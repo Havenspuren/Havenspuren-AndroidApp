@@ -1,0 +1,66 @@
+- name: "Testroute"
+  description: "Ein Route über Hafenarbeiter"
+  expectedTime: 60
+  pathToMap: "whv.map"
+  pathToMapImage: "Testlauf/map.png"
+  waypoints:
+    - title: "Erster Wegpunkt"
+      short_description: "Hier startet die Führung."
+      long_description: "Beschreibung, welche ganz toll erklärt, wieso der Wegpunkt hier ist."
+      latitude: 53.517993
+      longitude: 8.121171
+      index_of_route: 1
+      visited: true
+      audio:
+        path_to_file: "Testlauf/lpt.ogg"
+        extra: "Transkription"
+      pictures:
+        - path_to_file: "Testlauf/tree.jpg"
+          extra: "Bild"
+      trophy:
+        x: 10
+        y: 20
+        name: "Erste Trophäe"
+        description: "Eine sehr detailierte Beschreibung der Trophäe. Dieser Text sollte wirklich sehr interresante Informationen enthalten, damit die Nutzer interresse haben, sich weitere Trophäen anzuschauen."
+        path_to_image: "Testlauf/tree.jpg"
+        path_to_icon: "shared/vcg_stempel.png"
+        
+    - title: "Zweiter Wegpunkt"
+      short_description: "hier steht der ganz interresante zweite Text!"
+      long_description: "Und hier die der lange text für den zweiten wegpunkt"
+      latitude: 53.517257
+      longitude: 8.123178
+      index_of_route: 2
+      visited: false
+      pictures:
+        - path_to_file: "Testlauf/tree.jpg"
+          extra: "Bild"
+      audio:
+        path_to_file: "Testlauf/lpt.ogg"
+        extra: "Transkription"
+      trophy:
+        x: 40
+        y: 70
+        name: "Zweite Trophäe"
+        description: "Eine sehr detailierte Beschreibung der Trophäe. Dieser Text sollte wirklich sehr interresante Informationen enthalten, damit die Nutzer interresse haben, sich weitere Trophäen anzuschauen."
+        path_to_image: "Testlauf/tree.png"
+        path_to_icon: "shared/vcg_stempel.png"
+        
+        
+    - title: "Dritter Wegpunkt"
+      short_description: "hier steht der ganz interresante dritte Text!"
+      long_description: "Und hier die der lange text für den zweiten wegpunkt"
+      latitude: 53.518341
+      longitude: 8.123719
+      index_of_route: 3
+      visited: false
+      audio:
+        path_to_file: "Testlauf/lpt.ogg"
+        extra: "Transcription"
+      trophy:
+        x: 70
+        y: 50
+        name: "Dritte Trophäe"
+        description: "Eine sehr detailierte Beschreibung der Trophäe. Dieser Text sollte wirklich sehr interresante Informationen enthalten, damit die Nutzer interresse haben, sich weitere Trophäen anzuschauen."
+        path_to_image: "Testlauf/tree.png"
+        path_to_icon: "shared/vcg_stempel.png"

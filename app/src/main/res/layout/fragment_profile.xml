@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".layout.fragments.information.ProfileFragment">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:scaleType="centerCrop"/>
+
+
+    <TextView
+        android:id="@+id/my_account_headline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_top_headline_with_background"
+        android:textAppearance="?attr/textAppearanceHeadline3"
+        android:text="@string/account_title"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/my_account_headline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:srcCompat="@drawable/ic_person"
+                    android:src="@drawable/ic_person"
+                    app:tint="?attr/colorOnSurface"
+                    android:backgroundTint="?attr/colorOnSurface"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
+                <TextView
+                    android:layout_marginStart="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:lines="1"
+                    android:text="Max Mustermann"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:srcCompat="@drawable/ic_person"
+                    android:src="@drawable/ic_person"
+                    app:tint="?attr/colorOnSurface"
+                    android:backgroundTint="?attr/colorOnSurface"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
+                <TextView
+                    android:layout_marginStart="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:lines="1"
+                    android:text="06.08.1994"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:srcCompat="@drawable/ic_person"
+                    android:src="@drawable/ic_person"
+                    app:tint="?attr/colorOnSurface"
+                    android:backgroundTint="?attr/colorOnSurface"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
+                <TextView
+                    android:layout_marginStart="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:lines="1"
+                    android:text="männlich"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:srcCompat="@drawable/ic_person"
+                    android:src="@drawable/ic_person"
+                    app:tint="?attr/colorOnSurface"
+                    android:backgroundTint="?attr/colorOnSurface"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
+                <TextView
+                    android:layout_marginStart="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:lines="1"
+                    android:text="max.mustermann@student.jade-hs.de"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:srcCompat="@drawable/ic_person"
+                    android:src="@drawable/ic_person"
+
+                    app:tint="?attr/colorOnSurface"
+                    android:backgroundTint="?attr/colorOnSurface"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
+                <TextView
+                    android:layout_marginStart="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:lines="1"
+                    android:text="Max-Mustermann-Straße 55"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

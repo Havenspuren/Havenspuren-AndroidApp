@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".layout.fragments.trophies.TrophyMapFragment">
+
+    <de.jadehs.vcg.views.TrophyMap
+        android:id="@+id/trophy_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D39F52" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/previous_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/arrow_button"
+            android:background="#0000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/next_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            android:layout_marginEnd="10dp"
+            android:rotation="180"
+            android:src="@drawable/arrow_button"
+            android:background="#0000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/trophy_overview_current_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAlignment="center"
+            android:scrollHorizontally="true"
+            android:text="@string/lorem100"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@id/previous_button"
+            app:layout_constraintEnd_toStartOf="@id/next_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="#D39F52"
+            android:padding="5dp"
+            android:background="@drawable/trophy_map_title_background"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

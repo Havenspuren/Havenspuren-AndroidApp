@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginBottom="@dimen/dots_space">
+
+    <de.jadehs.vcg.views.DottedLine
+        android:id="@+id/dotted1"
+        style="@style/DottedLineOnSurface"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/dotted2"
+        app:layout_constraintEnd_toEndOf="@id/poi_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.jadehs.vcg.views.DottedLine
+        android:id="@+id/dotted2"
+        style="@style/DottedLineOnSurface"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/poi_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dotted1"
+        app:reverse="true"/>
+
+
+    <ImageView
+        android:id="@+id/poi_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_checkmark"
+        app:layout_constraintBottom_toBottomOf="@id/poi_desc"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title_container"
+        app:layout_constraintWidth_percent="0.13"
+        android:background="@drawable/circle"/>
+
+
+    <FrameLayout
+        android:id="@+id/title_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/poi_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/poi_desc">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <!-- follwing text view needs the width of wrap_content,
+            because otherwise the text will cut too early-->
+            <TextView
+                android:id="@+id/poi_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Trinkstation"
+                android:textAppearance="?attr/textAppearanceBody1" />
+
+            <ImageView
+                android:id="@+id/poi_trophy_status"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_trophy"
+                app:tint="#F85"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/poi_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:text="@string/lorem100"
+        android:textAppearance="?attr/textAppearanceBody2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/poi_image"
+        app:layout_constraintTop_toBottomOf="@id/title_container" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

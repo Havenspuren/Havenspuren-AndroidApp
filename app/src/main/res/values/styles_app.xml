@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General Themes
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+
+
+        <item name="colorOnPrimary">@color/onPrimary</item>
+        <item name="colorOnSecondary">@color/onSecondary</item>
+        <item name="colorOnSurface">@color/onSurface</item>
+
+
+        <item name="android:listDivider">@color/onPrimary</item>
+
+        &lt;!&ndash; navigation icon color &ndash;&gt;
+        <item name="colorControlNormal">?attr/colorOnSecondary</item>
+        <item name="navigationViewStyle">@style/NavigationMenu</item>
+
+        <item name="iconTint">@color/onPrimary</item>
+        <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
+    </style>-->
+
+    <style name="AppTheme.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+        <item name="colorSecondary">@color/colorSecondary</item>
+
+        <item name="colorSurface">@color/colorSurface</item>
+
+
+        <item name="colorOnPrimary">@color/onPrimary</item>
+
+        <item name="colorOnSecondary">@color/onSecondary</item>
+
+        <item name="colorOnSurface">@color/onSurface</item>
+
+
+        <item name="android:listDivider">?attr/colorOnPrimary</item>
+
+        <!-- navigation icon color -->
+        <item name="colorControlNormal">?attr/colorOnSecondary</item> <!--color of icons in app bar-->
+        <item name="navigationViewStyle">@style/NavigationMenu</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Typography" parent="">
+        <!-- Typography -->
+        <item name="android:textColorPrimary">?attr/colorOnSurface</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurface</item>
+
+
+        <item name="textAppearanceHeadline1">@style/TextAppearance.App.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.App.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.App.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.App.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.App.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.App.Headline6</item>
+
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.App.Subtitle2</item>
+
+        <item name="textAppearanceBody1">@style/TextAppearance.App.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.App.Body2</item>
+
+        <item name="textAppearanceCaption">@style/TextAppearance.App.Caption</item>
+
+        <item name="textAppearanceButton">@style/TextAppearance.App.Button</item>
+
+        <item name="textAppearanceOverline">@style/TextAppearance.App.Overline</item>
+
+
+    </style>
+
+    <style name="AppTheme.PrimarySurface" parent="">
+        <item name="colorPrimary">@color/colorSurface</item>
+        <item name="colorSurface">@color/colorPrimary</item>
+
+        <item name="colorOnPrimary">@color/onSurface</item>
+        <item name="colorOnSurface">@color/onPrimary</item>
+    </style>
+
+    <style name="AppBar.Light" parent="Widget.AppCompat.ActionBar">
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="tint">?attr/colorPrimary</item>
+    </style>
+
+</resources>

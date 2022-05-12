@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RecyclerViewCustomPadding">
+        <attr name="paddingPercentage" format="float" />
+        <attr name="paddingPercentageLeft" format="float" />
+        <attr name="paddingPercentageRight" format="float" />
+        <attr name="paddingPercentageTop" format="float" />
+        <attr name="paddingPercentageBottom" format="float" />
+        <attr name="showFadingEdge" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="DottedLine">
+        <attr name="reverse" format="boolean" />
+        <attr name="direction" format="enum">
+            <enum name="vertical" value="0" />
+            <enum name="horizontal" value="1" />
+        </attr>
+        <attr name="dotsSize" format="dimension" />
+        <attr name="marginDots" format="dimension" />
+        <attr name="dotsColor" format="color"/>
+    </declare-styleable>
+
+</resources>

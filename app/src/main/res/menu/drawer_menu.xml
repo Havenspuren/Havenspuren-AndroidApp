@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/nav_group">
+        <item
+            android:id="@+id/destination_route_overview"
+            android:icon="@drawable/ic_explore"
+            android:title="@string/route_overview_title" />
+        <!--<item
+            android:id="@+id/destination_profile_fragment"
+            android:icon="@drawable/ic_person"
+            android:title="@string/account_title" />-->
+        <item
+            android:id="@+id/destination_trophy_overview"
+            android:icon="@drawable/ic_trophy"
+            android:title="@string/achievement_title" />
+    </group>
+
+    <group
+        android:id="@+id/general_group">
+        <item
+            android:id="@+id/destination_settings"
+            android:title="@string/settings"
+            android:icon="@drawable/ic_settings"/>
+        <item
+            android:id="@+id/feedback_item"
+            android:title="@string/send_feedback"
+            android:icon="@drawable/ic_chat_bubble"/>
+
+        <item
+            android:id="@+id/support_item"
+            android:title="@string/support"
+            android:icon="@drawable/ic_email"/>
+        <!--<item
+            android:id="@+id/destination_contributors"
+            android:title="@string/contributors"
+            android:icon="@drawable/ic_notifications"/>-->
+        <item
+            android:id="@+id/destination_info_fragment"
+            android:title="@string/info_title"
+            android:icon="@drawable/ic_info"/>
+    </group>
+    <group
+        android:id="@+id/socials_group">
+
+    </group>
+
+
+</menu>

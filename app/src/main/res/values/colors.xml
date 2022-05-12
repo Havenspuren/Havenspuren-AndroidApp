@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#26a699</color>
+    <color name="colorPrimaryDark">#00766b</color>
+    <color name="colorPrimaryLight">#64d8ca</color>
+    <color name="colorSecondary">#003a5d</color>
+    <color name="colorSurface">#FFF</color>
+
+    <color name="onPrimary">#ffffff</color>
+    <color name="onPrimaryDark">#DDD</color>
+    <color name="onSecondary">#fff</color>
+    <color name="onSurface">#00395D</color>
+
+
+    <color name="neutralFAB">#DFFF</color>
+    <color name="black_transparent">#88000000</color>
+
+
+    <color name="dark_gray">#8888</color>
+    <color name="black">#000</color>
+
+    <color name="transparent">#00000000</color>
+</resources>

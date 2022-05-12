@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="de.jadehs.vcg.layout.fragments.routes.RouteOverviewFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titleSystemRoutes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_top_headline"
+            android:textAllCaps="true"
+            android:text="@string/title_section_system_routes"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceHeadline3" />
+
+        <LinearLayout
+            android:id="@+id/systemRouteContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

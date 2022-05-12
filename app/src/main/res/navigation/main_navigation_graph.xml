@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/destination_route_overview">
+
+    <fragment
+        android:id="@+id/destination_route_overview"
+        android:name="de.jadehs.vcg.layout.fragments.routes.RouteOverviewFragment"
+        android:label="@string/route_overview_title"
+        tools:layout="@layout/fragment_route_overview" >
+        <action
+            android:id="@+id/action_destination_route_overview_to_destination_map_fragment"
+            app:destination="@id/destination_map_fragment" />
+        <action
+            android:id="@+id/action_destination_route_overview_to_routeInfoFragment"
+            app:destination="@id/destination_route_info" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_map_fragment"
+        android:name="de.jadehs.vcg.layout.fragments.map.MapViewFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_map_view" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_map_fragment_to_poi_list"
+            app:destination="@id/destination_poi_list" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_poi_list"
+        android:name="de.jadehs.vcg.layout.fragments.poi_list.PoiListOverview"
+        android:label="{title}"
+        tools:layout="@layout/fragment_poi_list_overview">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_destination_poi_list_to_destination_map_fragment"
+            app:destination="@id/destination_map_fragment"
+            app:popUpTo="@id/destination_map_fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_contributors"
+        android:name="de.jadehs.vcg.layout.fragments.information.Contributors"
+        android:label="@string/contributors"
+        tools:layout="@layout/fragment_contributors" />
+    <fragment
+        android:id="@+id/destination_feedbackForm"
+        android:name="de.jadehs.vcg.layout.fragments.information.FeedbackForm"
+        android:label="@string/send_feedback"
+        tools:layout="@layout/fragment_feedback_form" />
+    <fragment
+        android:id="@+id/destination_settings"
+        android:name="de.jadehs.vcg.layout.fragments.settings.Settings"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+    <!--<fragment
+        android:id="@+id/destination_profile_fragment"
+        android:name="de.jadehs.vcg.layout.fragments.information.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />-->
+    <fragment
+        android:id="@+id/destination_trophy_overview"
+        android:name="de.jadehs.vcg.layout.fragments.trophies.TrophyOverviewFragment"
+        android:label="@string/achievement_title"
+        tools:layout="@layout/fragment_trophy_overview">
+        <action
+            android:id="@+id/action_trophy_overview_to_trophy_map"
+            app:destination="@id/destination_trophy_map" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_trophy_map"
+        android:name="de.jadehs.vcg.layout.fragments.trophies.TrophyMapFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_trophy_map">
+        <action
+            android:id="@+id/action_trophy_map_to_trophy_detail"
+            app:destination="@id/destination_trophy_detail" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_trophy_detail"
+        android:name="de.jadehs.vcg.layout.fragments.trophies.TrophyDetailFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_trophy_detail" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_info_fragment"
+        android:name="de.jadehs.vcg.layout.fragments.information.InfoFragment"
+        android:label="Über die App"
+        tools:layout="@layout/fragment_info" >
+        <action
+            android:id="@+id/action_info_fragment_to_contributors"
+            app:destination="@id/destination_contributors" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_route_info"
+        android:name="de.jadehs.vcg.layout.fragments.route_info.RouteInfoFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_route_info">
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
+</navigation>

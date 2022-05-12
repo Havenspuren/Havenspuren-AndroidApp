@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/map_menu_item_list_overview"
+        android:title="@string/list_overview"
+        android:icon="@drawable/ic_format_list_bulleted"
+        app:showAsAction="always"
+        />
+</menu>

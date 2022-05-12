@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Havenspuren</string>
+    <string name="permission_needed_information">Die App benötigt diese Berechtigungen um zu funktionieren, bitte bestätige diese, sonst schließt sich die App wieder!</string>
+
+
+    <string name="save">Speichern</string>
+    <string name="modifyRouteButton">Route bearbeiten</string>
+    <string name="title_activity_modify_route">ModifyRouteActivity</string>
+    <string name="audio_player_channel">Audio Kommentare</string>
+    <string name="audio_player_channel_description">Dieser Channel wird verwendet um die Audio Kommentare der Wegpunkte wiederzugeben. Wenn Sie ihn deaktivieren ist das wiedergeben von Audio nicht mehr möglich.</string>
+    <string name="audio_player_waypoint_description">Audio des Wegpunktes</string>
+    <string name="title_section_system_routes">Touren Überblick</string>
+    <string name="title_section_personal_routes">Deine bearbeiteten Routen:</string>
+    <string name="title_detail_activity">Details</string>
+    <string name="nearby_channel_name">Virtual City Guide</string>
+    <string name="nearby_channel_description">Wird benutzt um den Status der Stadtführung anzuzeigen und Informationen über nahe Wegpunkte zu teilen.</string>
+    <string name="route_overview_title">Touren Überblick</string>
+    <string name="account_title">Mein Konto</string>
+    <string name="achievement_title">Trophäen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="send_feedback">Feedback senden</string>
+    <string name="info_title">Über...</string>
+    <string name="support">Support</string>
+    <string name="contributors">Mitwirkende</string>
+    <string name="info">Info</string>
+    <string name="continue_text">Fortsetzen</string>
+    <string name="list_overview">Listenansicht</string>
+    <string name="dummy">Default</string>
+    <string name="lorem100">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
+    <string name="route_image_description">Bild der Route</string>
+    <string name="map_overview">Kartenübersicht</string>
+    <string name="error_no_email">Es ist kein Email Programm verfügbar</string>
+    <string name="feedback_mail_subject">Feedback Hafenspuren</string>
+    <string name="feedback_mail_text">Hallo liebes Hafenspuren-Team,</string>
+    <string name="number_as_meter">%.0fm</string>
+    <string name="number_as_kilometer">%.2fkm</string>
+    <string name="activate_gps">Bitte aktiviere dein GPS</string>
+    <string name="greeting_message">Hallo und herzlich willkommen bei Havenspuren!\n\n Wir laden Sie ein, die vergangenen und gegenwärtigen Gesichter Wilhelmshavens zu entdecken. Dabei begleiten Sie diejenigen, die die Stadt am besten kennen: Ihre Bewohner und Bewohnerinnen.\n\n Diese App ist im Rahmen eines studentischen Projektes der Jade Hochschule entstanden und befindet sich derzeit noch in der Testphase. Das bedeutet, sie ist einsatzbereit, aber es warten noch ein paar Funktionen und Änderungen darauf, umgesetzt zu werden. Wir freuen uns daher über jede Rückmeldung, die wir bezüglich Verbesserungsvorschlägen erhalten. Klicken Sie dafür im Menü auf Feedback senden oder Support oder folgen Sie dem Link am Ende der Tour.\n\n  Vielen Dank und viel Spaß beim Entdecken!</string>
+    <string name="greeting_message_title">Wilkommen</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="privacyAndLegalNotice"><![CDATA[Impressum & Datenschutz]]></string>
+    <string name="openSourceLicenses">Open Source Linzenzen</string>
+    <string name="trophy_unlocked_notification_title">Trophäe freigeschaltet</string>
+    <string name="trophy_unlocked_notification_desc">Du hast eine Trophäe freigeschaltet!</string>
+    <string name="trophy_channel_name">Trophäen</string>
+    <string name="trophy_channel_description">Benachrichtugung wenn Trophpäen freigeschaltet werden</string>
+    <string name="route_progress_text">Fortschritt: %d%%</string>
+    <string name="feedback_dialog_title">Feedback</string>
+    <string name="feedback_dialog_text">Sie haben die Route abgeschlossen. Herzlichen Glückwunsch! Hoffentlich hatten Sie spaß. \n Wir befinden uns noch in einer Testphase, deswegen Bitten wir Sie uns ein Feedback zur App und zur Route zu schicken. Sind Sie dazu bereit?</string>
+    <string name="ar_info_title">Augumented Reality</string>
+    <string name="ar_info_text">Die App soll bald eine Augumented Reality Funktion unterstützen. Bald kann man hier also diese AR Funktionalität starten.</string>
+    <string name="route_info_dialog_title">Bald Verfügbar</string>
+    <string name="route_info_dialog_text">Bald kannst du hier weitere Informationen zur Route finden.</string>
+    <string name="trophy_progress">Trophäen: %d/%d</string>
+    <string name="waypoints">Wegpunkte</string>
+    <string name="play_button_description">Audio pausieren/starten</string>
+    <string name="previous_button_description">Ein Titel zurück</string>
+    <string name="next_button_description">Ein Titel vor</string>
+    <string name="center_map_description">Karte Zentrieren</string>
+    <string name="progress">%d/%d</string>
+    <string name="error_no_browser">Kein Web-Browser vorhanden</string>
+</resources>
