@@ -2,7 +2,9 @@ Die App ist das Resultat eines studentischen Projektes der Jade Hochschule und a
 ##### Technische Entwicklung
 - Marcel Bankert
 - Miro Flemke
+- Zhuyi Li
 - Claas Wittig
+
   
 ##### Gestaltung
 - Lea Burrichter
