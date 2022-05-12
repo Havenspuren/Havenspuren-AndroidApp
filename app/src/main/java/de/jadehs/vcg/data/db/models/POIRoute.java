@@ -31,6 +31,7 @@ public class POIRoute implements Serializable {
      * the picture which is displayed as the route picture
      */
     @ColumnInfo(name = "path_to_route_image")
+    @NonNull
     private String pathToRouteImage;
 
     /**

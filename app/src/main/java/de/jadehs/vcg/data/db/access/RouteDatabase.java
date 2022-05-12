@@ -21,7 +21,7 @@ import de.jadehs.vcg.data.db.models.Trophy;
 
 @Database(
         entities = {POIWaypoint.class, POIRoute.class, Media.class, WaypointMediaJunction.class, Trophy.class},
-        version = 12,
+        version = 13,
         exportSchema = true)
 @TypeConverters({Converters.class})
 public abstract class RouteDatabase extends RoomDatabase {
