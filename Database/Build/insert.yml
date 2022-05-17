@@ -11,7 +11,7 @@
       latitude: 53.517993
       longitude: 8.121171
       index_of_route: 1
-      visited: true
+      visited: 1
       audio:
         path_to_file: "Testlauf/lpt.ogg"
         extra: "Transkription"
@@ -32,7 +32,7 @@
       latitude: 53.517257
       longitude: 8.123178
       index_of_route: 2
-      visited: false
+      visited: 0
       pictures:
         - path_to_file: "Testlauf/tree.jpg"
           extra: "Bild"
@@ -54,7 +54,7 @@
       latitude: 53.518341
       longitude: 8.123719
       index_of_route: 3
-      visited: false
+      visited: 0
       audio:
         path_to_file: "Testlauf/lpt.ogg"
         extra: "Transcription"

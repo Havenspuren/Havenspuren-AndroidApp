@@ -28,6 +28,7 @@ import de.jadehs.vcg.R;
 import de.jadehs.vcg.data.db.models.Media;
 import de.jadehs.vcg.data.db.pojo.POIWaypointWithMedia;
 import de.jadehs.vcg.layout.dialogs.ARInfoDialog;
+import de.jadehs.vcg.layout.dialogs.ImageDialog;
 import de.jadehs.vcg.layout.fragments.galery.PictureGallery;
 import de.jadehs.vcg.services.audio.AudioPlayerManager;
 import de.jadehs.vcg.services.audio.AudioPlayerService;

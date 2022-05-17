@@ -26,9 +26,7 @@ class PictureGallery : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            pictureUriList = it.getStringArrayList(IMG_LIST)?.map { img ->
-                Uri.parse(img.toString())
-            }
+            pictureUriList = it.getStringArrayList(IMG_LIST)?.map(Uri::parse)
         }
     }
 
@@ -44,11 +42,10 @@ class PictureGallery : Fragment() {
                 layoutManager = LinearLayoutManager(view.context, RecyclerView.HORIZONTAL, false)
                 val snapHelper = PagerSnapHelper()
                 snapHelper.attachToRecyclerView(this)
-
             }
 
             pictureUriList?.run {
-                recyclerView.adapter = MediaPagerAdapter(this)
+                recyclerView.adapter = MediaPagerAdapter(this, childFragmentManager)
             }
         }
     }

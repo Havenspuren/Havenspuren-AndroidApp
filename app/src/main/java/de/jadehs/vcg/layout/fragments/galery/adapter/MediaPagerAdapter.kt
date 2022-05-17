@@ -2,12 +2,13 @@ package de.jadehs.vcg.layout.fragments.galery.adapter
 
 import android.net.Uri
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 
 val pictureFileEndings = listOf("png", "jpg", "bmp", "gif", "webp", "heic", "heif")
 val videoFileEndings = listOf("3gp", "mp4", "mkv", "mkv", "webm")
 
-class MediaPagerAdapter(uriList: List<Uri>) : RecyclerView.Adapter<MediaViewHolder>() {
+class MediaPagerAdapter(uriList: List<Uri>, val fragmentManager: FragmentManager) : RecyclerView.Adapter<MediaViewHolder>() {
 
     private val mediaList = uriList.toTypedArray()
 
@@ -32,7 +33,7 @@ class MediaPagerAdapter(uriList: List<Uri>) : RecyclerView.Adapter<MediaViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         return when(viewType){
-            0 -> PictureViewHolder(parent)
+            0 -> PictureViewHolder(parent,fragmentManager)
             1 -> VideoViewHolder(parent)
             else -> throw IllegalStateException("View Type isn't a valid id -> media uri doesn't have a valid file type")
         }
