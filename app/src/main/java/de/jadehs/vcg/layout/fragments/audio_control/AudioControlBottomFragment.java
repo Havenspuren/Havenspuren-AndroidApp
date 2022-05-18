@@ -178,6 +178,19 @@ public class AudioControlBottomFragment extends Fragment {
     private void setupUI(@NonNull View view, @Nullable Bundle savedInstanceState) {
         progressBar = view.findViewById(R.id.audio_control_progress_bar);
         maxProgress = progressBar.getValueTo();
+        progressBar.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                if (!fromUser || controller == null) {
+                    return;
+                }
+                long duration = controller.getMetadata().getLong(MediaMetadataCompat.METADATA_KEY_DURATION);
+                long newProgress = (long) (value * duration / maxProgress);
+                seekTo(newProgress);
+            }
+        });
+
+
         titleNameView = view.findViewById(R.id.audio_control_title_name);
         trackNumberProgressView = view.findViewById(R.id.audio_control_track_number_progress);
     }
@@ -212,7 +225,7 @@ public class AudioControlBottomFragment extends Fragment {
         this.viewModel.getCurrentRoute().observe(this.getViewLifecycleOwner(), new Observer<RouteWithWaypoints>() {
             @Override
             public void onChanged(RouteWithWaypoints routeWithWaypoints) {
-                if(routeWithWaypoints == null)
+                if (routeWithWaypoints == null)
                     return;
 
                 POIWaypointWithMedia toDisplay;
@@ -379,44 +392,50 @@ public class AudioControlBottomFragment extends Fragment {
 
     private void onNextClick() {
         RouteWithWaypoints route = this.viewModel.getCurrentRoute().getValue();
-        if (route != null) {
-            ListIterator<POIWaypointWithMedia> iterator = route.getIteratorAt(this.waypointId);
-            if (iterator != null) {
+        if (route == null) {
+            return;
+        }
+        ListIterator<POIWaypointWithMedia> iterator = route.getIteratorAt(this.waypointId);
+        if (iterator == null) {
+            return;
+        }
 
-                POIWaypointWithMedia next = null;
-                while (next == null && iterator.hasNext()) {
-                    POIWaypointWithMedia nextLocal = iterator.next();
-                    if (nextLocal.isVisited() && nextLocal.hasAudio()) {
-                        next = nextLocal;
-                    }
-                }
-
-                if (next != null) {
-                    this.audioPlayerManager.stopPlayback();
-                    this.bindToWaypoint(next, route.getVisitedCount());
-                }
+        POIWaypointWithMedia next = null;
+        while (next == null && iterator.hasNext()) {
+            POIWaypointWithMedia nextLocal = iterator.next();
+            if (nextLocal.isVisited() && nextLocal.hasAudio()) {
+                next = nextLocal;
             }
+        }
+
+        if (next != null) {
+            this.audioPlayerManager.stopPlayback();
+            this.bindToWaypoint(next, route.getVisitedCount());
         }
     }
 
     private void onPreviousClick() {
         RouteWithWaypoints route = this.viewModel.getCurrentRoute().getValue();
-        if (route != null) {
-            ListIterator<POIWaypointWithMedia> iterator = route.getIteratorAt(this.waypointId);
-            if (iterator != null) {
-                POIWaypointWithMedia next = null;
-                while (next == null && iterator.hasPrevious()) {
-                    POIWaypointWithMedia nextLocal = iterator.previous();
-                    if (nextLocal.isVisited() && nextLocal.hasAudio() && nextLocal.getId() != this.waypointId) {
-                        next = nextLocal;
-                    }
-                }
+        if (route == null) {
+            return;
+        }
+        ListIterator<POIWaypointWithMedia> iterator = route.getIteratorAt(this.waypointId);
+        if (iterator == null) {
+            return;
+        }
 
-                if (next != null) {
-                    this.audioPlayerManager.stopPlayback();
-                    this.bindToWaypoint(next, route.getVisitedCount());
-                }
+
+        POIWaypointWithMedia previous = null;
+        while (previous == null && iterator.hasPrevious()) {
+            POIWaypointWithMedia previousLocal = iterator.previous();
+            if (previousLocal.isVisited() && previousLocal.hasAudio() && previousLocal.getId() != this.waypointId) {
+                previous = previousLocal;
             }
+        }
+
+        if (previous != null) {
+            this.audioPlayerManager.stopPlayback();
+            this.bindToWaypoint(previous, route.getVisitedCount());
         }
     }
 
@@ -425,13 +444,26 @@ public class AudioControlBottomFragment extends Fragment {
      * Does toggle the playstate of the current MediaSession
      */
     private void playPause() {
-        if (controller != null) {
-            MediaControllerCompat.TransportControls controls = controller.getTransportControls();
-            if (AudioUtils.isPlaying(controller)) {
-                controls.pause();
-            } else {
-                controls.play();
-            }
+        if (controller == null) {
+            return;
         }
+        MediaControllerCompat.TransportControls controls = controller.getTransportControls();
+        if (AudioUtils.isPlaying(controller)) {
+            controls.pause();
+        } else {
+            controls.play();
+        }
+    }
+
+    /**
+     * jumps to the currently playing audio
+     *
+     * @param milliseconds
+     */
+    private void seekTo(long milliseconds) {
+        if (controller == null) {
+            return;
+        }
+        controller.getTransportControls().seekTo(milliseconds);
     }
 }

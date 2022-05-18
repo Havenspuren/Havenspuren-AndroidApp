@@ -15,6 +15,7 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -140,26 +141,6 @@ public class AudioPlayerService extends Service {
                 Util.getUserAgent(
                         getApplicationContext(),
                         getString(R.string.app_name)));
-
-
-
-        locationUpdateCallback = new Runnable() {
-            private final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
-            @Override
-            public void run() {
-                if (player != null && AudioUtils.isPlayingExo(player.getPlaybackState())) {
-                    Intent intent = new Intent(AudioPlayerService.PLAYBACK_LOCATION_CHANGED_ACTION);
-                    intent.putExtra(AudioPlayerService.EXTRA_PLAYBACK_POSITION, player.getCurrentPosition());
-                    intent.putExtra(AudioPlayerService.EXTRA_PLAYBACK_LENGTH,player.getDuration());
-
-                    broadcastManager.sendBroadcast(intent);
-
-                    handler.postDelayed(this, PLAYBACK_LOCATION_UPDATE_INTERVAL);
-                }else{
-                    isLocationUpdatesRunning = false;
-                }
-            }
-        };
     }
 
     @Override
@@ -240,12 +221,12 @@ public class AudioPlayerService extends Service {
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if(playbackState == Player.STATE_READY){
-                    if(playWhenReady && !isLocationUpdatesRunning){
+                if (playbackState == Player.STATE_READY) {
+                    if (playWhenReady && !isLocationUpdatesRunning) {
                         startLocationUpdates();
                     }
 
-                    if(!playWhenReady && isLocationUpdatesRunning){
+                    if (!playWhenReady && isLocationUpdatesRunning) {
                         stopLocationUpdates();
                     }
 
@@ -273,7 +254,7 @@ public class AudioPlayerService extends Service {
      */
     private void destroyPlayer() {
         if (player != null) {
-            if(handler != null)
+            if (handler != null)
                 handler.removeCallbacksAndMessages(null);
             Player p = player;
             player = null;
@@ -283,17 +264,36 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void startLocationUpdates(){
-        if(!isLocationUpdatesRunning){
+    private void startLocationUpdates() {
+        if (!isLocationUpdatesRunning) {
             isLocationUpdatesRunning = true;
-            final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+            if(locationUpdateCallback == null){
+                locationUpdateCallback = new Runnable() {
+                    private final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+
+                    @Override
+                    public void run() {
+                        if (player != null && AudioUtils.isPlayingExo(player.getPlaybackState())) {
+                            Intent intent = new Intent(AudioPlayerService.PLAYBACK_LOCATION_CHANGED_ACTION);
+                            intent.putExtra(AudioPlayerService.EXTRA_PLAYBACK_POSITION, player.getCurrentPosition());
+                            intent.putExtra(AudioPlayerService.EXTRA_PLAYBACK_LENGTH, player.getDuration());
+
+                            broadcastManager.sendBroadcast(intent);
+
+                            handler.postDelayed(this, PLAYBACK_LOCATION_UPDATE_INTERVAL);
+                        } else {
+                            isLocationUpdatesRunning = false;
+                        }
+                    }
+                };
+            }
 
             handler.postDelayed(locationUpdateCallback, PLAYBACK_LOCATION_UPDATE_INTERVAL);
         }
 
     }
 
-    private void stopLocationUpdates(){
+    private void stopLocationUpdates() {
         handler.removeCallbacks(locationUpdateCallback);
         isLocationUpdatesRunning = false;
     }
@@ -404,11 +404,11 @@ public class AudioPlayerService extends Service {
 
     private class MediaDescriptor implements PlayerNotificationManager.MediaDescriptionAdapter, MediaSessionConnector.MediaMetadataProvider {
 
-        private Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
+        private final Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
         private String title;
         private String description;
         private Bitmap picture;
-        private MediaMetadataCompat metadata;
+        private MediaMetadataCompat.Builder metadata;
 
         public MediaDescriptor(Bundle extras) {
             setExtras(extras);
@@ -428,16 +428,14 @@ public class AudioPlayerService extends Service {
             if (path != null) picture = ImageUtils.getImageOfBounds(new File(path), 100, 100);
 
 
-            MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder()
+            metadata = new MediaMetadataCompat.Builder()
                     .putString(MediaMetadataCompat.METADATA_KEY_TITLE, this.getTitle())
                     .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, this.getDescription())
                     .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, this.getPicture());
 
             if (waypointId != -1) {
-                builder.putLong(EXTRA_WAYPOINT_ID, waypointId);
+                metadata.putLong(EXTRA_WAYPOINT_ID, waypointId);
             }
-
-            metadata = builder.build();
 
 
         }
@@ -458,10 +456,7 @@ public class AudioPlayerService extends Service {
             return mainIntent;
         }
 
-        public MediaMetadataCompat getMetadata() {
-            return metadata;
-        }
-
+        @NonNull
         @Override
         public CharSequence getCurrentContentTitle(@NotNull Player player) {
             return getTitle();
@@ -470,26 +465,28 @@ public class AudioPlayerService extends Service {
 
         @Nullable
         @Override
-        public PendingIntent createCurrentContentIntent(Player player) {
+        public PendingIntent createCurrentContentIntent(@NonNull Player player) {
             return PendingIntent.getActivity(getBaseContext(), 0, getMainIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
         @Nullable
         @Override
-        public CharSequence getCurrentContentText(Player player) {
+        public CharSequence getCurrentContentText(@NonNull Player player) {
             return getDescription();
         }
 
 
         @Nullable
         @Override
-        public Bitmap getCurrentLargeIcon(Player player, PlayerNotificationManager.BitmapCallback callback) {
+        public Bitmap getCurrentLargeIcon(@NonNull Player player, PlayerNotificationManager.BitmapCallback callback) {
             return getPicture();
         }
 
+        @NonNull
         @Override
-        public MediaMetadataCompat getMetadata(Player player) {
-            return getMetadata();
+        public MediaMetadataCompat getMetadata(@NonNull Player player) {
+            metadata.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, player.getDuration());
+            return metadata.build();
         }
     }
 
