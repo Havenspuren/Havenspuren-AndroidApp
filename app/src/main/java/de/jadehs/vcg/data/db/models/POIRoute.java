@@ -7,12 +7,8 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity()
-@Getter
-@Setter
 public class POIRoute implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
@@ -62,6 +58,82 @@ public class POIRoute implements Serializable {
     @NonNull
     private String pathToMap;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @NonNull
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@NonNull String name) {
+        this.name = name;
+    }
+
+    @NonNull
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@NonNull String description) {
+        this.description = description;
+    }
+
+    public String getThemesFile() {
+        return themesFile;
+    }
+
+    public void setThemesFile(String themesFile) {
+        this.themesFile = themesFile;
+    }
+
+    @NonNull
+    public String getPathToRouteImage() {
+        return pathToRouteImage;
+    }
+
+    public void setPathToRouteImage(@NonNull String pathToRouteImage) {
+        this.pathToRouteImage = pathToRouteImage;
+    }
+
+    @NonNull
+    public String getPathToMapImage() {
+        return pathToMapImage;
+    }
+
+    public void setPathToMapImage(@NonNull String pathToMapImage) {
+        this.pathToMapImage = pathToMapImage;
+    }
+
+    public String getPathToCharacterImage() {
+        return pathToCharacterImage;
+    }
+
+    public void setPathToCharacterImage(String pathToCharacterImage) {
+        this.pathToCharacterImage = pathToCharacterImage;
+    }
+
+    public int getExpectedTime() {
+        return expectedTime;
+    }
+
+    public void setExpectedTime(int expectedTime) {
+        this.expectedTime = expectedTime;
+    }
+
+    @NonNull
+    public String getPathToMap() {
+        return pathToMap;
+    }
+
+    public void setPathToMap(@NonNull String pathToMap) {
+        this.pathToMap = pathToMap;
+    }
 
     public boolean hasPathToRouteImage() {
         return getPathToRouteImage() != null;

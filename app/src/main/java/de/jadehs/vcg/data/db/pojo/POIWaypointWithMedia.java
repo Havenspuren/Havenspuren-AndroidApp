@@ -1,6 +1,7 @@
 package de.jadehs.vcg.data.db.pojo;
 
 
+import androidx.annotation.Nullable;
 import androidx.room.Ignore;
 import androidx.room.Junction;
 import androidx.room.Relation;
@@ -14,10 +15,14 @@ import de.jadehs.vcg.data.db.models.Media;
 import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
 import de.jadehs.vcg.data.db.models.Trophy;
-import lombok.Getter;
-import lombok.Setter;
+import de.jadehs.vcg.data.model.Coordinate;
 
 public class POIWaypointWithMedia extends POIWaypoint implements Serializable {
+
+    public POIWaypointWithMedia(long id, long routeId, String title, String longDescription, String shortDescription, @Nullable String password, int indexOfRoute, boolean visited, UnlockAction unlockAction, Coordinate position) {
+        super(id, routeId, title, longDescription, shortDescription, password, indexOfRoute, visited, unlockAction, position);
+    }
+
     @Relation(
             parentColumn = "id",
             entityColumn = "id",
@@ -29,8 +34,7 @@ public class POIWaypointWithMedia extends POIWaypoint implements Serializable {
     )
     private List<Media> media;
 
-    @Getter
-    @Setter
+
     @Relation(entity = POIRoute.class, parentColumn = "route_id", entityColumn = "id")
     private POIRoute route;
 
@@ -116,5 +120,13 @@ public class POIWaypointWithMedia extends POIWaypoint implements Serializable {
 
     public boolean hasTrophy() {
         return getTrophy() != null;
+    }
+
+    public POIRoute getRoute() {
+        return route;
+    }
+
+    public void setRoute(POIRoute route) {
+        this.route = route;
     }
 }

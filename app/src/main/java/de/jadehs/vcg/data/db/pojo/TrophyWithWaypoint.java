@@ -4,11 +4,7 @@ import androidx.room.Relation;
 
 import de.jadehs.vcg.data.db.models.POIWaypoint;
 import de.jadehs.vcg.data.db.models.Trophy;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class TrophyWithWaypoint extends Trophy {
 
     @Relation(
@@ -18,4 +14,11 @@ public class TrophyWithWaypoint extends Trophy {
     )
     private WaypointWithRoute waypoint;
 
+    public WaypointWithRoute getWaypoint() {
+        return waypoint;
+    }
+
+    public void setWaypoint(WaypointWithRoute waypoint) {
+        this.waypoint = waypoint;
+    }
 }

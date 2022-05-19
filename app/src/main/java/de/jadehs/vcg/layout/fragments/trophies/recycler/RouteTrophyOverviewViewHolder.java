@@ -15,8 +15,6 @@ import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.layout.fragments.trophies.TrophyMapFragment;
 import de.jadehs.vcg.utils.data.FileProvider;
-import lombok.Getter;
-import lombok.Setter;
 
 public class RouteTrophyOverviewViewHolder extends RecyclerView.ViewHolder {
     private final TextView title;
@@ -45,8 +43,6 @@ public class RouteTrophyOverviewViewHolder extends RecyclerView.ViewHolder {
         listener.setMapPath(route.getPathToMapImage());
     }
 
-    @Getter
-    @Setter
     private class ClickHandler implements View.OnClickListener{
         private long id;
         private String title;
@@ -55,6 +51,30 @@ public class RouteTrophyOverviewViewHolder extends RecyclerView.ViewHolder {
         public void onClick(View v) {
             Bundle b = TrophyMapFragment.createArguments(getId(), getTitle(), getMapPath());
             controller.navigate(R.id.action_trophy_overview_to_trophy_map,b);
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getMapPath() {
+            return mapPath;
+        }
+
+        public void setMapPath(String mapPath) {
+            this.mapPath = mapPath;
         }
     }
 
