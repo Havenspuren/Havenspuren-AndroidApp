@@ -6,16 +6,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 import org.oscim.core.GeoPoint;
+
+import java.util.Objects;
 
 import de.jadehs.vcg.R;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
@@ -27,7 +34,7 @@ import de.jadehs.vcg.services.NearbyWaypointService;
  * Use the {@link ShortPoiInfo#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShortPoiInfo extends Fragment{
+public class ShortPoiInfo extends Fragment {
 
 
     private static final String ARG_Waypoint = "de.jadehs.vcg.arg.wayopint";
@@ -39,8 +46,10 @@ public class ShortPoiInfo extends Fragment{
     private POIInfoListener listener;
 
 
-
     private POIWaypoint waypoint;
+    private ConstraintLayout passwordContainer;
+    private Button passwordConfirmButton;
+    private TextInputLayout passwordTextLayout;
 
     public ShortPoiInfo() {
         // Required empty public constructor
@@ -81,8 +90,23 @@ public class ShortPoiInfo extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         this.title = view.findViewById(R.id.detailTitle);
         this.description = view.findViewById(R.id.detailDescription);
+
         /*this.actionButton = view.findViewById(R.id.directions);
         actionButton.setOnClickListener(this);*/
+        passwordContainer = view.findViewById(R.id.password_input_container);
+        if (waypoint.getUnlockAction() == POIWaypoint.UnlockAction.PASSWORD) {
+            passwordTextLayout = passwordContainer.findViewById(R.id.password_input);
+            passwordConfirmButton = passwordContainer.findViewById(R.id.password_confirm_button);
+            passwordConfirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPasswordConfirm();
+                }
+            });
+        } else {
+            passwordContainer.setVisibility(View.GONE);
+        }
+
         fillInformation(waypoint);
     }
 
@@ -114,7 +138,7 @@ public class ShortPoiInfo extends Fragment{
     }*/
 
 
-    private void fillInformation(POIWaypoint waypoint){
+    private void fillInformation(POIWaypoint waypoint) {
         this.setTitle(waypoint.getTitle());
         this.setDescription(waypoint.getShortDescription());
     }
@@ -139,6 +163,31 @@ public class ShortPoiInfo extends Fragment{
         this.description.setText(description);
     }
 
+
+    @NonNull
+    public String getPassword() {
+        if (passwordTextLayout == null)
+            return "null";
+        EditText editText = passwordTextLayout.getEditText();
+        if (editText == null)
+            return "null";
+        return Objects.toString(editText.getText());
+    }
+
+
+    private void onPasswordConfirm() {
+        String password = getPassword();
+
+
+        boolean same = password.equalsIgnoreCase(waypoint.getPassword());
+
+
+        if (same) {
+            // TODO unlock waypoint
+            Toast.makeText(this.requireContext(), "Richtiges Passwort", Toast.LENGTH_LONG).show();
+        }
+    }
+
     /*private void openDetailActivity(long waypointId) {
         Intent i = new Intent(this.getContext(), DetailActivity.class);
         i.putExtra(DetailActivity.ID_EXTRA, waypointId);
@@ -147,7 +196,7 @@ public class ShortPoiInfo extends Fragment{
     }*/
 
 
-    private void startService(long routeID, POIWaypoint waypoint){
+    private void startService(long routeID, POIWaypoint waypoint) {
         Intent intent = new Intent(this.getContext(), NearbyWaypointService.class);
         intent.putExtra(NearbyWaypointService.EXTRA_MAPID, routeID);
         intent.putExtra(NearbyWaypointService.EXTRA_WPID, waypoint.getId());

@@ -12,6 +12,8 @@
       longitude: 8.121171
       index_of_route: 1
       visited: true
+      unlock_action: PASSWORD
+      password: pass
       audio:
         path_to_file: "Testlauf/lpt.ogg"
         extra: "Transkription"
