@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
@@ -27,7 +28,9 @@ import java.util.Objects;
 import de.jadehs.vcg.R;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
 import de.jadehs.vcg.data.db.pojo.POIWaypointWithMedia;
+import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.services.NearbyWaypointService;
+import de.jadehs.vcg.view_models.RouteViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +53,7 @@ public class ShortPoiInfo extends Fragment {
     private ConstraintLayout passwordContainer;
     private Button passwordConfirmButton;
     private TextInputLayout passwordTextLayout;
+    private RouteViewModel routeViewModel;
 
     public ShortPoiInfo() {
         // Required empty public constructor
@@ -76,6 +80,9 @@ public class ShortPoiInfo extends Fragment {
         if (getArguments() != null) {
             waypoint = (POIWaypointWithMedia) getArguments().getSerializable(ARG_Waypoint);
         }
+
+        routeViewModel = new ViewModelProvider(this.requireActivity(), new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication()))
+                .get(RouteViewModel.class);
     }
 
     @Override
@@ -90,11 +97,18 @@ public class ShortPoiInfo extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.title = view.findViewById(R.id.detailTitle);
         this.description = view.findViewById(R.id.detailDescription);
-
+        RouteWithWaypoints route = routeViewModel.getCurrentRoute().getValue();
+        boolean isNext = false;
+        if (route != null) {
+            POIWaypoint waypoint = route.getNextWaypoint();
+            if (waypoint != null) {
+                isNext = waypoint.getId() == waypoint.getId();
+            }
+        }
         /*this.actionButton = view.findViewById(R.id.directions);
         actionButton.setOnClickListener(this);*/
         passwordContainer = view.findViewById(R.id.password_input_container);
-        if (waypoint.getUnlockAction() == POIWaypoint.UnlockAction.PASSWORD) {
+        if (waypoint.getUnlockAction() == POIWaypoint.UnlockAction.PASSWORD && isNext) {
             passwordTextLayout = passwordContainer.findViewById(R.id.password_input);
             passwordConfirmButton = passwordContainer.findViewById(R.id.password_confirm_button);
             passwordConfirmButton.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +122,7 @@ public class ShortPoiInfo extends Fragment {
         }
 
         fillInformation(waypoint);
+
     }
 
     @Override

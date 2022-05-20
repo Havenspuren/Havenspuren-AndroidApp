@@ -4,6 +4,7 @@
   path_to_map: "whv.map"
   path_to_map_image: "Testlauf/map.png"
   path_to_route_image: "Testlauf/im.png"
+  path_to_character_image: "Testlauf/im.png"
   waypoints:
     - title: "Erster Wegpunkt"
       short_description: "Hier startet die Führung."
@@ -11,7 +12,7 @@
       latitude: 53.517993
       longitude: 8.121171
       index_of_route: 1
-      visited: true
+      visited: 1
       unlock_action: PASSWORD
       password: pass
       audio:
@@ -27,6 +28,7 @@
         description: "Eine sehr detailierte Beschreibung der Trophäe. Dieser Text sollte wirklich sehr interresante Informationen enthalten, damit die Nutzer interresse haben, sich weitere Trophäen anzuschauen."
         path_to_image: "Testlauf/tree.jpg"
         path_to_icon: "shared/vcg_stempel.png"
+        path_to_character_image: "Testlauf/im.png"
         
     - title: "Zweiter Wegpunkt"
       short_description: "hier steht der ganz interresante zweite Text!"
@@ -34,20 +36,14 @@
       latitude: 53.517257
       longitude: 8.123178
       index_of_route: 2
-      visited: false
+      visited: 0
+      unlock_action: GPS
       pictures:
         - path_to_file: "Testlauf/tree.jpg"
           extra: "Bild"
       audio:
         path_to_file: "Testlauf/lpt.ogg"
         extra: "Transkription"
-      trophy:
-        x: 40
-        y: 70
-        name: "Zweite Trophäe"
-        description: "Eine sehr detailierte Beschreibung der Trophäe. Dieser Text sollte wirklich sehr interresante Informationen enthalten, damit die Nutzer interresse haben, sich weitere Trophäen anzuschauen."
-        path_to_image: "Testlauf/tree.png"
-        path_to_icon: "shared/vcg_stempel.png"
         
         
     - title: "Dritter Wegpunkt"
@@ -56,14 +52,8 @@
       latitude: 53.518341
       longitude: 8.123719
       index_of_route: 3
-      visited: false
+      unlock_action: GPS
+      visited: 0
       audio:
         path_to_file: "Testlauf/lpt.ogg"
         extra: "Transcription"
-      trophy:
-        x: 70
-        y: 50
-        name: "Dritte Trophäe"
-        description: "Eine sehr detailierte Beschreibung der Trophäe. Dieser Text sollte wirklich sehr interresante Informationen enthalten, damit die Nutzer interresse haben, sich weitere Trophäen anzuschauen."
-        path_to_image: "Testlauf/tree.png"
-        path_to_icon: "shared/vcg_stempel.png"
