@@ -20,7 +20,7 @@ public abstract class TrophyDao implements ParentDao<Trophy> {
 
 
     @Transaction
-    @Query("SELECT * FROM trophy JOIN poiwaypoint on trophy.waypoint_id = poiwaypoint.id WHERE route_id = :routeId")
+    @Query("SELECT trophy.* FROM trophy JOIN poiwaypoint on trophy.waypoint_id = poiwaypoint.id WHERE route_id = :routeId")
     public abstract LiveData<List<TrophyWithWaypoint>> getTrophiesOfRoute(long routeId);
 
 }

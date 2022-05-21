@@ -71,7 +71,8 @@ public abstract class RouteViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        routeViewModel = new ViewModelProvider(this.requireActivity(),new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())).get(RouteViewModel.class);
+        routeViewModel = new ViewModelProvider(this.requireActivity(),new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication()))
+                .get(RouteViewModel.class);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         if (getArguments() != null) {
@@ -124,6 +125,10 @@ public abstract class RouteViewFragment extends Fragment {
         if(this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED) && fusedLocationProviderClient != null){
             registerLocationCallback(listener);
         }
+    }
+
+    public RouteViewModel getRouteViewModel() {
+        return routeViewModel;
     }
 
     private void registerLocationCallback(LocationListener listener){

@@ -3,6 +3,7 @@ package de.jadehs.vcg.data.db.access;
 
 import android.content.Context;
 
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -21,8 +22,12 @@ import de.jadehs.vcg.data.db.models.Trophy;
 
 @Database(
         entities = {POIWaypoint.class, POIRoute.class, Media.class, WaypointMediaJunction.class, Trophy.class},
-        version = 13,
-        exportSchema = true)
+        version = 15,
+        autoMigrations = {
+                @AutoMigration(from = 13, to = 14),
+                @AutoMigration(from = 14, to = 15)
+        }
+)
 @TypeConverters({Converters.class})
 public abstract class RouteDatabase extends RoomDatabase {
     public abstract WaypointDao wayPointDao();

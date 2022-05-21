@@ -1,9 +1,11 @@
 package de.jadehs.vcg.data.db.models;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
 
@@ -20,8 +22,29 @@ import de.jadehs.vcg.data.model.Coordinate;
         childColumns = "route_id",
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE
-)})
+)},
+        indices = {@Index("route_id")}
+)
 public class POIWaypoint implements Serializable {
+
+
+    public enum UnlockAction {
+        GPS, PASSWORD;
+    }
+
+    public POIWaypoint(long id, long routeId, String title, String longDescription, String shortDescription, @Nullable String password, int indexOfRoute, boolean visited, UnlockAction unlockAction, Coordinate position) {
+        this.id = id;
+        this.routeId = routeId;
+        this.title = title;
+        this.longDescription = longDescription;
+        this.shortDescription = shortDescription;
+        this.password = password;
+        this.indexOfRoute = indexOfRoute;
+        this.visited = visited;
+        this.unlockAction = unlockAction;
+        this.position = position;
+    }
+
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo(name = "route_id")
@@ -31,9 +54,16 @@ public class POIWaypoint implements Serializable {
     private String longDescription;
     @ColumnInfo(name = "short_description")
     private String shortDescription;
+    /**
+     * password which unlocks this waypoint.
+     */
+    @Nullable
+    private String password;
     @ColumnInfo(name = "index_of_route")
     private int indexOfRoute;
     private boolean visited;
+    @ColumnInfo(name = "unlock_action", defaultValue = "GPS")
+    private UnlockAction unlockAction;
 
     @Embedded
     private Coordinate position;
@@ -109,5 +139,22 @@ public class POIWaypoint implements Serializable {
 
     public void setRouteId(long routeId) {
         this.routeId = routeId;
+    }
+
+    @Nullable
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@Nullable String password) {
+        this.password = password;
+    }
+
+    public UnlockAction getUnlockAction() {
+        return unlockAction;
+    }
+
+    public void setUnlockAction(UnlockAction unlockAction) {
+        this.unlockAction = unlockAction;
     }
 }

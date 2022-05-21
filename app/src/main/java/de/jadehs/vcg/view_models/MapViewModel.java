@@ -36,13 +36,4 @@ public class MapViewModel extends DatabaseViewModel {
     public RouteMemoryCache getRouteCache() {
         return routeCache;
     }
-
-    public void updateWaypoint(final POIWaypoint waypoint){
-        RouteDatabase.databaseWriteExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                getDatabase().wayPointDao().update(waypoint);
-            }
-        });
-    }
 }

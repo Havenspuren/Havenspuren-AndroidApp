@@ -3,6 +3,7 @@ package de.jadehs.vcg.data.db.association;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 
 import java.io.Serializable;
 
@@ -21,7 +22,8 @@ foreignKeys = {
                 parentColumns = "id",
                 childColumns = "media_id"
         )
-})
+},
+indices = {@Index("waypoint_id"),@Index("media_id")})
 public class WaypointMediaJunction implements Serializable {
     @ColumnInfo(name = "waypoint_id")
     private long waypointId;

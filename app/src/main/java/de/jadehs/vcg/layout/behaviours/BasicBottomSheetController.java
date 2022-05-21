@@ -18,17 +18,25 @@ public class BasicBottomSheetController {
     private FrameLayout fragmentContainer;
     private Fragment currentFragment;
     private FragmentManager fragmentManager;
+    private Runnable onOpenCallback;
+    private Runnable onCloseCallback;
 
     public BasicBottomSheetController(FragmentManager fragmentManager, View bottomSheet) {
         this.bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         this.bottomSheet = bottomSheet;
+
+        this.bottomSheetBehavior.addBottomSheetCallback(new BottomSheetCallbacks());
         this.fragmentContainer = bottomSheet.findViewById(R.id.bottom_sheet_fragment_container);
         this.fragmentManager = fragmentManager;
     }
 
-
-
     public void open(final Fragment newFragment) {
+        this.open(newFragment, null);
+    }
+
+
+    public void open(final Fragment newFragment, Runnable onOpenCallback) {
+        this.onOpenCallback = onOpenCallback;
         currentFragment = newFragment;
         fragmentManager.beginTransaction().replace(fragmentContainer.getId(),newFragment).setReorderingAllowed(true).runOnCommit(new Runnable() {
             @Override
@@ -39,8 +47,10 @@ public class BasicBottomSheetController {
     }
 
     private void open(){
-        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED){
+        if (!this.isOpen()){
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }else{
+            notifyOnOpenCallback();
         }
     }
 
@@ -51,8 +61,27 @@ public class BasicBottomSheetController {
         }
     }
 
+    private void notifyOnOpenCallback(){
+        if(onOpenCallback != null){
+            onOpenCallback.run();
+            onOpenCallback = null;
+        }
+    }
 
-    public void close() {
+    private void notifyOnCloseCallback(){
+        if(onCloseCallback != null){
+            onCloseCallback.run();
+            onCloseCallback = null;
+        }
+    }
+
+
+    public void close(){
+        this.close(null);
+    }
+
+    public void close(Runnable onCloseCallback) {
+        this.onCloseCallback = onCloseCallback;
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
     }
@@ -68,6 +97,11 @@ public class BasicBottomSheetController {
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
             if(newState == BottomSheetBehavior.STATE_HIDDEN){
                 removeCurrentFragment();
+                notifyOnCloseCallback();
+            }
+
+            if(newState == BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_EXPANDED){
+                notifyOnOpenCallback();
             }
         }
 
