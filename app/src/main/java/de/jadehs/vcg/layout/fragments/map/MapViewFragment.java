@@ -117,10 +117,9 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
             if (route != null) {
                 if (waypoint.getId() == route.getNextWaypoint().getId()) {
 
-                    waypoint.setVisited(true);
+                    getRouteViewModel().unlockWaypointsUntil(waypoint);
                     bottomSheetController.setAttachedTo(waypoint);
                     bottomSheetController.open();
-                    mapViewModel.updateWaypoint(waypoint);
                     if (route.getVisitedCount() == route.getWaypoints().size() - 1) {
                         new RouteFinishedDialog().show(getChildFragmentManager(), null);
                     }

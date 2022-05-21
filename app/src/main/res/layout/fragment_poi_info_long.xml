@@ -9,69 +9,69 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:elevation="20dp"
         app:cardCornerRadius="20dp"
         app:contentPadding="10dp">
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_margin="5sp"
+                android:text="Titel"
+                android:textAppearance="?attr/textAppearanceHeadline4" />
 
-                <TextView
-                    android:id="@+id/text_title"
-                    android:layout_width="match_parent"
+            <FrameLayout
+                android:id="@+id/gallery_container"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
+            <uk.co.deanwild.flowtextview.FlowTextView
+                android:id="@+id/text_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description">
+
+                <ImageView
+                    android:id="@+id/poi_info_character"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:text="Titel"
-                    android:textAppearance="?attr/textAppearanceHeadline4" />
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:adjustViewBounds="true" />
+            </uk.co.deanwild.flowtextview.FlowTextView>
 
-                <FrameLayout
-                    android:id="@+id/gallery_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp" />
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
 
-                <uk.co.deanwild.flowtextview.FlowTextView
-                    android:id="@+id/text_desc"
-                    android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/waypoint_ar_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Description">
-
-                    <ImageView
-                        android:id="@+id/poi_info_character"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:adjustViewBounds="true" />
-                </uk.co.deanwild.flowtextview.FlowTextView>
-
-                <View
-                    android:id="@+id/divider2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/black" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/waypoint_ar_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="10dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_photo_camera"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
+                    android:layout_margin="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_photo_camera"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </FrameLayout>

@@ -2,10 +2,12 @@ package de.jadehs.vcg.layout.fragments.bottom_sheet;
 
 import android.content.Context;
 import android.content.Intent;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ import de.jadehs.vcg.data.db.models.POIWaypoint;
 import de.jadehs.vcg.data.db.pojo.POIWaypointWithMedia;
 import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.services.NearbyWaypointService;
+import de.jadehs.vcg.utils.BottomSheetControllerProvider;
 import de.jadehs.vcg.view_models.RouteViewModel;
 
 /**
@@ -45,8 +48,6 @@ public class ShortPoiInfo extends Fragment {
 
     private TextView title;
     private TextView description;
-    private FloatingActionButton actionButton;
-    private POIInfoListener listener;
 
 
     private POIWaypoint waypoint;
@@ -54,6 +55,7 @@ public class ShortPoiInfo extends Fragment {
     private Button passwordConfirmButton;
     private TextInputLayout passwordTextLayout;
     private RouteViewModel routeViewModel;
+    private BottomSheetControllerProvider bottomSheetController;
 
     public ShortPoiInfo() {
         // Required empty public constructor
@@ -77,6 +79,20 @@ public class ShortPoiInfo extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Fragment parentFragment = getParentFragment();
+
+        try {
+            if (parentFragment == null) {
+                bottomSheetController = (BottomSheetControllerProvider) getContext();
+            } else {
+                bottomSheetController = (BottomSheetControllerProvider) parentFragment;
+            }
+        } catch (ClassCastException exception) {
+            throw new IllegalStateException("Parent of this Fragment (Fragment oder Acitvity) needs to implement " + BottomSheetControllerProvider.class.getName(), exception);
+        }
+
+
         if (getArguments() != null) {
             waypoint = (POIWaypointWithMedia) getArguments().getSerializable(ARG_Waypoint);
         }
@@ -89,6 +105,7 @@ public class ShortPoiInfo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_poi_info_short, container, false);
     }
 
@@ -102,7 +119,7 @@ public class ShortPoiInfo extends Fragment {
         if (route != null) {
             POIWaypoint waypoint = route.getNextWaypoint();
             if (waypoint != null) {
-                isNext = waypoint.getId() == waypoint.getId();
+                isNext = waypoint.getId() == this.waypoint.getId(); // TODO check necessary??
             }
         }
         /*this.actionButton = view.findViewById(R.id.directions);
@@ -123,16 +140,6 @@ public class ShortPoiInfo extends Fragment {
 
         fillInformation(waypoint);
 
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        /*try{
-            listener = (POIInfoListener) context;
-        }catch (ClassCastException ex){
-            throw new IllegalStateException("Attaching context needs to be an implementation of the POIInfoListener interface");
-        }*/
     }
 
     /*@Override
@@ -194,12 +201,21 @@ public class ShortPoiInfo extends Fragment {
         String password = getPassword();
 
 
-        boolean same = password.equalsIgnoreCase(waypoint.getPassword());
+        boolean samePassword = password.trim().equalsIgnoreCase(waypoint.getPassword());
 
 
-        if (same) {
-            // TODO unlock waypoint
-            Toast.makeText(this.requireContext(), "Richtiges Passwort", Toast.LENGTH_LONG).show();
+        if (samePassword) {
+            routeViewModel.unlockWaypointsUntil(waypoint);
+            passwordTextLayout.findFocus().clearFocus();
+            InputMethodManager inputService = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (inputService != null)
+                inputService.hideSoftInputFromWindow(passwordTextLayout.getWindowToken(), 0);
+            bottomSheetController.getController().close(new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetController.getController().open();
+                }
+            });
         }
     }
 

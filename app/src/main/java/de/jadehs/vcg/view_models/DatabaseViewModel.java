@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import de.jadehs.vcg.data.db.access.RouteDatabase;
+import de.jadehs.vcg.data.db.models.POIWaypoint;
 
 public class DatabaseViewModel extends AndroidViewModel {
 
@@ -25,5 +26,19 @@ public class DatabaseViewModel extends AndroidViewModel {
      */
     public synchronized RouteDatabase getDatabase() {
         return database;
+    }
+
+    /**
+     * Update the specific waypoint
+     *
+     * @param waypoint
+     */
+    public void updateWaypoint(final POIWaypoint waypoint) {
+        RouteDatabase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                getDatabase().wayPointDao().update(waypoint);
+            }
+        });
     }
 }

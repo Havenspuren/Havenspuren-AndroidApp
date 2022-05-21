@@ -127,6 +127,10 @@ public abstract class RouteViewFragment extends Fragment {
         }
     }
 
+    public RouteViewModel getRouteViewModel() {
+        return routeViewModel;
+    }
+
     private void registerLocationCallback(LocationListener listener){
         if(fusedLocationProviderClient != null){
             if (requireActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
