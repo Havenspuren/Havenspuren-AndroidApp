@@ -88,7 +88,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="18sp"/>
 
-        <de.jadehs.vcg.views.StaticSlider
+        <com.google.android.material.slider.Slider
             android:id="@+id/audio_control_progress_bar"
             android:layout_width="0dp"
             android:layout_height="0dp"
