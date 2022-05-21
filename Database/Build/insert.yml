@@ -13,7 +13,7 @@
       index_of_route: 1
       visited: true
       audio:
-        path_to_file: "Testlauf/lpt.ogg"
+        path_to_file: "Testlauf/gamedev.m4a"
         extra: "Transkription"
       pictures:
         - path_to_file: "Testlauf/tree.jpg"
