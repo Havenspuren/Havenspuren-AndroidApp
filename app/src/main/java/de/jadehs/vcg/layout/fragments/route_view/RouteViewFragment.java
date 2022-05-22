@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -17,6 +18,7 @@ import com.google.android.gms.location.LocationServices;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.jadehs.vcg.BuildConfig;
 import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.view_models.RouteViewModel;
 import de.jadehs.vcg.view_models.factories.RouteViewModelFactory;
@@ -28,6 +30,7 @@ import de.jadehs.vcg.view_models.factories.RouteViewModelFactory;
 public abstract class RouteViewFragment extends Fragment {
 
     public static final String ARG_ROUTE_ID = "route_id";
+    private static final String TAG = "RouteViewFragment";
     private long routeId;
     private RouteViewModel routeViewModel;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -44,11 +47,16 @@ public abstract class RouteViewFragment extends Fragment {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
-        if (getArguments() != null) {
-            routeId = getArguments().getLong(ARG_ROUTE_ID, 1L);
+        routeId = 1;
+        if (getArguments() == null || !getArguments().containsKey(ARG_ROUTE_ID)) {
+            IllegalStateException ex = new IllegalStateException("Tried show a RouteViewFragment without passing an routeId as argument");
+            if (BuildConfig.DEBUG) {
+                throw ex;
+            } else {
+                Log.e(TAG, "Tried show a RouteViewFragment without passing an routeId as argument. Trying to continue with routeId 1", ex);
+            }
         } else {
-            // TODO should throw error, because in production the first route doesn't necessary have id 1
-            routeId = 1;
+            routeId = getArguments().getLong(ARG_ROUTE_ID);
         }
 
         RouteViewModelFactory factory = new RouteViewModelFactory(requireActivity().getApplication(), routeId);

@@ -104,16 +104,14 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     // List<Overlay> myOverlays;
     // WPMarkerWD nextPoint;
     private final DestinationLocationObserver destinationLocationObserver = new DestinationLocationObserver();
-    private String mapPath;
     // Views
     MapView map;
     BottomSheetControllerProvider controllerProvider;
     BottomSheetController bottomSheetController;
-    MapViewModel mapViewModel;
     private final DestinationLocationObserver.NextStepReachedListener destinationListener = new DestinationLocationObserver.NextStepReachedListener() {
         @Override
         public void onNextStepReachedListener(POIWaypointWithMedia waypoint) {
-            if(waypoint.getUnlockAction() != POIWaypoint.UnlockAction.GPS){
+            if (waypoint.getUnlockAction() != POIWaypoint.UnlockAction.GPS) {
                 return;
             }
             RouteWithWaypoints route = getCurrentRoute().getValue();
@@ -136,6 +134,8 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
 
         }
     };
+    MapViewModel mapViewModel;
+    private String mapPath;
     private FloatingActionButton centerButton;
     private IRenderTheme theme;
     private FrameLayout bottomSheetView;
@@ -187,7 +187,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
         super.onCreate(savedInstanceState);
 
         mapPath = this.getArguments().getString(ARG_MAP_PATH);
-        if(mapPath == null)
+        if (mapPath == null)
             NavHostFragment.findNavController(this).navigateUp();
 
         // DEBUG PURPOSES
@@ -270,6 +270,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
         if (item.getItemId() == R.id.map_menu_item_list_overview && getArguments() != null) {
             Bundle b = new Bundle();
             b.putString("title", getArguments().getString("title"));
+            b.putLong(RouteViewFragment.ARG_ROUTE_ID, this.getRouteId());
             Navigation.findNavController(requireView()).navigate(R.id.action_map_fragment_to_poi_list, b);
             return true;
         }
@@ -396,7 +397,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
 
         FileProvider provider = new FileProvider(requireContext());
         tileSource = new MapFileTileSource();
-        try{
+        try {
             FileInputStream stream = new FileInputStream(provider.getMapsFile(mapPath));
             tileSource.setMapFileInputStream(stream);
             VectorTileLayer tileLayer = map.map().setBaseMap(tileSource);
