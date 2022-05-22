@@ -38,6 +38,7 @@ import de.jadehs.vcg.services.audio.AudioPlayerService;
 import de.jadehs.vcg.services.audio.PlayerConnectionCallback;
 import de.jadehs.vcg.utils.AudioUtils;
 import de.jadehs.vcg.view_models.RouteViewModel;
+import de.jadehs.vcg.view_models.factories.RouteViewModelFactory;
 
 /**
  * Binds to the AudioPlayerService and controls it
@@ -150,13 +151,17 @@ public class AudioControlBottomFragment extends Fragment {
         super.onCreate(savedInstanceState);
         broadcastManager = LocalBroadcastManager.getInstance(requireContext());
         this.progressText = this.requireContext().getString(R.string.progress);
-        this.viewModel = new ViewModelProvider(requireActivity().getViewModelStore(), new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(RouteViewModel.class);
+
         if (getArguments() != null) {
             if (getArguments().containsKey(ROUTE_ID_ARGUMENT)) {
                 this.routeId = getArguments().getLong(ROUTE_ID_ARGUMENT);
-                this.viewModel.setCurrentRoute(routeId);
             }
         }
+        this.viewModel = new ViewModelProvider(
+                requireActivity().getViewModelStore(),
+                new RouteViewModelFactory(requireActivity().getApplication(), this.routeId)
+        ).get(RouteViewModel.class);
+
     }
 
     @Override

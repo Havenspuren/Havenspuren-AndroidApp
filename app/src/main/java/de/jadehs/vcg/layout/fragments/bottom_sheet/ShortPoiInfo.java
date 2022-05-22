@@ -2,7 +2,6 @@ package de.jadehs.vcg.layout.fragments.bottom_sheet;
 
 import android.content.Context;
 import android.content.Intent;
-import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +17,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +31,7 @@ import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.services.NearbyWaypointService;
 import de.jadehs.vcg.utils.BottomSheetControllerProvider;
 import de.jadehs.vcg.view_models.RouteViewModel;
+import de.jadehs.vcg.view_models.factories.RouteViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,10 +55,6 @@ public class ShortPoiInfo extends Fragment {
     private RouteViewModel routeViewModel;
     private BottomSheetControllerProvider bottomSheetController;
 
-    public ShortPoiInfo() {
-        // Required empty public constructor
-    }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -74,6 +68,10 @@ public class ShortPoiInfo extends Fragment {
         args.putSerializable(ARG_Waypoint, waypoint);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public ShortPoiInfo() {
+        // Required empty public constructor
     }
 
     @Override
@@ -97,8 +95,10 @@ public class ShortPoiInfo extends Fragment {
             waypoint = (POIWaypointWithMedia) getArguments().getSerializable(ARG_Waypoint);
         }
 
-        routeViewModel = new ViewModelProvider(this.requireActivity(), new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication()))
-                .get(RouteViewModel.class);
+        routeViewModel = new ViewModelProvider(
+                this.requireActivity(),
+                new RouteViewModelFactory(requireActivity().getApplication(), waypoint.getRouteId())
+        ).get(RouteViewModel.class);
     }
 
     @Override
@@ -170,16 +170,14 @@ public class ShortPoiInfo extends Fragment {
         return (String) title.getText();
     }
 
-    @NotNull
-    public String getDescription() {
-        return (String) description.getText();
-    }
-
-
     public void setTitle(@NotNull String title) {
         this.title.setText(title);
     }
 
+    @NotNull
+    public String getDescription() {
+        return (String) description.getText();
+    }
 
     public void setDescription(@NotNull String description) {
         this.description.setText(description);

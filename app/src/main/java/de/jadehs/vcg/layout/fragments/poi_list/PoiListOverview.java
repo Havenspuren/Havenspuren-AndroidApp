@@ -31,10 +31,6 @@ import de.jadehs.vcg.utils.BottomSheetControllerProvider;
 public class PoiListOverview extends RouteViewFragment implements BottomSheetControllerProvider {
     private static final String TAG = "PoiListOverview";
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_ROUTE_ID = "de.jadehs.list_overview.route_id";
-
-    private long routeId;
     private RecyclerView recyclerView;
     private POIAdapter recyclerAdapter;
     private BottomSheetControllerProvider controllerProvider;
@@ -68,14 +64,6 @@ public class PoiListOverview extends RouteViewFragment implements BottomSheetCon
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            routeId = getArguments().getLong(ARG_ROUTE_ID, 1L);
-            this.setCurrentRoute(routeId);
-        } else {
-            NavHostFragment.findNavController(this).navigateUp();
-            Log.e(TAG, "onCreate: Tried to open POIOverview without providing a routeId");
-        }
     }
 
     @Override

@@ -26,10 +26,10 @@ public class RouteViewModel extends DatabaseViewModel {
      *
      * @param application the application who holds the database
      */
-    public RouteViewModel(@NonNull Application application) {
-        // TODO add route view model factory with route id as argument
+    public RouteViewModel(@NonNull Application application, long routeId) {
         super(application);
         currentRoute = new ReplaceableLiveData<>();
+        this.setCurrentRoute(routeId);
     }
 
     /**
@@ -55,7 +55,7 @@ public class RouteViewModel extends DatabaseViewModel {
      *
      * @param idOfRoute id of the route which is retrieved from the database
      */
-    public void setCurrentRoute(long idOfRoute) {
+    private void setCurrentRoute(long idOfRoute) {
         setCurrentRoute(getDatabase().routeDao().getRoute(idOfRoute));
     }
 
