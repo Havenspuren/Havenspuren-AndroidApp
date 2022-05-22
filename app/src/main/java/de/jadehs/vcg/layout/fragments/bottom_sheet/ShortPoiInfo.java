@@ -68,7 +68,7 @@ public class ShortPoiInfo extends Fragment {
      * @param waypoint The waypoint which needs to gets displayed.
      * @return A new instance of fragment ShortPoiInfo.
      */
-    public static ShortPoiInfo newInstance(POIWaypoint waypoint) {
+    public static ShortPoiInfo newInstance(POIWaypointWithMedia waypoint) {
         ShortPoiInfo fragment = new ShortPoiInfo();
         Bundle args = new Bundle();
         args.putSerializable(ARG_Waypoint, waypoint);

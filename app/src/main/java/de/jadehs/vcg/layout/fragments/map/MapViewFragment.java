@@ -113,21 +113,25 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     private final DestinationLocationObserver.NextStepReachedListener destinationListener = new DestinationLocationObserver.NextStepReachedListener() {
         @Override
         public void onNextStepReachedListener(POIWaypointWithMedia waypoint) {
+            if(waypoint.getUnlockAction() != POIWaypoint.UnlockAction.GPS){
+                return;
+            }
             RouteWithWaypoints route = getCurrentRoute().getValue();
-            if (route != null) {
-                if (waypoint.getId() == route.getNextWaypoint().getId()) {
+            if (route == null) {
+                return;
+            }
+            if (waypoint.getId() == route.getNextWaypoint().getId()) {
 
-                    getRouteViewModel().unlockWaypointsUntil(waypoint);
-                    bottomSheetController.setAttachedTo(waypoint);
-                    bottomSheetController.open();
-                    if (route.getVisitedCount() == route.getWaypoints().size() - 1) {
-                        new RouteFinishedDialog().show(getChildFragmentManager(), null);
-                    }
-                    if (waypoint.hasTrophy()) {
-                        requireActivity().sendBroadcast(TrophyBroadcastReceiver.createIntent(getActivity(), route.getPoiRoute().getId()));
-                    }
-
+                getRouteViewModel().unlockWaypointsUntil(waypoint);
+                bottomSheetController.setAttachedTo(waypoint);
+                bottomSheetController.open();
+                if (route.getVisitedCount() == route.getWaypoints().size() - 1) {
+                    new RouteFinishedDialog().show(getChildFragmentManager(), null);
                 }
+                if (waypoint.hasTrophy()) {
+                    requireActivity().sendBroadcast(TrophyBroadcastReceiver.createIntent(getActivity(), route.getPoiRoute().getId()));
+                }
+
             }
 
         }
