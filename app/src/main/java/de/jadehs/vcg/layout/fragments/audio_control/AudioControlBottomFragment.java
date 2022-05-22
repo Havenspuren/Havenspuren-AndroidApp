@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.slider.Slider;
@@ -157,10 +156,8 @@ public class AudioControlBottomFragment extends Fragment {
                 this.routeId = getArguments().getLong(ROUTE_ID_ARGUMENT);
             }
         }
-        this.viewModel = new ViewModelProvider(
-                requireActivity().getViewModelStore(),
-                new RouteViewModelFactory(requireActivity().getApplication(), this.routeId)
-        ).get(RouteViewModel.class);
+        RouteViewModelFactory factory = new RouteViewModelFactory(requireActivity().getApplication(), this.routeId);
+        this.viewModel = factory.getViewModel(requireActivity(), RouteViewModel.class);
 
     }
 

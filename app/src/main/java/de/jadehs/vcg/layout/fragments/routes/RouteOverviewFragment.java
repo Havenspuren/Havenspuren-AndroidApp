@@ -1,7 +1,5 @@
 package de.jadehs.vcg.layout.fragments.routes;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,17 +43,10 @@ public class RouteOverviewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.fileProvider = new FileProvider(this.requireContext());
-    }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof Activity) {
-            viewmodel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(((Activity) context).getApplication()))
-                    .get(AllRoutesViewModel.class);
-        } else {
-            throw new IllegalArgumentException("Context needs to be an Activity");
-        }
+
+        viewmodel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory((requireActivity().getApplication())))
+                .get(AllRoutesViewModel.class);
     }
 
     @Override
@@ -78,13 +69,14 @@ public class RouteOverviewFragment extends Fragment {
                 systemRoutesContainer.removeAllViews();
                 // TODO change to recycler view
                 for (final RouteWithWaypoints route : poiRoutes) {
-                    View routeView = getLayoutInflater().inflate(R.layout.route_list_item, systemRoutesContainer);
+                    View routeView = getLayoutInflater().inflate(R.layout.route_list_item, systemRoutesContainer, false);
+                    systemRoutesContainer.addView(routeView);
                     final POIRoute r = route.getPoiRoute();
                     float progress = route.getProgress();
                     ((TextView) routeView.findViewById(R.id.route_progress_text)).setText(
-                            String.format(requireContext().getString(R.string.route_progress_text), (int)(progress * 100))
+                            String.format(requireContext().getString(R.string.route_progress_text), (int) (progress * 100))
                     );
-                    ((ProgressBar)routeView.findViewById(R.id.route_progress_bar)).setProgress((int)(progress*100));
+                    ((ProgressBar) routeView.findViewById(R.id.route_progress_bar)).setProgress((int) (progress * 100));
 
 
                     ((TextView) routeView.findViewById(R.id.RouteName)).setText(r.getName());

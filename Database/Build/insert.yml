@@ -58,3 +58,63 @@
       audio:
         path_to_file: "Testlauf/lpt.ogg"
         extra: "Transcription"
+- name: "Testroute2"
+  description: "Ein Route über Hafenarbeiter"
+  expected_time: 60
+  path_to_map: "whv.map"
+  path_to_map_image: "Testlauf/map.png"
+  path_to_route_image: "Testlauf/im.png"
+  path_to_character_image: "Testlauf/im.png"
+  waypoints:
+    - title: "Erster Wegpunkt"
+      short_description: "Hier startet die Führung."
+      long_description: "Beschreibung, welche ganz toll erklärt, wieso der Wegpunkt hier ist."
+      latitude: 53.517993
+      longitude: 8.121171
+      index_of_route: 1
+      visited: 1
+      unlock_action: PASSWORD
+      password: pass
+      audio:
+        path_to_file: "Testlauf/gamedev.m4a"
+        extra: "Transkription"
+      pictures:
+        - path_to_file: "Testlauf/tree.jpg"
+          extra: "Bild"
+      trophy:
+        x: 10
+        y: 20
+        name: "Erste Trophäe"
+        description: "Eine sehr detailierte Beschreibung der Trophäe. Dieser Text sollte wirklich sehr interresante Informationen enthalten, damit die Nutzer interresse haben, sich weitere Trophäen anzuschauen."
+        path_to_image: "Testlauf/tree.jpg"
+        path_to_icon: "shared/vcg_stempel.png"
+        path_to_character_image: "Testlauf/im.png"
+
+    - title: "Zweiter Wegpunkt"
+      short_description: "hier steht der ganz interresante zweite Text!"
+      long_description: "Und hier die der lange text für den zweiten wegpunkt"
+      latitude: 53.517257
+      longitude: 8.123178
+      index_of_route: 2
+      visited: 0
+      unlock_action: PASSWORD
+      password: pass
+      pictures:
+        - path_to_file: "Testlauf/tree.jpg"
+          extra: "Bild"
+      audio:
+        path_to_file: "Testlauf/lpt.ogg"
+        extra: "Transkription"
+
+
+    - title: "Dritter Wegpunkt"
+      short_description: "hier steht der ganz interresante dritte Text!"
+      long_description: "Und hier die der lange text für den zweiten wegpunkt"
+      latitude: 53.518341
+      longitude: 8.123719
+      index_of_route: 3
+      unlock_action: GPS
+      visited: 0
+      audio:
+        path_to_file: "Testlauf/lpt.ogg"
+        extra: "Transcription"

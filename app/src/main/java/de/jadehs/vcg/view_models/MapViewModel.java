@@ -17,7 +17,11 @@ public class MapViewModel extends DatabaseViewModel {
     private RouteMemoryCache routeCache;
 
 
-
+    /**
+     * ATTENTION if the viewmodel is every changed to accept the graph folder in the constructor,
+     * the viewmodelsprovider needs to have a custom key to for the map path
+     * @param application
+     */
     public MapViewModel(@NonNull Application application) {
         super(application);
     }

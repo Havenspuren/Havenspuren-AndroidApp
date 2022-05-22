@@ -8,7 +8,6 @@ import android.os.Looper;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -52,10 +51,8 @@ public abstract class RouteViewFragment extends Fragment {
             routeId = 1;
         }
 
-        routeViewModel = new ViewModelProvider(
-                this.requireActivity(),
-                new RouteViewModelFactory(requireActivity().getApplication(), routeId)
-        ).get(RouteViewModel.class);
+        RouteViewModelFactory factory = new RouteViewModelFactory(requireActivity().getApplication(), routeId);
+        routeViewModel = factory.getViewModel(requireActivity(), RouteViewModel.class);
     }
 
     @Override

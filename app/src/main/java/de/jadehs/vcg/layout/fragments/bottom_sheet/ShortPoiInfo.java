@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -95,10 +94,8 @@ public class ShortPoiInfo extends Fragment {
             waypoint = (POIWaypointWithMedia) getArguments().getSerializable(ARG_Waypoint);
         }
 
-        routeViewModel = new ViewModelProvider(
-                this.requireActivity(),
-                new RouteViewModelFactory(requireActivity().getApplication(), waypoint.getRouteId())
-        ).get(RouteViewModel.class);
+        RouteViewModelFactory factory = new RouteViewModelFactory(requireActivity().getApplication(), waypoint.getRouteId());
+        routeViewModel = factory.getViewModel(requireActivity(), RouteViewModel.class);
     }
 
     @Override
