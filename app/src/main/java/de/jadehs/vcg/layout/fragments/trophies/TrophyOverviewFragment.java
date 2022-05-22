@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import de.jadehs.vcg.R;
@@ -33,7 +34,10 @@ public class TrophyOverviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())).get(AllRoutesViewModel.class);
+        mViewModel = new ViewModelProvider(
+                requireActivity(),
+                new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())
+        ).get(AllRoutesViewModel.class);
 
     }
 
@@ -59,7 +63,16 @@ public class TrophyOverviewFragment extends Fragment {
         mViewModel.getRoutes().observe(this.getViewLifecycleOwner(), new Observer<List<RouteWithWaypoints>>() {
             @Override
             public void onChanged(List<RouteWithWaypoints> poiRoutes) {
-                recylcerAdapter.submitList(poiRoutes);
+
+                // TODO change to filter in select
+                List<RouteWithWaypoints> routeWithWaypoints = new LinkedList<>();
+
+                for (RouteWithWaypoints r : poiRoutes) {
+                    if (r.getTrophyCount() > 0) {
+                        routeWithWaypoints.add(r);
+                    }
+                }
+                recylcerAdapter.submitList(routeWithWaypoints);
             }
         });
     }
