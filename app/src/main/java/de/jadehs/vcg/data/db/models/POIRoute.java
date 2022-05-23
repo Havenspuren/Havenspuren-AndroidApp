@@ -1,6 +1,7 @@
 package de.jadehs.vcg.data.db.models;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -50,6 +51,13 @@ public class POIRoute implements Serializable {
     @ColumnInfo(name = "expected_time")
     private int expectedTime;
 
+    /**
+     * Color of the navigation path
+     */
+    @ColumnInfo(name = "navigation_path_color", defaultValue = "2570282751")
+    @Nullable
+    private Integer navigationPathColor;
+
 
     /**
      * path to map file which contains the map data
@@ -57,6 +65,19 @@ public class POIRoute implements Serializable {
     @ColumnInfo(name = "path_to_map")
     @NonNull
     private String pathToMap;
+
+    public POIRoute(long id, @NonNull String name, @NonNull String description, String themesFile, @NonNull String pathToRouteImage, @NonNull String pathToMapImage, String pathToCharacterImage, int expectedTime, int navigationPathColor, @NonNull String pathToMap) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.themesFile = themesFile;
+        this.pathToRouteImage = pathToRouteImage;
+        this.pathToMapImage = pathToMapImage;
+        this.pathToCharacterImage = pathToCharacterImage;
+        this.expectedTime = expectedTime;
+        this.navigationPathColor = navigationPathColor;
+        this.pathToMap = pathToMap;
+    }
 
     public long getId() {
         return id;
@@ -142,8 +163,18 @@ public class POIRoute implements Serializable {
     public boolean hasCharacterImage() {
         return getPathToCharacterImage() != null;
     }
-    public boolean hasThemesFile(){
+
+    public boolean hasThemesFile() {
         return getThemesFile() != null;
+    }
+
+    @Nullable
+    public Integer getNavigationPathColor() {
+        return navigationPathColor;
+    }
+
+    public void setNavigationPathColor(@Nullable Integer navigationPathColor) {
+        this.navigationPathColor = navigationPathColor;
     }
 }
 

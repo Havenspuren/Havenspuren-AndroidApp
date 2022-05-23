@@ -5,6 +5,7 @@
   path_to_map_image: "Testlauf/map.png"
   path_to_route_image: "Testlauf/im.png"
   path_to_character_image: "Testlauf/im.png"
+  navigation_path_color: 0x99FF66FF
   waypoints:
     - title: "Erster Wegpunkt"
       short_description: "Hier startet die Führung."
