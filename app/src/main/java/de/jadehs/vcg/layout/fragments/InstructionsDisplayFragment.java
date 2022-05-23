@@ -39,8 +39,7 @@ public class InstructionsDisplayFragment extends Fragment {
      * @return A new instance of fragment InstructionsDisplayFragment.
      */
     public static InstructionsDisplayFragment newInstance() {
-        InstructionsDisplayFragment fragment = new InstructionsDisplayFragment();
-        return fragment;
+        return new InstructionsDisplayFragment();
     }
 
     private Location currentLocation;
@@ -105,15 +104,15 @@ public class InstructionsDisplayFragment extends Fragment {
 
 
         if (meter < 1000) {
-            meter = ((int) meter / 10) * 10;
-            distanceInstructionTextView.setText(String.format(getString(R.string.number_as_meter), meter));
+            int m = ((int) meter / 10) * 10;
+            distanceInstructionTextView.setText(String.format(getString(R.string.number_as_meter), m));
         } else {
             distanceInstructionTextView.setText(String.format(getString(R.string.number_as_kilometer), meter / 1000));
         }
 
         if (allMeters < 1000) {
-            allMeters = ((int) allMeters / 10) * 10;
-            wholeDistanceTextView.setText(String.format(getString(R.string.number_as_meter), allMeters));
+            int am = ((int) allMeters / 10) * 10;
+            wholeDistanceTextView.setText(String.format(getString(R.string.number_as_meter), am));
         } else {
             wholeDistanceTextView.setText(String.format(getString(R.string.number_as_kilometer), allMeters / 1000));
         }
