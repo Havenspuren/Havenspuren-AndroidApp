@@ -13,19 +13,17 @@ import androidx.fragment.app.Fragment;
 
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.commons.models.IMessage;
-import com.stfalcon.chatkit.commons.models.IUser;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import de.jadehs.vcg.R;
 import de.jadehs.vcg.data.db.pojo.POIWaypointWithMedia;
-import de.jadehs.vcg.data.model.TextMessage;
 import de.jadehs.vcg.databinding.FragmentPoiInfoChatLongBinding;
 import de.jadehs.vcg.services.audio.AudioPlayerManager;
 import de.jadehs.vcg.services.audio.AudioPlayerService;
 import de.jadehs.vcg.services.audio.PlayerConnectionCallback;
+import de.jadehs.vcg.utils.MessagesParser;
+import de.jadehs.vcg.utils.data.FileProvider;
 
 public class LongChatPoiInfo extends Fragment {
 
@@ -36,26 +34,26 @@ public class LongChatPoiInfo extends Fragment {
     private AudioPlayerManager audioManager;
     private FragmentPoiInfoChatLongBinding binding;
     private MessagesListAdapter<IMessage> adapter;
+    private AudioPlayerService.AudioServiceBinder audioBinder;
+    private MediaControllerCompat audioController;
     private PlayerConnectionCallback playerConnectionCallback = new PlayerConnectionCallback() {
         @Override
         public void connectionEstablished(AudioPlayerService.AudioServiceBinder binder) {
-
+            audioBinder = binder;
         }
 
         @Override
         public void onSessionAvailable(MediaControllerCompat controller) {
-
+            audioController = controller;
         }
 
         @Override
         public void connectionLost() {
-
+            audioBinder = null;
+            audioController = null;
         }
     };
-
-    public LongChatPoiInfo() {
-        // Empty constructor
-    }
+    private FileProvider fileProvider;
 
     /**
      * Use this factory method to create a new instance of
@@ -72,6 +70,9 @@ public class LongChatPoiInfo extends Fragment {
         return fragment;
     }
 
+    public LongChatPoiInfo() {
+        // Empty constructor
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,8 @@ public class LongChatPoiInfo extends Fragment {
         audioManager = new AudioPlayerManager();
         audioManager.attachActivity(requireActivity());
         audioManager.listenForConnection(playerConnectionCallback);
+
+        fileProvider = new FileProvider(requireContext());
     }
 
     @Override
@@ -96,47 +99,23 @@ public class LongChatPoiInfo extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupMessages(view, savedInstanceState);
+        binding.textTitle.setText(waypoint.getTitle());
+    }
 
-        adapter = new MessagesListAdapter<>("ai", new ImageLoader() {
+
+    private void setupMessages(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        adapter = new MessagesListAdapter<>(MessagesParser.SELF_USER.getId(), new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
-
+                imageView.setImageURI(fileProvider.getMediaUri(url));
             }
         });
 
-        List<IMessage> messages = new ArrayList<>();
-        messages.add(new TextMessage("m1", "*test*", new IUser() {
-            @Override
-            public String getId() {
-                return "ai";
-            }
+        List<IMessage> messages = new MessagesParser(waypoint.getLongDescription())
+                .parseMessages();
 
-            @Override
-            public String getName() {
-                return "Dr. Toll";
-            }
 
-            @Override
-            public String getAvatar() {
-                return null;
-            }
-        }));
-        messages.add(new TextMessage("m2", "test", new IUser() {
-            @Override
-            public String getId() {
-                return "ai2";
-            }
-
-            @Override
-            public String getName() {
-                return "Dr. Toll";
-            }
-
-            @Override
-            public String getAvatar() {
-                return null;
-            }
-        }));
         for (IMessage message : messages) {
             adapter.addToStart(message, true);
         }
@@ -145,7 +124,17 @@ public class LongChatPoiInfo extends Fragment {
 
     private void unbindFromAudioService() {
         audioManager.removeConnectionListener(playerConnectionCallback);
-//        binder = null;
+        audioBinder = null;
+        audioController = null;
+    }
+
+
+    private void startAudio() {
+        if (audioManager == null) {
+            return;
+        }
+
+        audioManager.startPlayback(waypoint);
     }
 
     @Override

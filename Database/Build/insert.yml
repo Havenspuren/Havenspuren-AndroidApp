@@ -9,7 +9,12 @@
   waypoints:
     - title: "Erster Wegpunkt"
       short_description: "Hier startet die Führung."
-      long_description: "Beschreibung, welche ganz toll erklärt, wieso der Wegpunkt hier ist."
+      long_description: |
+        + Hallo ich bin toll!
+        - Heyho wie gehts?
+        +# Testlauf/tree.jpg
+        - WOW
+        Mehrere Zeilen!!!!
       latitude: 53.517993
       longitude: 8.121171
       index_of_route: 1

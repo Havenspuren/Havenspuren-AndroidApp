@@ -10,9 +10,17 @@ import java.util.List;
 import de.jadehs.vcg.data.model.ImageMessage;
 import de.jadehs.vcg.data.model.TextMessage;
 
+/**
+ * parses the given string as multiple messages
+ * <p>
+ * This instance can't be reused
+ */
 public class MessagesParser {
 
-    private static final IUser SELF_USER = new IUser() {
+    /**
+     * User which is used for messages of the user
+     */
+    public static final IUser SELF_USER = new IUser() {
         @Override
         public String getId() {
             return "me";
@@ -28,7 +36,10 @@ public class MessagesParser {
             return null;
         }
     };
-    private static final IUser OTHER_USER = new IUser() {
+    /**
+     * User which is used for messages of the tour guide
+     */
+    public static final IUser OTHER_USER = new IUser() {
         @Override
         public String getId() {
             return "ai";
@@ -62,7 +73,12 @@ public class MessagesParser {
         this.originalLines = originalMessage.split(System.lineSeparator());
     }
 
-    private List<IMessage> parseMessages() {
+    /**
+     * Retruns all messages of the given string
+     *
+     * @return all messages
+     */
+    public List<IMessage> parseMessages() {
         List<IMessage> messages = new LinkedList<>();
         while (linesLeft()) {
             messages.add(getNextMessage());
@@ -72,13 +88,18 @@ public class MessagesParser {
     }
 
 
+    /**
+     * Returns the next message, should only be used when parseMessages
+     *
+     * @return
+     */
     public IMessage getNextMessage() {
+        ensureLinesLeft();
         if (!isMessageStart()) {
             throw new IllegalStateException("not start of message");
         }
 
         StringBuilder text = new StringBuilder();
-        String mediaPath = "";
         IUser user = null;
         boolean isImage = false;
         boolean isAudio = false;
@@ -86,8 +107,8 @@ public class MessagesParser {
         do {
             if (isMessageStart()) {
                 String line = getLine();
-                String userPrefix = line.substring(0, 1);
-                String woUserPrefix = line.substring(1);
+                String userPrefix = line.substring(0, SELF_PREFIX.length());
+                line = line.substring(SELF_PREFIX.length());
                 if (userPrefix.equals(SELF_PREFIX)) {
                     user = SELF_USER;
                 } else if (userPrefix.equals(OTHER_PREFIX)) {
@@ -96,33 +117,43 @@ public class MessagesParser {
                     throw new IllegalStateException("Illegal User identifier. Must be one of " + Arrays.toString(LINE_START_PREFIXES));
                 }
 
-                if (woUserPrefix.startsWith(AFTER_PREFIX_SEPERATOR)) {
-                    text.append(woUserPrefix.substring(AFTER_PREFIX_SEPERATOR.length()));
-                } else {
-                    if (woUserPrefix.startsWith(IMAGE_PREFIX)) {
+                if (!line.startsWith(AFTER_PREFIX_SEPERATOR)) {
+                    if (line.startsWith(IMAGE_PREFIX)) {
                         isImage = true;
-                    } else if (woUserPrefix.startsWith(AUDIO_PREFIX)) {
+                    } else if (line.startsWith(AUDIO_PREFIX)) {
                         isAudio = true;
                     } else {
-                        throw new IllegalStateException("adf");
+                        throw new IllegalStateException("Illegal Content identifier");
                     }
-
-
+                    line = line.substring(IMAGE_PREFIX.length());
                 }
+                if (!line.startsWith(AFTER_PREFIX_SEPERATOR)) {
+                    throw new IllegalStateException("Unexpected Token in line " + line);
+                }
+
+                text.append(line.substring(AFTER_PREFIX_SEPERATOR.length()));
+
             } else {
                 text.append(getLine());
             }
-        } while (linesLeft() && isMessageStart());
+
+            text.append(System.lineSeparator());
+
+            if (isImage || isAudio) {
+                break;
+            }
+        } while (linesLeft() && !isMessageStart());
 
         IMessage message;
 
         String id = "m" + line;
+        String buildText = text.substring(0, text.length() - 1);
         if (isImage) {
-            message = new ImageMessage(id, mediaPath, user);
+            message = new ImageMessage(id, buildText, user);
         } else if (isAudio) {
-            message = new TextMessage(id, mediaPath, user);
+            throw new UnsupportedOperationException("not yet implemented");
         } else {
-            message = new TextMessage(id, text.toString(), user);
+            message = new TextMessage(id, buildText, user);
         }
 
         return message;
@@ -130,7 +161,6 @@ public class MessagesParser {
 
 
     private boolean isMessageStart() {
-
         for (String prefix : LINE_START_PREFIXES) {
             if (peekLine().startsWith(prefix)) {
                 return true;
@@ -140,15 +170,23 @@ public class MessagesParser {
     }
 
     private String getLine() {
+        ensureLinesLeft();
         return originalLines[line++];
     }
 
     private String peekLine() {
+        ensureLinesLeft();
         return originalLines[line];
     }
 
     private boolean linesLeft() {
         return line < originalLines.length;
+    }
+
+    private void ensureLinesLeft() {
+        if (!linesLeft()) {
+            throw new IllegalStateException("No more lines left!");
+        }
     }
 
 }
