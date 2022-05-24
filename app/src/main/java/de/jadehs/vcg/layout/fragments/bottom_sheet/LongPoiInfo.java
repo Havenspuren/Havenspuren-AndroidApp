@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +27,6 @@ import de.jadehs.vcg.R;
 import de.jadehs.vcg.data.db.models.Media;
 import de.jadehs.vcg.data.db.pojo.POIWaypointWithMedia;
 import de.jadehs.vcg.layout.dialogs.ARInfoDialog;
-import de.jadehs.vcg.layout.dialogs.ImageDialog;
 import de.jadehs.vcg.layout.fragments.galery.PictureGallery;
 import de.jadehs.vcg.services.audio.AudioPlayerManager;
 import de.jadehs.vcg.services.audio.AudioPlayerService;

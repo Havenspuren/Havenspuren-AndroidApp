@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.graphhopper.util.Parameters;
 
+import de.jadehs.vcg.data.db.models.POIWaypoint;
 import de.jadehs.vcg.data.db.pojo.POIWaypointWithMedia;
+import de.jadehs.vcg.layout.fragments.bottom_sheet.LongChatPoiInfo;
 import de.jadehs.vcg.layout.fragments.bottom_sheet.LongPoiInfo;
 import de.jadehs.vcg.layout.fragments.bottom_sheet.ShortPoiInfo;
 
@@ -22,7 +25,7 @@ public class BottomSheetController extends BasicBottomSheetController {
         setupView();
     }
 
-    public void setupView(){
+    public void setupView() {
         BottomSheetBehavior<View> bottomSheetBehavior = getBottomSheetBehavior();
 
 
@@ -31,16 +34,37 @@ public class BottomSheetController extends BasicBottomSheetController {
         bottomSheetBehavior.setPeekHeight(400);
     }
 
-    public void open(){
-        if(attachedTo != null){
-            Fragment f;
-            if(needsDetailedInfoWindow()){
-                f = LongPoiInfo.newInstance(attachedTo);
-            }else{
-                f = ShortPoiInfo.newInstance(attachedTo);
-            }
-            open(f);
+    public void open() {
+        if (attachedTo == null) {
+            return;
         }
+        Fragment f = getNeededFragment();
+
+        if (f == null) {
+            return;
+        }
+        open(f);
+    }
+
+
+    private Fragment getNeededFragment() {
+        if (attachedTo == null)
+            return null;
+
+        if (!needsDetailedInfoWindow()) {
+            return ShortPoiInfo.newInstance(attachedTo);
+        }
+
+
+        Fragment f = null;
+
+        if (attachedTo.getLongContentType() == POIWaypoint.ContentType.CHAT) {
+            f = LongChatPoiInfo.newInstance(attachedTo);
+        } else if (attachedTo.getLongContentType() == POIWaypoint.ContentType.TEXT) {
+            f = LongPoiInfo.newInstance(attachedTo);
+        }
+
+        return f;
     }
 
 
@@ -56,10 +80,9 @@ public class BottomSheetController extends BasicBottomSheetController {
     }
 
     /**
-     *
      * @return wether the currently attached waypoint needs the full poi info side or not. If no Marker is attached, false is returned
      */
-    private boolean needsDetailedInfoWindow(){
+    private boolean needsDetailedInfoWindow() {
         return attachedTo != null && attachedTo.isVisited();
     }
 }

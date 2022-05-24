@@ -6,7 +6,6 @@ import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
-import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
 
 import org.oscim.core.GeoPoint;
@@ -30,6 +29,10 @@ public class POIWaypoint implements Serializable {
 
     public enum UnlockAction {
         GPS, PASSWORD;
+    }
+
+    public enum ContentType {
+        TEXT, CHAT;
     }
 
     public POIWaypoint(long id, long routeId, String title, String longDescription, String shortDescription, @Nullable String password, int indexOfRoute, boolean visited, UnlockAction unlockAction, Coordinate position) {
@@ -64,7 +67,11 @@ public class POIWaypoint implements Serializable {
     private boolean visited;
     @ColumnInfo(name = "unlock_action", defaultValue = "GPS")
     private UnlockAction unlockAction;
-
+    /**
+     * Defines how to display and interpret the content of the long_description attribute
+     */
+    @ColumnInfo(name = "long_content_type", defaultValue = "TEXT")
+    private ContentType longContentType;
     @Embedded
     private Coordinate position;
 
@@ -156,5 +163,13 @@ public class POIWaypoint implements Serializable {
 
     public void setUnlockAction(UnlockAction unlockAction) {
         this.unlockAction = unlockAction;
+    }
+
+    public ContentType getLongContentType() {
+        return longContentType;
+    }
+
+    public void setLongContentType(ContentType longContentType) {
+        this.longContentType = longContentType;
     }
 }

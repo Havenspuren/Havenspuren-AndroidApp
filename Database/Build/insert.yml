@@ -14,8 +14,9 @@
       longitude: 8.121171
       index_of_route: 1
       visited: 0
-      unlock_action: PASSWORD
-      password: pass
+      unlock_action: "PASSWORD"
+      password: "pass"
+      long_content_type: "CHAT"
       audio:
         path_to_file: "Testlauf/gamedev.m4a"
         extra: "Transkription"

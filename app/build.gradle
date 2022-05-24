@@ -150,6 +150,9 @@ dependencies {
     // Markdown
     implementation 'com.github.mukeshsolanki:MarkdownView-Android:1.1.1'
 
+    // Chat
+    implementation 'com.github.stfalcon-studio:Chatkit:0.4.1'
+
 
 
 
