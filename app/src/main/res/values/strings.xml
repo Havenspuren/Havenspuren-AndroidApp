@@ -32,7 +32,7 @@
     <string name="error_no_email">Es ist kein Email Programm verfügbar</string>
     <string name="feedback_mail_subject">Feedback Hafenspuren</string>
     <string name="feedback_mail_text">Hallo liebes Hafenspuren-Team,</string>
-    <string name="number_as_meter">%.0fm</string>
+    <string name="number_as_meter">%dm</string>
     <string name="number_as_kilometer">%.2fkm</string>
     <string name="activate_gps">Bitte aktiviere dein GPS</string>
     <string name="greeting_message">Hallo und herzlich willkommen bei Havenspuren!\n\n Wir laden Sie ein, die vergangenen und gegenwärtigen Gesichter Wilhelmshavens zu entdecken. Dabei begleiten Sie diejenigen, die die Stadt am besten kennen: Ihre Bewohner und Bewohnerinnen.\n\n Diese App ist im Rahmen eines studentischen Projektes der Jade Hochschule entstanden und befindet sich derzeit noch in der Testphase. Das bedeutet, sie ist einsatzbereit, aber es warten noch ein paar Funktionen und Änderungen darauf, umgesetzt zu werden. Wir freuen uns daher über jede Rückmeldung, die wir bezüglich Verbesserungsvorschlägen erhalten. Klicken Sie dafür im Menü auf Feedback senden oder Support oder folgen Sie dem Link am Ende der Tour.\n\n  Vielen Dank und viel Spaß beim Entdecken!</string>

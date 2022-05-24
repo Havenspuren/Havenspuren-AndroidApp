@@ -39,8 +39,7 @@ public class InstructionsDisplayFragment extends Fragment {
      * @return A new instance of fragment InstructionsDisplayFragment.
      */
     public static InstructionsDisplayFragment newInstance() {
-        InstructionsDisplayFragment fragment = new InstructionsDisplayFragment();
-        return fragment;
+        return new InstructionsDisplayFragment();
     }
 
     private Location currentLocation;
@@ -102,18 +101,16 @@ public class InstructionsDisplayFragment extends Fragment {
     }
 
     private void updateInstructionDistance(float meter, float allMeters) {
-
-
         if (meter < 1000) {
-            meter = ((int) meter / 10) * 10;
-            distanceInstructionTextView.setText(String.format(getString(R.string.number_as_meter), meter));
+            int m = ((int) meter / 10) * 10;
+            distanceInstructionTextView.setText(String.format(getString(R.string.number_as_meter), m));
         } else {
             distanceInstructionTextView.setText(String.format(getString(R.string.number_as_kilometer), meter / 1000));
         }
 
         if (allMeters < 1000) {
-            allMeters = ((int) allMeters / 10) * 10;
-            wholeDistanceTextView.setText(String.format(getString(R.string.number_as_meter), allMeters));
+            int am = ((int) allMeters / 10) * 10;
+            wholeDistanceTextView.setText(String.format(getString(R.string.number_as_meter), am));
         } else {
             wholeDistanceTextView.setText(String.format(getString(R.string.number_as_kilometer), allMeters / 1000));
         }
@@ -137,7 +134,7 @@ public class InstructionsDisplayFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.directionImage = view.findViewById(R.id.instruction_display_image);
         this.distanceInstructionTextView = view.findViewById(R.id.instruction_display_distance_instruction);
@@ -155,20 +152,20 @@ public class InstructionsDisplayFragment extends Fragment {
                 CardView.LayoutParams layoutParams = (CardView.LayoutParams) v.getLayoutParams();
 
                 if (layoutParams.width == ViewGroup.LayoutParams.MATCH_PARENT) {
-                    final ConstraintSet wrapSet = new ConstraintSet();
-                    wrapSet.clone(context, R.layout.instructions_display_card_contents);
+//                    final ConstraintSet wrapSet = new ConstraintSet();
+//                    wrapSet.clone(context, R.layout.instructions_display_card_contents);
                     layoutParams.width = CardView.LayoutParams.WRAP_CONTENT;
 
-                    wrapSet.applyTo((ConstraintLayout) directionImage.getParent());
+//                    wrapSet.applyTo((ConstraintLayout) directionImage.getParent());
                 } else {
-                    final ConstraintSet expandedSet = new ConstraintSet();
-                    expandedSet.clone(context, R.layout.instructions_display_card_contents_expanded);
+//                    final ConstraintSet expandedSet = new ConstraintSet();
+//                    expandedSet.clone(context, R.layout.instructions_display_card_contents_expanded);
                     layoutParams.width = CardView.LayoutParams.MATCH_PARENT;
 
-                    expandedSet.applyTo((ConstraintLayout) directionImage.getParent());
+//                    expandedSet.applyTo((ConstraintLayout) directionImage.getParent());
                 }
 
-                v.forceLayout();
+                v.requestLayout();
             }
         });
     }

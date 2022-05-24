@@ -5,6 +5,7 @@
   path_to_map_image: "Testlauf/map.png"
   path_to_route_image: "Testlauf/im.png"
   path_to_character_image: "Testlauf/im.png"
+  navigation_path_color: 0x99FF66FF
   waypoints:
     - title: "Erster Wegpunkt"
       short_description: "Hier startet die Führung."
@@ -12,7 +13,7 @@
       latitude: 53.517993
       longitude: 8.121171
       index_of_route: 1
-      visited: 1
+      visited: 0
       unlock_action: PASSWORD
       password: pass
       audio:

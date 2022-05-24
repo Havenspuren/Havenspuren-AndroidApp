@@ -99,6 +99,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
 
     public static final String FOCUS_WAYPOINT_KEY = "FOCUS_WAYPOINT_KEY";
     private static final String TAG = "MapViewFragment";
+    private static final int DEFAULT_PATH_COLOR = 0x993366FF;
     private final RouteLocationObserver locationObserver = new RouteLocationObserver();
     // POIInfoWindow infoWindow;
     // List<Overlay> myOverlays;
@@ -144,6 +145,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     private boolean followLocation;
     private LocationLayer locationLayer;
     private PathLayer pathLayer;
+    private LineStyle.LineBuilder<?> pathLayerStyle;
     private Location lastLocation;
     private InstructionsDisplayFragment directionsFragment;
     private final LocationCallback defaultLocationCallback = new LocationCallback() {
@@ -177,6 +179,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     };
     private MapFileTileSource tileSource;
     private FragmentContainerView bottomFragmentContainer;
+
 
     public MapViewFragment() {
         // Required empty public constructor
@@ -221,7 +224,8 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
 
 
         mapViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(this.requireActivity().getApplication())).get(MapViewModel.class);
-        mapViewModel.setGraphFolder(mapPath);
+        int lastDot = mapPath.lastIndexOf(".");
+        mapViewModel.setGraphFolder(mapPath.substring(0, lastDot));
 
         registerLocationCallbacks();
     }
@@ -434,8 +438,8 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
         map.map().viewport().setMapLimit(tileSource.getMapInfo().boundingBox);
 
 
-        LineStyle style = new LineStyle(0x993366FF, 4 * getResources().getDisplayMetrics().density);
-        pathLayer = new PathLayer(map.map(), style);
+        pathLayerStyle = LineStyle.builder().color(DEFAULT_PATH_COLOR).strokeWidth(4 * getResources().getDisplayMetrics().density);
+        pathLayer = new PathLayer(map.map(), pathLayerStyle.build());
         map.map().layers().add(pathLayer);
 
         theme = map.map().setTheme(VtmThemes.DEFAULT);
@@ -573,6 +577,12 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
             if (routeWithWaypoints == null) {
                 return;
             }
+            Integer color = routeWithWaypoints.getPoiRoute().getNavigationPathColor();
+            if(color != null){
+                pathLayerStyle.color(color);
+                pathLayer.setStyle(pathLayerStyle.build());
+            }
+
 
             final ArrayList<GeoPoint> waypoints = new ArrayList<>();
 

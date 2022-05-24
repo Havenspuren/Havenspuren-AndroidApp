@@ -45,7 +45,6 @@ public class RouteLocationObserver extends LocationObserver implements Observer<
     private boolean pause;
 
 
-
     public RouteLocationObserver() {
         recalculateListeners = new LinkedList<>();
         instructionListeners = new LinkedList<>();
@@ -62,8 +61,9 @@ public class RouteLocationObserver extends LocationObserver implements Observer<
     }
 
     protected void notifyRecalculateListener(Location newLocation) {
-        Log.d(TAG, "notifyRecalculateListener: Recalculation called");
-        if(!pause){
+
+        if (!pause) {
+            Log.d(TAG, "notifyRecalculateListener: Recalculation called");
             for (RecalculateListener l : this.recalculateListeners) {
                 l.onRecalculateNeeded(newLocation);
             }
@@ -73,7 +73,7 @@ public class RouteLocationObserver extends LocationObserver implements Observer<
     public void addInstructionListener(NavigationInstructionListener navigationInstructionListener) {
         if (!this.instructionListeners.contains(navigationInstructionListener)) {
             this.instructionListeners.add(navigationInstructionListener);
-            navigationInstructionListener.onNewInstruction(getCurrentLocation(),currentInstruction);
+            navigationInstructionListener.onNewInstruction(getCurrentLocation(), currentInstruction);
         }
     }
 
@@ -83,7 +83,7 @@ public class RouteLocationObserver extends LocationObserver implements Observer<
 
     protected void notifyInstructionListeners(Location loc, Instruction instruction) {
         Log.d(TAG, "notifyInstructionListeners: New Instruction available");
-        if(!pause){
+        if (!pause) {
             for (NavigationInstructionListener l : this.instructionListeners) {
                 l.onNewInstruction(loc, instruction);
             }
@@ -143,31 +143,29 @@ public class RouteLocationObserver extends LocationObserver implements Observer<
      * @return distance in meters. -1 if no distance could get calculated
      */
     private double getDistanceFromPath() {
-        if (currentPath != null && getCurrentLocation() != null) {
-            PointList points = currentPath.getPoints();
-            Double minLength = null;
-            if (points.size() > 1) {
-                Iterator<GHPoint3D> iterator = points.iterator();
-                GHPoint lastPoint = iterator.next();
-                while (iterator.hasNext()) {
-                    GHPoint currentPoint = iterator.next();
-                    double distance = getDistanceToLine(lastPoint, currentPoint);
-                    if (distance > 0) {
-                        if (minLength == null) {
-                            minLength = distance;
-                        } else if (distance < minLength) {
-                            minLength = distance;
-                        }
-                    }
-                    lastPoint = currentPoint;
-                }
-            }
-            return minLength == null ? -1 : minLength;
-
-        } else {
+        if (currentPath == null || getCurrentLocation() == null) {
             Log.d(TAG, "getDistanceFromPath: Nothing to analyse");
             return -1;
         }
+        PointList points = currentPath.getPoints();
+        Double minLength = null;
+        if (points.size() > 1) {
+            Iterator<GHPoint3D> iterator = points.iterator();
+            GHPoint lastPoint = iterator.next();
+            while (iterator.hasNext()) {
+                GHPoint currentPoint = iterator.next();
+                double distance = getDistanceToLine(lastPoint, currentPoint);
+                if (distance > 0) {
+                    if (minLength == null) {
+                        minLength = distance;
+                    } else if (distance < minLength) {
+                        minLength = distance;
+                    }
+                }
+                lastPoint = currentPoint;
+            }
+        }
+        return minLength == null ? -1 : minLength;
     }
 
     /**
@@ -227,18 +225,19 @@ public class RouteLocationObserver extends LocationObserver implements Observer<
         }
     }
 
-    public void invalidate(){
-        if(getCurrentLocation() != null){
+    public void invalidate() {
+        if (getCurrentLocation() != null) {
             notifyRecalculateListener(getCurrentLocation());
         }
 
     }
 
 
-    public void pause(){
+    public void pause() {
         pause = true;
     }
-    public void resume(){
+
+    public void resume() {
         pause = false;
     }
 
