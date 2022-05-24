@@ -44,9 +44,10 @@ public class RouteMemoryCache implements Closeable {
 
     private void loadHopper() {
         GraphHopper tmpHopp = new GraphHopper().forMobile();
-        tmpHopp.setEncodingManager(EncodingManager.create("car"));
-        tmpHopp.setProfiles(new Profile("car").setVehicle("car").setWeighting("fastest"));
-        tmpHopp.getCHPreparationHandler().setCHProfiles(new CHProfile("car"));
+
+        tmpHopp.setEncodingManager(EncodingManager.create("bike,foot"));
+        tmpHopp.setProfiles(new Profile("bike").setVehicle("bike").setWeighting("fastest"), new Profile("foot").setVehicle("foot").setWeighting("shortest"));
+        tmpHopp.getCHPreparationHandler().setCHProfiles(new CHProfile("bike"), new CHProfile("foot"));
 
         boolean result = tmpHopp.load(fileProvider.getHopperFolder(mapName).getAbsolutePath());
         if (result)
@@ -94,7 +95,7 @@ public class RouteMemoryCache implements Closeable {
         }
 
         protected ResponsePath doInBackground(Void... v) {
-            GHRequest req = new GHRequest(fromLat, fromLng, toLat, toLng).setProfile("car");
+            GHRequest req = new GHRequest(fromLat, fromLng, toLat, toLng).setProfile("foot");
             req.getHints().putObject(Parameters.Routing.INSTRUCTIONS, true);
             GHResponse resp = hopper.route(req);
             if (resp.getAll().isEmpty())

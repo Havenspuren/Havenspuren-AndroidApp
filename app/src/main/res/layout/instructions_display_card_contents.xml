@@ -45,7 +45,7 @@
         android:maxLines="1"
         android:textAlignment="viewEnd"
         android:textAppearance="?attr/textAppearanceHeadline5"
-        app:layout_constraintBottom_toBottomOf="@id/instruction_display_image"
+        app:layout_constraintBottom_toBottomOf="@+id/instruction_display_distance_instruction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/instruction_display_distance_instruction" />
 </androidx.constraintlayout.widget.ConstraintLayout>
