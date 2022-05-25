@@ -1,6 +1,5 @@
 package de.jadehs.vcg.layout.fragments;
 
-import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,15 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.transition.TransitionManager;
 
 import com.graphhopper.util.Instruction;
 import com.graphhopper.util.shapes.GHPoint;
-
-import org.jetbrains.annotations.NotNull;
 
 import de.jadehs.vcg.R;
 
@@ -69,6 +64,14 @@ public class InstructionsDisplayFragment extends Fragment {
     }
 
     public void setCurrentInstruction(Instruction currentInstruction) {
+        if (currentInstruction == null || this.currentInstruction == null) {
+            if (currentInstruction == null) {
+                hideView();
+                return;
+            } else {
+                showView();
+            }
+        }
         this.currentInstruction = currentInstruction;
         if (currentInstruction.getSign() == 0) {
             directionImage.setImageResource(R.drawable.ic_north);
@@ -114,7 +117,6 @@ public class InstructionsDisplayFragment extends Fragment {
         } else {
             wholeDistanceTextView.setText(String.format(getString(R.string.number_as_kilometer), allMeters / 1000));
         }
-        this.getView().requestLayout();
     }
 
     public void setTitle(String title) {
@@ -133,6 +135,18 @@ public class InstructionsDisplayFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_instructions_display, container, false);
     }
 
+    private void hideView() {
+        this.requireView().setVisibility(View.GONE);
+    }
+
+    private void showView() {
+        this.requireView().setVisibility(View.VISIBLE);
+    }
+
+    private boolean isViewVisible() {
+        return this.requireView().getVisibility() == View.VISIBLE;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -140,13 +154,12 @@ public class InstructionsDisplayFragment extends Fragment {
         this.distanceInstructionTextView = view.findViewById(R.id.instruction_display_distance_instruction);
         this.wholeDistanceTextView = view.findViewById(R.id.instruction_display_whole_distance);
         this.titleTextView = view.findViewById(R.id.instruction_display_title);
+        hideView();
 
 
         view.findViewById(R.id.instruction_display_card_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Context context = v.getContext();
 
                 TransitionManager.beginDelayedTransition((ViewGroup) v.getParent());
                 CardView.LayoutParams layoutParams = (CardView.LayoutParams) v.getLayoutParams();

@@ -169,7 +169,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
                 if (waypoint == null) {
                     locationObserver.pause();
                     pathLayer.clearPath();
-                    directionsFragment.getView().setVisibility(View.GONE);
+                    directionsFragment.setCurrentInstruction(null);
                 } else {
                     GeoPoint point = waypoint.getGeoPosition();
                     mapViewModel.getRouteCache().calcPath(newStartLocation.getLatitude(), newStartLocation.getLongitude(), point.getLatitude(), point.getLongitude());
@@ -518,8 +518,8 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
 
     @Override
     public void onNewInstruction(Location currentLocation, Instruction instruction) {
-        if (instruction != null)
-            directionsFragment.setCurrentInstruction(instruction);
+
+        directionsFragment.setCurrentInstruction(instruction);
     }
 
     private void openDetailActivity(WPMarkerWD waypoint) {
@@ -578,7 +578,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
                 return;
             }
             Integer color = routeWithWaypoints.getPoiRoute().getNavigationPathColor();
-            if(color != null){
+            if (color != null) {
                 pathLayerStyle.color(color);
                 pathLayer.setStyle(pathLayerStyle.build());
             }
