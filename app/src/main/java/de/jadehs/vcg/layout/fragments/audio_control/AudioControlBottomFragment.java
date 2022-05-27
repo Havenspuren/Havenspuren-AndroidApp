@@ -230,15 +230,30 @@ public class AudioControlBottomFragment extends Fragment {
                 if (routeWithWaypoints == null)
                     return;
 
-                POIWaypointWithMedia toDisplay;
+                POIWaypointWithMedia toDisplay = null;
                 if (AudioControlBottomFragment.this.waypointId != -1) {
                     toDisplay = routeWithWaypoints.getWaypointById(AudioControlBottomFragment.this.waypointId);
-                } else {
+
+                    if(toDisplay == null){
+
+                    }
+                }
+                if (toDisplay == null) {
                     toDisplay = routeWithWaypoints.getLastUnlocked();
                 }
+
                 bindToWaypoint(toDisplay, routeWithWaypoints.getVisitedCount());
             }
         });
+    }
+
+
+    private void setEnabled(boolean enabled) {
+        nextButton.setEnabled(enabled);
+        previousButton.setEnabled(enabled);
+        playButton.setEnabled(enabled);
+
+        progressBar.setEnabled(enabled);
     }
 
     @Override
@@ -249,8 +264,8 @@ public class AudioControlBottomFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         destroyAudioManager();
         unregisterTrackProgressReceiver();
     }
@@ -325,6 +340,10 @@ public class AudioControlBottomFragment extends Fragment {
             POIWaypointWithMedia waypoint = route.getWaypointById(this.waypointId);
             int waypointCount = route.getVisitedCount();
             if (waypoint == null) {
+                if(this.waypointId != -1){
+                    audioPlayerManager.stopPlayback();
+                }
+
                 bindToWaypoint(route.getLastUnlocked(), waypointCount);
             } else {
                 bindToWaypoint(waypoint, waypointCount);
@@ -339,9 +358,15 @@ public class AudioControlBottomFragment extends Fragment {
      */
     private void bindToWaypoint(POIWaypointWithMedia waypoint, int waypointCount) {
         if (waypoint != null) {
+            setEnabled(true);
             this.titleNameView.setText(waypoint.getTitle());
             this.waypointId = waypoint.getId();
             this.updateTrackNumberProgress(waypoint.getIndexOfRoute(), waypointCount);
+        } else {
+            this.titleNameView.setText(requireContext().getText(R.string.no_waypoint_unlocked));
+            this.updateProgressBar(0,1);
+            this.updateTrackNumberProgress(0, waypointCount);
+            setEnabled(false);
         }
     }
 

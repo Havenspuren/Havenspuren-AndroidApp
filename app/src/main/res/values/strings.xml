@@ -61,4 +61,6 @@
     <string name="progress">%d/%d</string>
     <string name="error_no_browser">Kein Web-Browser vorhanden</string>
     <string name="confirm_password">Abschicken</string>
+    <string name="no_waypoint_unlocked">Noch kein Wegpunkt freigeschaltet</string>
+    <string name="start_routing">Routing starten</string>
 </resources>

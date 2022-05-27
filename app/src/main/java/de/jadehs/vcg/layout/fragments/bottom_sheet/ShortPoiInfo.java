@@ -2,6 +2,7 @@ package de.jadehs.vcg.layout.fragments.bottom_sheet;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.jetbrains.annotations.NotNull;
 import org.oscim.core.GeoPoint;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import de.jadehs.vcg.R;
@@ -53,6 +56,7 @@ public class ShortPoiInfo extends Fragment {
     private TextInputLayout passwordTextLayout;
     private RouteViewModel routeViewModel;
     private BottomSheetControllerProvider bottomSheetController;
+    private ImageButton directionsButton;
 
     /**
      * Use this factory method to create a new instance of
@@ -111,6 +115,14 @@ public class ShortPoiInfo extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.title = view.findViewById(R.id.detailTitle);
         this.description = view.findViewById(R.id.detailDescription);
+
+        this.directionsButton = view.findViewById(R.id.short_info_directions);
+        this.directionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShortPoiInfo.this.startDirections();
+            }
+        });
         RouteWithWaypoints route = routeViewModel.getCurrentRoute().getValue();
         boolean isNext = false;
         if (route != null) {
@@ -137,6 +149,19 @@ public class ShortPoiInfo extends Fragment {
 
         fillInformation(waypoint);
 
+    }
+
+    private void startDirections() {
+        GeoPoint location = waypoint.getGeoPosition();
+        Intent i = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(String.format(Locale.US,
+                        "geo:%f,%f?q=%f, %f(%s)",
+                        location.getLatitude(),
+                        location.getLongitude(),
+                        location.getLatitude(),
+                        location.getLongitude(),
+                        Uri.encode((String) title.getText()))));
+        this.requireContext().startActivity(i);
     }
 
     /*@Override

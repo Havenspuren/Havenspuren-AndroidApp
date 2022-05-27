@@ -9,7 +9,7 @@ public class AudioUtils {
 
 
     public static boolean isPlaying(@PlaybackStateCompat.State int state) {
-        return state == PlaybackStateCompat.STATE_PLAYING;
+        return state == PlaybackStateCompat.STATE_PLAYING || state == PlaybackStateCompat.STATE_BUFFERING;
     }
 
     public static boolean isPlaying(MediaControllerCompat controller) {
