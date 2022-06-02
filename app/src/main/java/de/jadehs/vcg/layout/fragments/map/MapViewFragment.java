@@ -281,6 +281,8 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
