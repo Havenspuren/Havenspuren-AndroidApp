@@ -550,7 +550,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     }
 
     private Drawable getDefaultIcon() {
-        return ContextCompat.getDrawable(requireContext(), R.drawable.ic_inactive_marker);
+        return ContextCompat.getDrawable(requireContext(), R.drawable.ic_anker_hellblau);
     }
 
     private WPMarkerWD getMarker(long id) {
@@ -567,7 +567,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     }
 
     private MarkerSymbol getDefaultMarkerSymbol() {
-        Bitmap bitmap = BitmapFactory.decodeResource(requireContext().getResources(), R.drawable.ic_inactive_marker);
+        Bitmap bitmap = BitmapFactory.decodeResource(requireContext().getResources(), R.drawable.ic_anker_hellblau);
         return new MarkerSymbol(new AndroidBitmap(bitmap), MarkerSymbol.HotspotPlace.BOTTOM_CENTER);
     }
 
@@ -605,11 +605,11 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
                 WPMarkerWD m = new WPMarkerWD();
                 m.setWaypoint(waypoint);
                 boolean isNext = waypoint == nextWaypoint;
-                int iconResource = R.drawable.ic_muted_marker;
+                int iconResource = R.drawable.ic_anker_beige;
                 if (waypoint.isVisited())
-                    iconResource = R.drawable.ic_visited_marker;
+                    iconResource = R.drawable.ic_anker_hellblau;
                 if (isNext) {
-                    iconResource = R.drawable.ic_active_marker_new;
+                    iconResource = R.drawable.ic_anker_dunkelblau;
                     m.setAnchorOffsetY(0.7);
                 }
                 m.setIcon(ContextCompat.getDrawable(requireActivity(), iconResource));
