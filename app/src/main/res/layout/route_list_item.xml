@@ -44,8 +44,10 @@
                 android:id="@+id/RouteName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:lines="1"
+                android:ellipsize="end"
                 android:text="@string/dummy"
-                android:textAppearance="?attr/textAppearanceHeadline4"
+                android:textAppearance="?attr/textAppearanceHeadline5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
