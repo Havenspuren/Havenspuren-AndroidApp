@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -189,6 +190,9 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
         mapPath = this.getArguments().getString(ARG_MAP_PATH);
         if (mapPath == null)
             NavHostFragment.findNavController(this).navigateUp();
@@ -282,12 +286,16 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
 
         Log.d(TAG, "onResume: ");
+
+        requireActivity().getOnBackPressedDispatcher()
+                .addCallback(
+                        getViewLifecycleOwner(),
+                        bottomSheetController.getOnBackPressedListener());
 
         if (map != null) {
             map.onResume();
@@ -309,6 +317,8 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause: ");
+
+        bottomSheetController.getOnBackPressedListener().remove();
 
         if (map != null) {
             map.onPause();

@@ -2,6 +2,7 @@ package de.jadehs.vcg.layout.behaviours;
 
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -14,12 +15,21 @@ import de.jadehs.vcg.layout.fragments.bottom_sheet.ShortPoiInfo;
 public class BottomSheetController extends BasicBottomSheetController {
 
     private static final String TAG = "BottomSheetController";
+    private final OnBackPressedCallback onBackPressedListener;
 
     private POIWaypointWithMedia attachedTo;
 
     public BottomSheetController(FragmentManager fragmentManager, View bottomSheet) {
         super(fragmentManager, bottomSheet);
         setupView();
+        this.onBackPressedListener = new OnBackPressedCallback(false){
+            @Override
+            public void handleOnBackPressed() {
+                if(isOpen()){
+                    close();
+                }
+            }
+        };
     }
 
     public void setupView(){
@@ -43,8 +53,19 @@ public class BottomSheetController extends BasicBottomSheetController {
         }
     }
 
+    @Override
+    public void close(Runnable onCloseCallback) {
+        super.close(onCloseCallback);
+        this.onBackPressedListener.setEnabled(false);
+    }
 
-//    private Button detailButton;
+    @Override
+    public void open(Fragment newFragment, Runnable onOpenCallback) {
+        super.open(newFragment, onOpenCallback);
+        this.onBackPressedListener.setEnabled(true);
+    }
+
+    //    private Button detailButton;
 
 
     public POIWaypointWithMedia getAttachedTo() {
@@ -61,5 +82,9 @@ public class BottomSheetController extends BasicBottomSheetController {
      */
     private boolean needsDetailedInfoWindow(){
         return attachedTo != null && attachedTo.isVisited();
+    }
+
+    public OnBackPressedCallback getOnBackPressedListener() {
+        return onBackPressedListener;
     }
 }
