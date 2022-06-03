@@ -44,7 +44,7 @@
                 android:id="@+id/RouteName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tutorial"
+                android:text="@string/dummy"
                 android:textAppearance="?attr/textAppearanceHeadline4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -61,11 +61,10 @@
                 app:layout_constraintEnd_toStartOf="@id/guideline3"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/route_image"
                 android:layout_width="0px"
                 android:layout_height="0px"
-                android:scaleType="fitXY"
                 android:cropToPadding="true"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"

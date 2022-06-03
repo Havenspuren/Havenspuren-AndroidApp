@@ -16,6 +16,7 @@ import de.jadehs.vcg.R;
 import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.layout.fragments.route_view.RouteViewFragment;
+import de.jadehs.vcg.utils.data.FileProvider;
 
 public class RouteInfoFragment extends RouteViewFragment {
 
@@ -27,6 +28,7 @@ public class RouteInfoFragment extends RouteViewFragment {
     private TextView trophyProgressView;
     private String progressText;
     private String trophyProgressText;
+    private FileProvider fileProvider;
 
     public RouteInfoFragment() {
         // Required empty public constructor
@@ -36,6 +38,7 @@ public class RouteInfoFragment extends RouteViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        fileProvider = new FileProvider(requireContext());
     }
 
     @Override
@@ -77,7 +80,7 @@ public class RouteInfoFragment extends RouteViewFragment {
         POIRoute poiRoute = route.getPoiRoute();
         this.titleView.setText(poiRoute.getName());
         this.descView.setText(poiRoute.getDescription());
-        this.imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), R.drawable.ic_launcher_foreground));
+        this.imageView.setImageURI(fileProvider.getMediaUri(poiRoute.getPathToRouteImage()));
 
 
         setProgress((int) (route.getProgress() * 100));

@@ -19,11 +19,12 @@
     <string name="achievement_title">Trophäen</string>
     <string name="settings">Einstellungen</string>
     <string name="send_feedback">Feedback senden</string>
-    <string name="info_title">Über...</string>
+    <string name="info_title">Über…</string>
     <string name="support">Support</string>
     <string name="contributors">Mitwirkende</string>
     <string name="info">Info</string>
     <string name="continue_text">Fortsetzen</string>
+    <string name="start_text">Starten</string>
     <string name="list_overview">Listenansicht</string>
     <string name="dummy">Default</string>
     <string name="lorem100">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>

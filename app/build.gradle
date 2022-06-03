@@ -150,6 +150,8 @@ dependencies {
     // Markdown
     implementation 'com.github.mukeshsolanki:MarkdownView-Android:1.1.1'
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 
 
 
