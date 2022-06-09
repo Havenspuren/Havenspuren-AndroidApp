@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.StrictMode
+import android.os.strictmode.Violation
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import de.jadehs.vcg.R.string.nearby_channel_description
@@ -29,23 +30,33 @@ class MyApplication : Application() {
 
 
     override fun onCreate() {
-        super.onCreate()
+
 
         if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(
-                    StrictMode.ThreadPolicy.Builder().detectNetwork()
-                            .detectResourceMismatches()
-                            .penaltyDeath()
-                            .build())
-            StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+            val threadPolicy = StrictMode.ThreadPolicy.Builder().detectNetwork()
+                    .detectResourceMismatches()
+                    .penaltyDeath()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                threadPolicy.penaltyListener(mainExecutor, StrictMode.OnThreadViolationListener { violation: Violation? ->
+                    violation?.printStackTrace()
+                })
+            }
+            StrictMode.setThreadPolicy(threadPolicy.build())
+            val vmPolicy = StrictMode.VmPolicy.Builder()
                     .detectLeakedClosableObjects()
                     .detectActivityLeaks()
                     .detectCleartextNetwork()
                     .detectLeakedRegistrationObjects()
                     .detectLeakedSqlLiteObjects()
                     .penaltyLog()
-                    .build())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                vmPolicy.penaltyListener(mainExecutor, StrictMode.OnVmViolationListener { violation: Violation? ->
+                    violation?.printStackTrace()
+                })
+            }
+            StrictMode.setVmPolicy(vmPolicy.build())
         }
+        super.onCreate()
 
 
         Parameters.MARKER_SORT = false;

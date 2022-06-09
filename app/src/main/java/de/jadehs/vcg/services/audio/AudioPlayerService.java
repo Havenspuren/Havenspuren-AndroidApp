@@ -466,7 +466,7 @@ public class AudioPlayerService extends Service {
         @Nullable
         @Override
         public PendingIntent createCurrentContentIntent(@NonNull Player player) {
-            return PendingIntent.getActivity(getBaseContext(), 0, getMainIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+            return PendingIntent.getActivity(getBaseContext(), 0, getMainIntent(), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         }
 
         @Nullable

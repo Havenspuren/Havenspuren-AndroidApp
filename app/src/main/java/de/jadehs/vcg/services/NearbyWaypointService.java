@@ -96,7 +96,7 @@ public class NearbyWaypointService extends Service {
     private PendingIntent getMapPendingIntent(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(MainActivity.EXTRA_ROUTE , mapId);
-        return PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
     /*private PendingIntent getDetailPendingIntent(){
