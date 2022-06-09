@@ -9,7 +9,10 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="7dp"
         android:focusable="true"
         app:cardCornerRadius="30dp"
         app:contentPadding="15dp">
@@ -42,10 +45,13 @@
 
             <TextView
                 android:id="@+id/RouteName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Tutorial"
-                android:textAppearance="?attr/textAppearanceHeadline4"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/dummy"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                app:layout_constraintEnd_toStartOf="@+id/route_image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,19 +67,18 @@
                 app:layout_constraintEnd_toStartOf="@id/guideline3"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/route_image"
                 android:layout_width="0px"
                 android:layout_height="0px"
-                android:scaleType="fitXY"
+                android:background="@drawable/circle"
+                android:contentDescription="@string/route_image_description"
                 android:cropToPadding="true"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/guideline"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_launcher_foreground"
-                android:contentDescription="@string/route_image_description"
-                android:background="@drawable/circle"/>
+                app:srcCompat="@drawable/ic_launcher_foreground" />
 
             <TextView
                 android:id="@+id/route_progress_text"
@@ -100,11 +105,11 @@
                 android:id="@+id/continue_route_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/continue_text"
                 app:layout_constraintStart_toEndOf="@id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/route_progress_text"/>
+                app:layout_constraintTop_toBottomOf="@+id/route_progress_text" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

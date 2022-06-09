@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -169,7 +170,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
                 if (waypoint == null) {
                     locationObserver.pause();
                     pathLayer.clearPath();
-                    directionsFragment.getView().setVisibility(View.GONE);
+                    directionsFragment.setCurrentInstruction(null);
                 } else {
                     GeoPoint point = waypoint.getGeoPosition();
                     mapViewModel.getRouteCache().calcPath(newStartLocation.getLatitude(), newStartLocation.getLongitude(), point.getLatitude(), point.getLongitude());
@@ -188,6 +189,9 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
 
         mapPath = this.getArguments().getString(ARG_MAP_PATH);
         if (mapPath == null)
@@ -281,11 +285,17 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
 
         Log.d(TAG, "onResume: ");
+
+        requireActivity().getOnBackPressedDispatcher()
+                .addCallback(
+                        getViewLifecycleOwner(),
+                        bottomSheetController.getOnBackPressedListener());
 
         if (map != null) {
             map.onResume();
@@ -307,6 +317,8 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause: ");
+
+        bottomSheetController.getOnBackPressedListener().remove();
 
         if (map != null) {
             map.onPause();
@@ -518,8 +530,8 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
 
     @Override
     public void onNewInstruction(Location currentLocation, Instruction instruction) {
-        if (instruction != null)
-            directionsFragment.setCurrentInstruction(instruction);
+
+        directionsFragment.setCurrentInstruction(instruction);
     }
 
     private void openDetailActivity(WPMarkerWD waypoint) {
@@ -548,7 +560,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     }
 
     private Drawable getDefaultIcon() {
-        return ContextCompat.getDrawable(requireContext(), R.drawable.ic_inactive_marker);
+        return ContextCompat.getDrawable(requireContext(), R.drawable.ic_anker_hellblau);
     }
 
     private WPMarkerWD getMarker(long id) {
@@ -565,7 +577,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     }
 
     private MarkerSymbol getDefaultMarkerSymbol() {
-        Bitmap bitmap = BitmapFactory.decodeResource(requireContext().getResources(), R.drawable.ic_inactive_marker);
+        Bitmap bitmap = BitmapFactory.decodeResource(requireContext().getResources(), R.drawable.ic_anker_hellblau);
         return new MarkerSymbol(new AndroidBitmap(bitmap), MarkerSymbol.HotspotPlace.BOTTOM_CENTER);
     }
 
@@ -578,7 +590,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
                 return;
             }
             Integer color = routeWithWaypoints.getPoiRoute().getNavigationPathColor();
-            if(color != null){
+            if (color != null) {
                 pathLayerStyle.color(color);
                 pathLayer.setStyle(pathLayerStyle.build());
             }
@@ -603,11 +615,11 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
                 WPMarkerWD m = new WPMarkerWD();
                 m.setWaypoint(waypoint);
                 boolean isNext = waypoint == nextWaypoint;
-                int iconResource = R.drawable.ic_muted_marker;
+                int iconResource = R.drawable.ic_anker_beige;
                 if (waypoint.isVisited())
-                    iconResource = R.drawable.ic_visited_marker;
+                    iconResource = R.drawable.ic_anker_hellblau;
                 if (isNext) {
-                    iconResource = R.drawable.ic_active_marker_new;
+                    iconResource = R.drawable.ic_anker_dunkelblau;
                     m.setAnchorOffsetY(0.7);
                 }
                 m.setIcon(ContextCompat.getDrawable(requireActivity(), iconResource));

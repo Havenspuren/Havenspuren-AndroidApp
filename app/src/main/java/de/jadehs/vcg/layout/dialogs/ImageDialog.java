@@ -69,6 +69,15 @@ public class ImageDialog extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.image.setImageURI(uriToImage);
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog d = getDialog();
+                if(d != null){
+                    d.dismiss();
+                }
+            }
+        });
     }
 
     @Override

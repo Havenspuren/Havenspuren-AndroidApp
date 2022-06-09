@@ -16,32 +16,30 @@
             android:title="@string/achievement_title" />
     </group>
 
-    <group
-        android:id="@+id/general_group">
-        <item
+    <group android:id="@+id/general_group">
+        <!--<item
             android:id="@+id/destination_settings"
             android:title="@string/settings"
-            android:icon="@drawable/ic_settings"/>
+            android:icon="@drawable/ic_settings"/>-->
         <item
             android:id="@+id/feedback_item"
-            android:title="@string/send_feedback"
-            android:icon="@drawable/ic_chat_bubble"/>
+            android:icon="@drawable/ic_chat_bubble"
+            android:title="@string/send_feedback" />
 
         <item
             android:id="@+id/support_item"
-            android:title="@string/support"
-            android:icon="@drawable/ic_email"/>
+            android:icon="@drawable/ic_email"
+            android:title="@string/support" />
         <!--<item
             android:id="@+id/destination_contributors"
             android:title="@string/contributors"
             android:icon="@drawable/ic_notifications"/>-->
         <item
             android:id="@+id/destination_info_fragment"
-            android:title="@string/info_title"
-            android:icon="@drawable/ic_info"/>
+            android:icon="@drawable/ic_info"
+            android:title="@string/info_title" />
     </group>
-    <group
-        android:id="@+id/socials_group">
+    <group android:id="@+id/socials_group">
 
     </group>
 

@@ -46,7 +46,7 @@ def getInsertValues(dataObject, toIgnore=[], raw=[]):
                 valuesString += ","
             columnString += key
             if (type(value) == str or type(value) == bool) and (key not in raw):
-                value = "\"" + str(value) + "\""
+                value = "\"" + str(value).replace("\"", "\"\"") + "\""
             else:
                 value = str(value)
             valuesString += value

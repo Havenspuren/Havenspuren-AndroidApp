@@ -6,12 +6,12 @@
 
     <ImageView
         android:id="@+id/instruction_display_image"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_north"
         app:layout_constraintBottom_toTopOf="@id/instruction_display_distance_instruction"
+        app:layout_constraintDimensionRatio="W,1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@android:color/holo_blue_dark" />
@@ -25,7 +25,7 @@
         android:textAppearance="?attr/textAppearanceHeadline5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/instruction_display_image"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/instruction_display_image"
         app:layout_constraintTop_toBottomOf="@id/instruction_display_image" />
 
     <TextView

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -82,8 +83,11 @@ public class RouteOverviewFragment extends Fragment {
                     ((TextView) routeView.findViewById(R.id.RouteName)).setText(r.getName());
 
                     ((ImageView) routeView.findViewById(R.id.route_image)).setImageURI(fileProvider.getMediaUri(r.getPathToRouteImage()));
+                    Button continueButton = routeView.findViewById(R.id.continue_route_button);
 
-                    routeView.findViewById(R.id.continue_route_button).setOnClickListener(new View.OnClickListener() {
+
+                    continueButton.setText(route.getVisitedCount() > 0 ? R.string.continue_text : R.string.start_text);
+                    continueButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             // route to Map view with the graph fragment

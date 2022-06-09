@@ -16,8 +16,8 @@ android {
 		
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 18
-        versionName "0.3.0"
+        versionCode 21
+        versionName "0.4.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -149,6 +149,8 @@ dependencies {
 
     // Markdown
     implementation 'com.github.mukeshsolanki:MarkdownView-Android:1.1.1'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 
 
