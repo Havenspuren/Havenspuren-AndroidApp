@@ -4,31 +4,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 
 import de.jadehs.vcg.R;
 import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
+import de.jadehs.vcg.databinding.FragmentRouteInfoBinding;
 import de.jadehs.vcg.layout.fragments.route_view.RouteViewFragment;
 import de.jadehs.vcg.utils.data.FileProvider;
+import io.noties.markwon.Markwon;
 
 public class RouteInfoFragment extends RouteViewFragment {
 
 
-    private TextView titleView;
-    private TextView descView;
-    private ImageView imageView;
-    private TextView progressView;
-    private TextView trophyProgressView;
     private String progressText;
     private String trophyProgressText;
     private FileProvider fileProvider;
+    private FragmentRouteInfoBinding binding;
+    private Markwon markwon;
 
     public RouteInfoFragment() {
         // Required empty public constructor
@@ -37,37 +33,32 @@ public class RouteInfoFragment extends RouteViewFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        markwon = Markwon.create(requireContext());
 
         fileProvider = new FileProvider(requireContext());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_route_info, container, false);
+        binding = FragmentRouteInfoBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupInfoViews(view,savedInstanceState);
+        setupInfoViews(view, savedInstanceState);
         setupObserver();
     }
 
-    private void setupInfoViews(@NonNull View view, @Nullable Bundle savedInstanceState){
-        this.titleView = view.findViewById(R.id.route_info_title);
-        this.descView = view.findViewById(R.id.route_info_desc);
-        this.imageView = view.findViewById(R.id.route_info_image);
-
-        this.progressView = view.findViewById(R.id.route_info_progress);
+    private void setupInfoViews(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.progressText = view.getContext().getString(R.string.route_progress_text);
-
-        this.trophyProgressView = view.findViewById(R.id.route_info_trophy_progress);
         this.trophyProgressText = view.getContext().getString(R.string.trophy_progress);
     }
 
-    private void setupObserver(){
+    private void setupObserver() {
         getCurrentRoute().observe(getViewLifecycleOwner(), new Observer<RouteWithWaypoints>() {
             @Override
             public void onChanged(RouteWithWaypoints routeWithWaypoints) {
@@ -76,11 +67,11 @@ public class RouteInfoFragment extends RouteViewFragment {
         });
     }
 
-    private void bindData(RouteWithWaypoints route){
+    private void bindData(RouteWithWaypoints route) {
         POIRoute poiRoute = route.getPoiRoute();
-        this.titleView.setText(poiRoute.getName());
-        this.descView.setText(poiRoute.getDescription());
-        this.imageView.setImageURI(fileProvider.getMediaUri(poiRoute.getPathToRouteImage()));
+        this.binding.routeInfoTitle.setText(poiRoute.getName());
+        this.binding.routeInfoDesc.setText(poiRoute.getDescription());
+        this.binding.routeInfoImage.setImageURI(fileProvider.getMediaUri(poiRoute.getPathToRouteImage()));
 
 
         setProgress((int) (route.getProgress() * 100));
@@ -89,10 +80,10 @@ public class RouteInfoFragment extends RouteViewFragment {
     }
 
     private void setProgress(int percent) {
-        this.progressView.setText(String.format(this.progressText, percent));
+        this.binding.routeInfoProgress.setText(String.format(this.progressText, percent));
     }
 
     private void setTrophyProgress(int unlocked, int total) {
-        this.trophyProgressView.setText(String.format(this.trophyProgressText, unlocked, total));
+        this.binding.routeInfoTrophyProgress.setText(String.format(this.trophyProgressText, unlocked, total));
     }
 }

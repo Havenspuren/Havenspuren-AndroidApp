@@ -17,16 +17,18 @@ import de.jadehs.vcg.data.db.converter.Converters;
 import de.jadehs.vcg.data.db.models.Media;
 import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
+import de.jadehs.vcg.data.db.models.RouteProperties;
 import de.jadehs.vcg.data.db.models.Trophy;
 
 
 @Database(
-        entities = {POIWaypoint.class, POIRoute.class, Media.class, WaypointMediaJunction.class, Trophy.class},
-        version = 16,
+        entities = {POIWaypoint.class, POIRoute.class, Media.class, WaypointMediaJunction.class, Trophy.class, RouteProperties.class},
+        version = 17,
         autoMigrations = {
                 @AutoMigration(from = 13, to = 14),
                 @AutoMigration(from = 14, to = 15),
-                @AutoMigration(from = 15, to = 16)
+                @AutoMigration(from = 15, to = 16),
+                @AutoMigration(from = 16, to = 17)
         }
 )
 @TypeConverters({Converters.class})

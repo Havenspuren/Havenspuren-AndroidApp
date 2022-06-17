@@ -1,6 +1,7 @@
 package de.jadehs.vcg.data.db.pojo;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Ignore;
 import androidx.room.Relation;
@@ -11,46 +12,58 @@ import org.oscim.core.GeoPoint;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
+import de.jadehs.vcg.data.db.models.RouteProperties;
 import de.jadehs.vcg.utils.CollectionUtils;
 import kotlin.jvm.functions.Function1;
 
 
 public class RouteWithWaypoints implements Serializable {
 
+
     @Ignore
     private BoundingBox bounds;
+    @NonNull
+    @Embedded
+    private POIRoute poiRoute;
+    @NonNull
+    @Relation(entity = POIWaypoint.class, entityColumn = "route_id", parentColumn = "id")
+    private List<POIWaypointWithMedia> waypoints;
+    @NonNull
+    @Relation(entity = RouteProperties.class, entityColumn = "route_id", parentColumn = "id")
+    private List<RouteProperties> properties;
 
     @Ignore
-    public RouteWithWaypoints(POIRoute poiRoute) {
+    public RouteWithWaypoints(@NonNull POIRoute poiRoute) {
         this.poiRoute = poiRoute;
+        waypoints = Collections.emptyList();
+        properties = Collections.emptyList();
     }
 
-    public RouteWithWaypoints(POIRoute poiRoute, List<POIWaypointWithMedia> waypoints) {
+    public RouteWithWaypoints(@NonNull POIRoute poiRoute, @NonNull List<POIWaypointWithMedia> waypoints, @NonNull List<RouteProperties> properties) {
+
         this.poiRoute = poiRoute;
+        this.properties = properties;
         setWaypoints(waypoints);
     }
 
-    @Embedded
-    private POIRoute poiRoute;
+    @NonNull
+    public List<RouteProperties> getProperties() {
+        return properties;
+    }
 
-    @Relation(entity = POIWaypoint.class, entityColumn = "route_id", parentColumn = "id")
-    private List<POIWaypointWithMedia> waypoints;
+    public void setProperties(@NonNull List<RouteProperties> properties) {
+        this.properties = properties;
+    }
 
+    @NonNull
     public List<POIWaypointWithMedia> getWaypoints() {
         return waypoints;
-    }
-
-    public POIRoute getPoiRoute() {
-        return poiRoute;
-    }
-
-    public void setPoiRoute(POIRoute poiRoute) {
-        this.poiRoute = poiRoute;
     }
 
     public void setWaypoints(List<POIWaypointWithMedia> waypoints) {
@@ -62,6 +75,15 @@ public class RouteWithWaypoints implements Serializable {
                 return Integer.compare(o1.getIndexOfRoute(), o2.getIndexOfRoute());
             }
         });
+    }
+
+    @NonNull
+    public POIRoute getPoiRoute() {
+        return poiRoute;
+    }
+
+    public void setPoiRoute(@NonNull POIRoute poiRoute) {
+        this.poiRoute = poiRoute;
     }
 
     /**
@@ -89,8 +111,8 @@ public class RouteWithWaypoints implements Serializable {
 
     public ListIterator<POIWaypointWithMedia> getIteratorAt(long waypointId) {
         ListIterator<POIWaypointWithMedia> iterator = this.getWaypoints().listIterator();
-        while(iterator.hasNext()){
-            if(iterator.next().getId() == waypointId){
+        while (iterator.hasNext()) {
+            if (iterator.next().getId() == waypointId) {
                 return iterator;
             }
         }
