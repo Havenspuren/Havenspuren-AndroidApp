@@ -20,15 +20,15 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,14 +53,6 @@ import de.jadehs.vcg.utils.ImageUtils;
  */
 public class AudioPlayerService extends Service {
 
-    private static final String TAG = "AudioPlayerService";
-
-
-    // NOTIFICATION ID
-    private static final String PLAYER_CHANNEL = "de.jadehs.vcg.audio_player";
-
-
-    // INTENT EXTRAS
     /**
      * Used as an string extra field in AudioPlayerService intents to tell the application being invoked which title the current track has.
      */
@@ -69,11 +61,13 @@ public class AudioPlayerService extends Service {
      * Used as an string extra field in AudioPlayerService intents to tell the application being invoked which description the current track has.
      */
     public static final String EXTRA_DESCRIPTION = "de.jadehs.vcg.extra_description";
+
+
+    // INTENT EXTRAS
     /**
      * Used as an string extra field in AudioPlayerService intents to tell the application being invoked where the audio file is located. This extra is needed to start the service
      */
     public static final String EXTRA_AUDIO_FILE = "de.jadehs.vcg.extra_uri_to_file";
-
     /**
      * Used as an string extra field in AudioPlayerService intents to tell the application being invoked which picture to display in the notification.
      */
@@ -82,39 +76,33 @@ public class AudioPlayerService extends Service {
      * Used as an string extra field in AudioPlayerService intents to tell the application being invoked which picture to display in the notification.
      */
     public static final String EXTRA_WAYPOINT_ID = "de.jadehs.vcg.extra_waypoint_id";
-
-
-    // Broadcasts
-
     /**
      * Broadcast which is send, when playback started.
      */
     public static final String PLAYBACK_STARTED_ACTION = "de.jadehs.vcg.playback_started_action";
-
     /**
      * Broadcast which is send, when the playback location of the playback changed
      */
     public static final String PLAYBACK_LOCATION_CHANGED_ACTION = "de.jadehs.vcg.playback_location_changed_action";
 
+
+    // Broadcasts
     public static final String EXTRA_PLAYBACK_POSITION = "de.jadehs.vcg.playback_location";
-
     public static final String EXTRA_PLAYBACK_LENGTH = "de.jadehs.vcg.playback_length";
-
     /**
      * the interval which is used to send the PLAYBACK_LOCATION_CHANGED_ACTION broadcast
      */
     public static final long PLAYBACK_LOCATION_UPDATE_INTERVAL = 300;
-
-
-    private SimpleExoPlayer player;
+    private static final String TAG = "AudioPlayerService";
+    // NOTIFICATION ID
+    private static final String PLAYER_CHANNEL = "de.jadehs.vcg.audio_player";
+    private final Binder binder = new AudioServiceBinder();
+    private ExoPlayer player;
     private PlayerNotificationManager manager;
     private MediaSessionCompat mediaSessionCompat;
     private MediaSessionConnector connector;
     private MediaDescriptor descriptor;
-
-
-    private final Binder binder = new AudioServiceBinder();
-    private DefaultDataSourceFactory dataSourceFactory;
+    private DefaultDataSource.Factory dataSourceFactory;
     /**
      * id of the waypoint which was last passed with the onStartCommand intent, if no id was passed, the value is -1
      */
@@ -136,11 +124,9 @@ public class AudioPlayerService extends Service {
 
         setupNotificationManager();
 
-        dataSourceFactory = new DefaultDataSourceFactory(
-                getApplicationContext(),
-                Util.getUserAgent(
-                        getApplicationContext(),
-                        getString(R.string.app_name)));
+        dataSourceFactory = new DefaultDataSource.Factory(
+                getApplicationContext()
+        );
     }
 
     @Override
@@ -185,8 +171,15 @@ public class AudioPlayerService extends Service {
         if (filePath != null) {
             File file = new File(filePath);
             if (file.exists() && file.isFile()) {
-                MediaSource audioSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.fromFile(file));
-                player.prepare(audioSource);
+                MediaSource audioSource = new ProgressiveMediaSource
+                        .Factory(dataSourceFactory)
+                        .createMediaSource(
+                                MediaItem.fromUri(
+                                        Uri.fromFile(file)
+                                )
+                        );
+                player.setMediaSource(audioSource);
+                player.prepare();
                 mediaSessionCompat.setActive(true);
             } else {
                 throwMissingAudio.run();
@@ -213,14 +206,23 @@ public class AudioPlayerService extends Service {
         if (player != null) {
             destroyPlayer();
         }
-        player = new SimpleExoPlayer.Builder(getBaseContext()).build();
+        player = new ExoPlayer.Builder(getBaseContext()).build();
         handler = new Handler(player.getApplicationLooper());
 
 
-        player.addListener(new Player.EventListener() {
+        player.addListener(new Player.Listener() {
 
             @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
+                updateServiceStatus(playWhenReady, player.getPlaybackState());
+            }
+
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                updateServiceStatus(player.getPlayWhenReady(), playbackState);
+            }
+
+            private void updateServiceStatus(boolean playWhenReady, int playbackState) {
                 if (playbackState == Player.STATE_READY) {
                     if (playWhenReady && !isLocationUpdatesRunning) {
                         startLocationUpdates();
@@ -235,7 +237,6 @@ public class AudioPlayerService extends Service {
                 if (Player.STATE_ENDED == playbackState) {
                     stopAudioService();
                 }
-
             }
         });
 
@@ -243,7 +244,7 @@ public class AudioPlayerService extends Service {
         player.setPlayWhenReady(true);
         player.setAudioAttributes(
                 new AudioAttributes.Builder()
-                        .setContentType(C.CONTENT_TYPE_MUSIC)
+                        .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
                         .setUsage(C.USAGE_MEDIA)
                         .build(),
                 true);
@@ -267,7 +268,7 @@ public class AudioPlayerService extends Service {
     private void startLocationUpdates() {
         if (!isLocationUpdatesRunning) {
             isLocationUpdatesRunning = true;
-            if(locationUpdateCallback == null){
+            if (locationUpdateCallback == null) {
                 locationUpdateCallback = new Runnable() {
                     private final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
 
@@ -301,41 +302,43 @@ public class AudioPlayerService extends Service {
 
     private void setupNotificationManager() {
         descriptor = new MediaDescriptor(new Bundle());
-        manager = PlayerNotificationManager.createWithNotificationChannel(
+        manager = new PlayerNotificationManager.Builder(
                 getBaseContext(),
-                PLAYER_CHANNEL,
-                R.string.audio_player_channel,
-                R.string.audio_player_channel_description,
                 100,
-                descriptor,
-                new PlayerNotificationManager.NotificationListener() {
+                PLAYER_CHANNEL)
+                .setChannelNameResourceId(R.string.audio_player_channel)
+                .setChannelDescriptionResourceId(R.string.audio_player_channel_description)
+                .setMediaDescriptionAdapter(descriptor)
+                .setNotificationListener(
+                        new PlayerNotificationManager.NotificationListener() {
 
-                    @Override
-                    public void onNotificationCancelled(int notificationId, boolean dismissedByUser) {
-                        stopForeground(true);
-                        stopAudioService();
-                    }
+                            @Override
+                            public void onNotificationCancelled(int notificationId, boolean dismissedByUser) {
+                                stopForeground(true);
+                                stopAudioService();
+                            }
 
-                    @Override
-                    public void onNotificationPosted(int notificationId, @NotNull Notification notification, boolean ongoing) {
-                        Log.d(TAG, "onNotificationPosted: " + ongoing);
-                        if (ongoing) {
-                            startForeground(notificationId, notification);
-                        } else {
-                            stopForeground(false);
+                            @Override
+                            public void onNotificationPosted(int notificationId, @NotNull Notification notification, boolean ongoing) {
+                                Log.d(TAG, "onNotificationPosted: " + ongoing);
+                                if (ongoing) {
+                                    startForeground(notificationId, notification);
+                                } else {
+                                    stopForeground(false);
+                                }
+                            }
                         }
-                    }
-                });
+                ).build();
 
         manager.setUseChronometer(true);
 
-        manager.setUseNavigationActions(false);
-        manager.setUseNavigationActionsInCompactView(false);
+        manager.setUsePreviousAction(false);
+        manager.setUseNextAction(false);
 
-        // 10s
+        /*// 10s
         manager.setRewindIncrementMs(10000);
         // 10s
-        manager.setFastForwardIncrementMs(10000);
+        manager.setFastForwardIncrementMs(10000);*/
     }
 
     private void connectManagerToPlayerAndSession() {
@@ -355,9 +358,7 @@ public class AudioPlayerService extends Service {
 
     private void setupMediaSession() {
         mediaSessionCompat = new MediaSessionCompat(getApplicationContext(), TAG);
-        mediaSessionCompat.setFlags(
-                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
-        );
+
     }
 
     private void destroyMediaSession() {

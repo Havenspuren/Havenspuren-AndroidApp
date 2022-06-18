@@ -1,0 +1,446 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 17,
+    "identityHash": "d50d0a40af28d85588da9e651d5a19a0",
+    "entities": [
+      {
+        "tableName": "POIWaypoint",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `route_id` INTEGER NOT NULL, `title` TEXT, `long_description` TEXT, `short_description` TEXT, `password` TEXT, `index_of_route` INTEGER NOT NULL, `visited` INTEGER NOT NULL, `unlock_action` TEXT DEFAULT 'GPS', `latitude` REAL, `longitude` REAL, FOREIGN KEY(`route_id`) REFERENCES `POIRoute`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "routeId",
+            "columnName": "route_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longDescription",
+            "columnName": "long_description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "shortDescription",
+            "columnName": "short_description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "password",
+            "columnName": "password",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "indexOfRoute",
+            "columnName": "index_of_route",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "visited",
+            "columnName": "visited",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unlockAction",
+            "columnName": "unlock_action",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "'GPS'"
+          },
+          {
+            "fieldPath": "position.latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "position.longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_POIWaypoint_route_id",
+            "unique": false,
+            "columnNames": [
+              "route_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_POIWaypoint_route_id` ON `${TABLE_NAME}` (`route_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "POIRoute",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "route_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "POIRoute",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `themes_file` TEXT, `path_to_route_image` TEXT NOT NULL, `path_to_map_image` TEXT, `path_to_character_image` TEXT, `expected_time` INTEGER NOT NULL, `navigation_path_color` INTEGER DEFAULT 2570282751, `path_to_map` TEXT NOT NULL, `contributors` TEXT NOT NULL DEFAULT 'Informationen zu den Mitwirkenden fehlt noch')",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "themesFile",
+            "columnName": "themes_file",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pathToRouteImage",
+            "columnName": "path_to_route_image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pathToMapImage",
+            "columnName": "path_to_map_image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pathToCharacterImage",
+            "columnName": "path_to_character_image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "expectedTime",
+            "columnName": "expected_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "navigationPathColor",
+            "columnName": "navigation_path_color",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "2570282751"
+          },
+          {
+            "fieldPath": "pathToMap",
+            "columnName": "path_to_map",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contributors",
+            "columnName": "contributors",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'Informationen zu den Mitwirkenden fehlt noch'"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Media",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `path_to_file` TEXT, `extra` TEXT, `type` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pathToFile",
+            "columnName": "path_to_file",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "extra",
+            "columnName": "extra",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "WaypointMediaJunction",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`waypoint_id` INTEGER NOT NULL, `media_id` INTEGER NOT NULL, PRIMARY KEY(`waypoint_id`, `media_id`), FOREIGN KEY(`waypoint_id`) REFERENCES `POIWaypoint`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`media_id`) REFERENCES `Media`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "waypointId",
+            "columnName": "waypoint_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaId",
+            "columnName": "media_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "waypoint_id",
+            "media_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_WaypointMediaJunction_waypoint_id",
+            "unique": false,
+            "columnNames": [
+              "waypoint_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WaypointMediaJunction_waypoint_id` ON `${TABLE_NAME}` (`waypoint_id`)"
+          },
+          {
+            "name": "index_WaypointMediaJunction_media_id",
+            "unique": false,
+            "columnNames": [
+              "media_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WaypointMediaJunction_media_id` ON `${TABLE_NAME}` (`media_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "POIWaypoint",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "waypoint_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Media",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "media_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Trophy",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `waypoint_id` INTEGER NOT NULL, `path_to_image` TEXT NOT NULL, `path_to_icon` TEXT NOT NULL, `path_to_character_image` TEXT, `x` REAL NOT NULL, `y` REAL NOT NULL, `description` TEXT NOT NULL, `name` TEXT NOT NULL, FOREIGN KEY(`waypoint_id`) REFERENCES `POIWaypoint`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "waypointId",
+            "columnName": "waypoint_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pathToImage",
+            "columnName": "path_to_image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pathToIcon",
+            "columnName": "path_to_icon",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pathToCharacterImage",
+            "columnName": "path_to_character_image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "x",
+            "columnName": "x",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "y",
+            "columnName": "y",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Trophy_waypoint_id",
+            "unique": false,
+            "columnNames": [
+              "waypoint_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Trophy_waypoint_id` ON `${TABLE_NAME}` (`waypoint_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "POIWaypoint",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "waypoint_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "RouteProperties",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `route_id` INTEGER NOT NULL, `propertyType` TEXT NOT NULL, `value` TEXT NOT NULL, FOREIGN KEY(`route_id`) REFERENCES `POIRoute`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "routeId",
+            "columnName": "route_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "propertyType",
+            "columnName": "propertyType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "POIRoute",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "route_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd50d0a40af28d85588da9e651d5a19a0')"
+    ]
+  }
+}

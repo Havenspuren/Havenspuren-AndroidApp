@@ -96,7 +96,7 @@ dependencies {
 
     //exoplayer
 
-    def exo_version = "2.11.7"
+    def exo_version = "2.18.0"
 
     implementation "com.google.android.exoplayer:exoplayer:$exo_version"
     implementation "com.google.android.exoplayer:extension-mediasession:$exo_version"
