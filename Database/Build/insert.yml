@@ -1,4 +1,4 @@
-- name: "Testroute"
+- name: "Testroute1"
   description: "Ein Route über Hafenarbeiter"
   expected_time: 60
   path_to_map: "whv.map"

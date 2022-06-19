@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showGreetingMessageIfNeeded() {
         final String greeting_key = "de.jadehs.greeting_showed";
-        SharedPreferences preferences = getSharedPreferences("GENEREAL", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("GENERAL", MODE_PRIVATE);
 
         if (!preferences.getBoolean(greeting_key, false)) {
             showGreetingMessage();
