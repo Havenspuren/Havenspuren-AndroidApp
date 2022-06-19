@@ -212,6 +212,8 @@ public class AudioPlayerService extends Service {
 
         player.addListener(new Player.Listener() {
 
+            private final ExoPlayer player = AudioPlayerService.this.player;
+
             @Override
             public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
                 updateServiceStatus(playWhenReady, player.getPlaybackState());
