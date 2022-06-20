@@ -9,9 +9,14 @@ import androidx.arch.core.util.Function;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class FileUtils {
@@ -66,12 +71,13 @@ public class FileUtils {
             while ((lenghtRead = fromStream.read(buffer)) > 0) {
                 toStream.write(buffer, 0, lenghtRead);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+
+
 
     public static class IfNotExistsFunction implements Function<String, Boolean> {
 
@@ -83,7 +89,8 @@ public class FileUtils {
 
         @Override
         public Boolean apply(String input) {
-            return !new File(outputDir, input).exists();
+            File file = new File(outputDir, input);
+            return !file.exists() || file.isDirectory();
         }
     }
 }
