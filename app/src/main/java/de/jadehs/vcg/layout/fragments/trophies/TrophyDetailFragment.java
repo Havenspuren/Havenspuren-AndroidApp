@@ -64,7 +64,7 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
         Bundle args = new Bundle();
         args.putString(ARG_IMAGE_PATH, imagePath);
         args.putString(ARG_TEXT, text);
-        if(characterPath != null)
+        if (characterPath != null)
             args.putString(ARG_CHARACTER_IMAGE_PATH, characterPath);
         return args;
     }
@@ -94,7 +94,7 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(imagePath.length() == 0){
+        if (imagePath.length() == 0) {
             Navigation.findNavController(container).navigateUp(); // fallback if no image is provided instead of crashing the app
         }
         // Inflate the layout for this fragment
@@ -128,7 +128,7 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
 //        photoView.setMinimumScale(0.7f);
         photoView.setImageURI(fileProvider.getMediaUri(imagePath));
 
-        if(characterPath != null)
+        if (characterPath != null)
             character.setImageURI(fileProvider.getMediaUri(characterPath));
         else
             character.setVisibility(View.GONE);
@@ -137,12 +137,21 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
         if (text.length() > 0) {
             textView.setText(text);
         } else {
-            hideText(false);
+            setTextVisibility(false, false);
         }
     }
 
+    private void setTextVisibility(boolean visible) {
+        setTextVisibility(visible, true);
+    }
 
-    private void hideText(boolean animation) {
+
+    private void setTextVisibility(boolean visible, boolean animation) {
+        if(text.length() <= 0 && visible){
+            return;
+        }
+
+
         if (animation) {
             Fade fade = new Fade();
             fade.setDuration(350);
@@ -152,36 +161,16 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
             TransitionManager.beginDelayedTransition(container, fade);
         }
 
-        textContainer.setVisibility(View.GONE);
-        if(characterPath != null)
-            character.setVisibility(View.GONE);
-        highlighter.setVisibility(View.GONE);
+        int visibility = visible ? View.VISIBLE : View.GONE;
+        textContainer.setVisibility(visibility);
+        if (characterPath != null)
+            character.setVisibility(visibility);
+        highlighter.setVisibility(visibility);
 
-    }
-
-    private void showText(boolean animation) {
-
-        if (animation) {
-            Fade fade = new Fade();
-            fade.setDuration(350);
-            fade.addTarget(textContainer);
-            fade.addTarget(character);
-            fade.addTarget(highlighter);
-            TransitionManager.beginDelayedTransition(container, fade);
-        }
-
-        textContainer.setVisibility(View.VISIBLE);
-        if(characterPath != null)
-            character.setVisibility(View.VISIBLE);
-        highlighter.setVisibility(View.VISIBLE);
     }
 
     private void toggleText(boolean animation) {
-        if (textContainer.getVisibility() == View.GONE) {
-            showText(animation);
-        } else {
-            hideText(animation);
-        }
+        setTextVisibility(textContainer.getVisibility() == View.GONE, animation);
     }
 
     @Override
