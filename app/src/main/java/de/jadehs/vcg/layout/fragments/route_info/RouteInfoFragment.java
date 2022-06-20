@@ -1,5 +1,6 @@
 package de.jadehs.vcg.layout.fragments.route_info;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,9 @@ import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.databinding.FragmentRouteInfoBinding;
 import de.jadehs.vcg.layout.fragments.route_view.RouteViewFragment;
 import de.jadehs.vcg.utils.data.FileProvider;
+import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.core.MarkwonTheme;
 
 public class RouteInfoFragment extends RouteViewFragment {
 
@@ -33,7 +36,7 @@ public class RouteInfoFragment extends RouteViewFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        markwon = Markwon.create(requireContext());
+        markwon = Markwon.builder(requireContext()).build();
 
         fileProvider = new FileProvider(requireContext());
     }

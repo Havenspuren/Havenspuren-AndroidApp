@@ -3,7 +3,7 @@
   expected_time: 60
   path_to_map: "whv.map"
   contributors: |
-    Mediengestaltung:
+    ### Mediengestaltung:
     - Max Mustermann
     - Maxime Mustermann
   path_to_map_image: "Testlauf/map.png"
