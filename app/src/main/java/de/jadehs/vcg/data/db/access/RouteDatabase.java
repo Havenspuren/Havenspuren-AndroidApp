@@ -11,11 +11,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import de.jadehs.vcg.BuildConfig;
 import de.jadehs.vcg.data.db.association.WaypointMediaJunction;
 import de.jadehs.vcg.data.db.converter.Converters;
 import de.jadehs.vcg.data.db.models.Media;
@@ -23,6 +25,7 @@ import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
 import de.jadehs.vcg.data.db.models.RouteProperty;
 import de.jadehs.vcg.data.db.models.Trophy;
+import kotlin.io.FilesKt;
 
 
 @Database(
@@ -45,6 +48,7 @@ public abstract class RouteDatabase extends RoomDatabase {
     private static RouteDatabase database;
 
     public static synchronized RouteDatabase getInstance(Context context) {
+        deleteDatabaseIfOldVersion(context); // TODO remove if if not in alpha and beta
         if (database == null) {
             database = create(context);
         }
@@ -60,6 +64,9 @@ public abstract class RouteDatabase extends RoomDatabase {
             context.deleteDatabase(DATABASE_NAME);
             database = builder.build();
         }
+
+        context.getSharedPreferences("GENERAL", Context.MODE_PRIVATE)
+                .edit().putInt("DATABASE_VERSION", BuildConfig.DATABASE_DATA_VERSION).commit();
         return database;
     }
 
@@ -78,6 +85,15 @@ public abstract class RouteDatabase extends RoomDatabase {
             }
         }
 
+    }
+
+    private static void deleteDatabaseIfOldVersion(Context context) {
+        int currentDatabaseVersion = context
+                .getSharedPreferences("GENERAL", Context.MODE_PRIVATE)
+                .getInt("DATABASE_VERSION", -1);
+        if (currentDatabaseVersion < BuildConfig.DATABASE_DATA_VERSION) {
+            context.deleteDatabase(DATABASE_NAME);
+        }
     }
 
     public abstract WaypointDao wayPointDao();

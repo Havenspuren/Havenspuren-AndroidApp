@@ -18,6 +18,8 @@ android {
         versionCode 21
         versionName "0.4.2"
 
+
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -25,6 +27,8 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        buildConfigField "int", "DATABASE_DATA_VERSION", "3"
     }
 
     compileOptions {
