@@ -129,7 +129,10 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
                     new RouteFinishedDialog().show(getChildFragmentManager(), null);
                 }
                 if (waypoint.hasTrophy()) {
-                    requireActivity().sendBroadcast(TrophyBroadcastReceiver.createIntent(getActivity(), route.getPoiRoute().getId()));
+                    requireActivity().sendBroadcast(TrophyBroadcastReceiver.createIntent(getActivity(),
+                            route.getPoiRoute().getId(),
+                            route.getPoiRoute().getName(),
+                            route.getPoiRoute().getPathToMapImage()));
                 }
 
             }
@@ -189,8 +192,6 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
 
         mapPath = this.getArguments().getString(ARG_MAP_PATH);

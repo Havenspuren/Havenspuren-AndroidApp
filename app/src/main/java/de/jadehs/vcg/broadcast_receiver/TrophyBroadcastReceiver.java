@@ -16,15 +16,17 @@ public class TrophyBroadcastReceiver extends BroadcastReceiver {
 
     public static final String TROPHY_UNLOCKED_ACTION = "de.jadehs.vcg.TROPHY_UNLOCKED";
 
-    public static final String EXTRA_ROUTE_ID = "de.jadehs.vcg.ROUTE_ID";
+    public static final String EXTRA_ROUTE_ID = TrophyMapFragment.ROUTE_ID_ARGUMENT;
 
     public static final String NOTIFICATION_CHANNEL = "de.jadehs.vcg.TROPHY_UNLOCKED_CHANNEL";
 
 
-    public static Intent createIntent(Context context, long routeId) {
+    public static Intent createIntent(Context context, long routeId, String routeName, String mapPath) {
         Intent i = new Intent(context, TrophyBroadcastReceiver.class);
         i.setAction(TROPHY_UNLOCKED_ACTION);
-        i.putExtra(EXTRA_ROUTE_ID, routeId);
+        Bundle trophyMapBundle = TrophyMapFragment.createArguments(routeId,routeName, mapPath);
+        i.putExtras(trophyMapBundle);
+
         return i;
     }
 
@@ -32,7 +34,7 @@ public class TrophyBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() != null && intent.getAction().equals(TROPHY_UNLOCKED_ACTION)
                 && intent.hasExtra(EXTRA_ROUTE_ID)) {
-            Bundle b = TrophyMapFragment.createArguments(intent.getLongExtra(EXTRA_ROUTE_ID, 1L), "test", "bla");
+            Bundle b = intent.getExtras();
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
                     .setSmallIcon(R.drawable.ic_trophy)
                     .setContentTitle(context.getResources().getString(R.string.trophy_unlocked_notification_title))

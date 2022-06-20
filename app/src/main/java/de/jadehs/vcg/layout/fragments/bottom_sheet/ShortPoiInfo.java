@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import de.jadehs.vcg.R;
+import de.jadehs.vcg.broadcast_receiver.TrophyBroadcastReceiver;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
 import de.jadehs.vcg.data.db.pojo.POIWaypointWithMedia;
 import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
@@ -50,7 +51,7 @@ public class ShortPoiInfo extends Fragment {
     private TextView description;
 
 
-    private POIWaypoint waypoint;
+    private POIWaypointWithMedia waypoint;
     private ConstraintLayout passwordContainer;
     private Button passwordConfirmButton;
     private TextInputLayout passwordTextLayout;
@@ -226,6 +227,12 @@ public class ShortPoiInfo extends Fragment {
 
         if (samePassword) {
             routeViewModel.unlockWaypointsUntil(waypoint);
+            if (waypoint.hasTrophy()) {
+                requireActivity().sendBroadcast(TrophyBroadcastReceiver.createIntent(getActivity(),
+                        waypoint.getRoute().getId(),
+                        waypoint.getRoute().getName(),
+                        waypoint.getRoute().getPathToMapImage()));
+            }
             passwordTextLayout.findFocus().clearFocus();
             InputMethodManager inputService = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (inputService != null)
@@ -236,6 +243,8 @@ public class ShortPoiInfo extends Fragment {
                     bottomSheetController.getController().open();
                 }
             });
+        }else{
+            // TODO add a feedback if password was wrong
         }
     }
 
