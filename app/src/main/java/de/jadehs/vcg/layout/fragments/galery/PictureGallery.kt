@@ -40,13 +40,15 @@ class PictureGallery : Fragment() {
         view.apply {
             val recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view).apply {
                 layoutManager = LinearLayoutManager(view.context, RecyclerView.HORIZONTAL, false)
+
+                pictureUriList?.let { list ->
+                    adapter = MediaPagerAdapter(list, childFragmentManager)
+                }
                 val snapHelper = PagerSnapHelper()
                 snapHelper.attachToRecyclerView(this)
             }
 
-            pictureUriList?.run {
-                recyclerView.adapter = MediaPagerAdapter(this, childFragmentManager)
-            }
+
         }
     }
 
