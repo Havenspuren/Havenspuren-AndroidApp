@@ -135,7 +135,6 @@ public abstract class RouteViewFragment extends Fragment {
                     unregisterLocationCallback(listener);
                 }
             }
-            this.locListeners.clear();
         }
     }
 
