@@ -64,4 +64,6 @@
     <string name="confirm_password">Abschicken</string>
     <string name="no_waypoint_unlocked">Noch kein Wegpunkt freigeschaltet</string>
     <string name="start_routing">Routing starten</string>
+    <string name="markdown_didnt_load"># Daten konnten nicht geladen werden</string>
+    <string name="description">Beschreibung</string>
 </resources>

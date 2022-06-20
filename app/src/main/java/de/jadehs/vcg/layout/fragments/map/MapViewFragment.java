@@ -600,10 +600,7 @@ public class MapViewFragment extends RouteViewFragment implements BottomSheetCon
 
             markerLayer.removeAllItems();
             POIWaypointWithMedia nextWaypoint = routeWithWaypoints.getNextWaypoint();
-            if (nextWaypoint == null) {
-                directionsFragment.getView().setVisibility(View.GONE);
-            } else {
-                directionsFragment.getView().setVisibility(View.VISIBLE);
+            if (nextWaypoint != null) {
                 directionsFragment.setTitle(nextWaypoint.getTitle());
             }
 

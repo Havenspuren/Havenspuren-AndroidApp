@@ -33,11 +33,14 @@
         </activity>
 
 
-        <service android:name="de.jadehs.vcg.services.audio.AudioPlayerService" />
-        <service android:name="de.jadehs.vcg.services.NearbyWaypointService"/>
+        <service android:name="de.jadehs.vcg.services.audio.AudioPlayerService"
+            android:exported="false"/>
+        <service android:name="de.jadehs.vcg.services.NearbyWaypointService"
+            android:exported="false"/>
 
 
-        <receiver android:name=".broadcast_receiver.TrophyBroadcastReceiver"/>
+        <receiver android:name=".broadcast_receiver.TrophyBroadcastReceiver"
+            android:exported="false"/>
     </application>
 
 </manifest>

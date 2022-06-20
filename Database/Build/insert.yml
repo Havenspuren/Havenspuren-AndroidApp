@@ -1,4 +1,4 @@
-- name: "Testroute"
+- name: "Testroute1"
   description: "Ein Route über Hafenarbeiter"
   expected_time: 60
   path_to_map: "whv.map"
@@ -82,14 +82,6 @@
       pictures:
         - path_to_file: "Testlauf/tree.jpg"
           extra: "Bild"
-      trophy:
-        x: 10
-        y: 20
-        name: "Erste Trophäe"
-        description: "Eine sehr detailierte Beschreibung der Trophäe. Dieser Text sollte wirklich sehr interresante Informationen enthalten, damit die Nutzer interresse haben, sich weitere Trophäen anzuschauen."
-        path_to_image: "Testlauf/tree.jpg"
-        path_to_icon: "shared/vcg_stempel.png"
-        path_to_character_image: "Testlauf/im.png"
 
     - title: "Zweiter Wegpunkt"
       short_description: "hier steht der ganz interresante zweite Text!"

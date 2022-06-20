@@ -35,7 +35,6 @@ public class POIRoute implements Serializable {
      * background picture of the trophy overview
      */
     @ColumnInfo(name = "path_to_map_image")
-    @NonNull
     private String pathToMapImage;
 
     /**
@@ -66,7 +65,24 @@ public class POIRoute implements Serializable {
     @NonNull
     private String pathToMap;
 
-    public POIRoute(long id, @NonNull String name, @NonNull String description, String themesFile, @NonNull String pathToRouteImage, @NonNull String pathToMapImage, String pathToCharacterImage, int expectedTime, int navigationPathColor, @NonNull String pathToMap) {
+    /**
+     * a markdown styled text which mentions the contributors of this route
+     */
+    @ColumnInfo(defaultValue = "Informationen zu den Mitwirkenden fehlen noch")
+    @NonNull
+    private String contributors;
+
+    public POIRoute(long id,
+                    @NonNull String name,
+                    @NonNull String description,
+                    String themesFile,
+                    @NonNull String pathToRouteImage,
+                    String pathToMapImage,
+                    String pathToCharacterImage,
+                    int expectedTime,
+                    int navigationPathColor,
+                    @NonNull String pathToMap,
+                    @NonNull String contributors) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -77,6 +93,7 @@ public class POIRoute implements Serializable {
         this.expectedTime = expectedTime;
         this.navigationPathColor = navigationPathColor;
         this.pathToMap = pathToMap;
+        this.contributors = contributors;
     }
 
     public long getId() {
@@ -175,6 +192,15 @@ public class POIRoute implements Serializable {
 
     public void setNavigationPathColor(@Nullable Integer navigationPathColor) {
         this.navigationPathColor = navigationPathColor;
+    }
+
+    @NonNull
+    public String getContributors() {
+        return contributors;
+    }
+
+    public void setContributors(@NonNull String contributors) {
+        this.contributors = contributors;
     }
 }
 

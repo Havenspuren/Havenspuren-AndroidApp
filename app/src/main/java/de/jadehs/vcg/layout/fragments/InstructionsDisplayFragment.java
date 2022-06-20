@@ -27,6 +27,14 @@ import de.jadehs.vcg.R;
 public class InstructionsDisplayFragment extends Fragment {
 
 
+    private Location currentLocation;
+    private Instruction currentInstruction;
+    private ImageView directionImage;
+    private TextView distanceInstructionTextView;
+    private TextView wholeDistanceTextView;
+    private TextView titleTextView;
+    private CardView card;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -36,14 +44,6 @@ public class InstructionsDisplayFragment extends Fragment {
     public static InstructionsDisplayFragment newInstance() {
         return new InstructionsDisplayFragment();
     }
-
-    private Location currentLocation;
-    private Instruction currentInstruction;
-
-    private ImageView directionImage;
-    private TextView distanceInstructionTextView;
-    private TextView wholeDistanceTextView;
-    private TextView titleTextView;
 
 
     public InstructionsDisplayFragment() {
@@ -136,15 +136,31 @@ public class InstructionsDisplayFragment extends Fragment {
     }
 
     private void hideView() {
-        this.requireView().setVisibility(View.GONE);
+        this.card.setVisibility(View.GONE);
     }
 
     private void showView() {
-        this.requireView().setVisibility(View.VISIBLE);
+        this.card.setVisibility(View.VISIBLE);
     }
 
     private boolean isViewVisible() {
         return this.requireView().getVisibility() == View.VISIBLE;
+    }
+
+    public boolean isCollapsed() {
+        return card.getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT;
+    }
+
+    public void setCollapsed(boolean collapsed) {
+        View v = card;
+        TransitionManager.beginDelayedTransition((ViewGroup) v.getParent());
+        CardView.LayoutParams layoutParams = (CardView.LayoutParams) v.getLayoutParams();
+        int visibility = collapsed ? View.INVISIBLE : View.VISIBLE;
+        int width = collapsed ? CardView.LayoutParams.WRAP_CONTENT : CardView.LayoutParams.MATCH_PARENT;
+        wholeDistanceTextView.setVisibility(visibility);
+        titleTextView.setVisibility(visibility);
+        layoutParams.width = width;
+        v.requestLayout();
     }
 
     @Override
@@ -154,32 +170,17 @@ public class InstructionsDisplayFragment extends Fragment {
         this.distanceInstructionTextView = view.findViewById(R.id.instruction_display_distance_instruction);
         this.wholeDistanceTextView = view.findViewById(R.id.instruction_display_whole_distance);
         this.titleTextView = view.findViewById(R.id.instruction_display_title);
+        this.card = view.findViewById(R.id.instruction_display_card_view);
         hideView();
-
+        setCollapsed(true);
 
         view.findViewById(R.id.instruction_display_card_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                TransitionManager.beginDelayedTransition((ViewGroup) v.getParent());
-                CardView.LayoutParams layoutParams = (CardView.LayoutParams) v.getLayoutParams();
-
-                if (layoutParams.width == ViewGroup.LayoutParams.MATCH_PARENT) {
-//                    final ConstraintSet wrapSet = new ConstraintSet();
-//                    wrapSet.clone(context, R.layout.instructions_display_card_contents);
-                    layoutParams.width = CardView.LayoutParams.WRAP_CONTENT;
-
-//                    wrapSet.applyTo((ConstraintLayout) directionImage.getParent());
-                } else {
-//                    final ConstraintSet expandedSet = new ConstraintSet();
-//                    expandedSet.clone(context, R.layout.instructions_display_card_contents_expanded);
-                    layoutParams.width = CardView.LayoutParams.MATCH_PARENT;
-
-//                    expandedSet.applyTo((ConstraintLayout) directionImage.getParent());
-                }
-
-                v.requestLayout();
+                setCollapsed(!isCollapsed());
             }
         });
     }
+
+
 }
