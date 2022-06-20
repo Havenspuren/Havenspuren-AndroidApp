@@ -1,31 +1,24 @@
-Die App ist das Resultat eines studentischen Projektes der Jade Hochschule und aktuell noch in der Testphase. 
-##### Technische Entwicklung
+Die App ist das Resultat eines studentischen Projektes der Jade Hochschule und aktuell noch in der Testphase.
+## Projektmanagement
+- Anna Tannas
+- Rico Meiner
+
+## Technische Entwicklung
 - Marcel Bankert
 - Miro Flemke
-- Zhuyi Li
-- Claas Wittig
+- Claas Wittig (Leitung)
 
-  
-##### Gestaltung
+## Gestaltung
 - Lea Burrichter
 - Pierre Heinken
 - Iska Raabe
-- Monika Schnegelberger
 - Nils Ulfers
-  
-##### Inhalt
-- Anna Tannas
-- Kea Ulfers
-  
-##### Tester
-- Felix Richardson
-- Tobias Sowada
-  
-##### Finanzielle Unterstützung
+
+## Finanzielle Unterstützung
 - Wilhelmshaven Touristik und Freizeit GmbH
 - T-Systems on site services GmbH
-  
-##### Allgemeine Unterstützung und Expertise
+
+## Allgemeine Unterstützung und Expertise
 - Andreas Hurling
 - Christine Janz
-- Rico Meiner
+
