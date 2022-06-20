@@ -68,7 +68,7 @@ public class POIRoute implements Serializable {
     /**
      * a markdown styled text which mentions the contributors of this route
      */
-    @ColumnInfo(defaultValue = "Informationen zu den Mitwirkenden fehlt noch")
+    @ColumnInfo(defaultValue = "Informationen zu den Mitwirkenden fehlen noch")
     @NonNull
     private String contributors;
 

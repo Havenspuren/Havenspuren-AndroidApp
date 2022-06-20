@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey;
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE)
 })
-public class RouteProperties {
+public class RouteProperty {
 
 
     /**
@@ -44,7 +44,7 @@ public class RouteProperties {
     @NonNull
     private String value;
 
-    public RouteProperties(long id, long routeId, @NonNull String propertyType, @NonNull String value) {
+    public RouteProperty(long id, long routeId, @NonNull String propertyType, @NonNull String value) {
         this.id = id;
         this.routeId = routeId;
         this.propertyType = propertyType;

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -75,7 +76,7 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO remove fallback
-        imagePath = "Hafenarbeiter/grauer_esel_2.jpg";
+        imagePath = "";
         text = "";
         characterPath = null;
         if (getArguments() != null) {
@@ -93,6 +94,9 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(imagePath.length() == 0){
+            Navigation.findNavController(container).navigateUp(); // fallback if no image is provided instead of crashing the app
+        }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_trophy_detail, container, false);
     }
@@ -120,8 +124,8 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
     }
 
     private void bindTrophyData() {
-        //TODO change to a dynamic minimum scale
-        photoView.setMinimumScale(0.7f);
+
+//        photoView.setMinimumScale(0.7f);
         photoView.setImageURI(fileProvider.getMediaUri(imagePath));
 
         if(characterPath != null)
@@ -141,7 +145,7 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
     private void hideText(boolean animation) {
         if (animation) {
             Fade fade = new Fade();
-            fade.setDuration(500);
+            fade.setDuration(350);
             fade.addTarget(textContainer);
             fade.addTarget(character);
             fade.addTarget(highlighter);
@@ -159,7 +163,7 @@ public class TrophyDetailFragment extends Fragment implements OnPhotoTapListener
 
         if (animation) {
             Fade fade = new Fade();
-            fade.setDuration(500);
+            fade.setDuration(350);
             fade.addTarget(textContainer);
             fade.addTarget(character);
             fade.addTarget(highlighter);

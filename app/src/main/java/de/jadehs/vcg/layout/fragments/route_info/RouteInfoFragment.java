@@ -72,6 +72,7 @@ public class RouteInfoFragment extends RouteViewFragment {
         this.binding.routeInfoTitle.setText(poiRoute.getName());
         this.binding.routeInfoDesc.setText(poiRoute.getDescription());
         this.binding.routeInfoImage.setImageURI(fileProvider.getMediaUri(poiRoute.getPathToRouteImage()));
+        markwon.setMarkdown(this.binding.routeInfoContributor,route.getPoiRoute().getContributors());
 
 
         setProgress((int) (route.getProgress() * 100));

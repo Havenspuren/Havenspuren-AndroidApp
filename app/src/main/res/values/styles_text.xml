@@ -10,6 +10,7 @@
     </style>
     <style name="TextAppearance.App.Headline3" parent="TextAppearance.MaterialComponents.Headline3">
         <item name="fontFamily">@font/bree_serif_regular</item>
+
     </style>
     <style name="TextAppearance.App.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="fontFamily">@font/bree_serif_regular</item>

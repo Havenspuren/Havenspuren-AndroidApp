@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 17,
-    "identityHash": "d50d0a40af28d85588da9e651d5a19a0",
+    "identityHash": "8d289a5f689fa6303cadf69232ff4603",
     "entities": [
       {
         "tableName": "POIWaypoint",
@@ -387,7 +387,7 @@
         ]
       },
       {
-        "tableName": "RouteProperties",
+        "tableName": "RouteProperty",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `route_id` INTEGER NOT NULL, `propertyType` TEXT NOT NULL, `value` TEXT NOT NULL, FOREIGN KEY(`route_id`) REFERENCES `POIRoute`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
@@ -440,7 +440,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd50d0a40af28d85588da9e651d5a19a0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8d289a5f689fa6303cadf69232ff4603')"
     ]
   }
 }

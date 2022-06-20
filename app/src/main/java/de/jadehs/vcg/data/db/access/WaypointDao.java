@@ -26,4 +26,21 @@ public abstract class WaypointDao implements ParentDao<POIWaypoint> {
     @Transaction
     @Query("SELECT * FROM POIWaypoint WHERE id = :id ORDER BY index_of_route ASC")
     public abstract LiveData<List<POIWaypointWithMedia>> getWaypointsFromRoute(long id);
+
+    @Query("SELECT * FROM POIWaypoint")
+    public abstract List<POIWaypoint> getAllWaypoints();
+
+
+    @Query("UPDATE POIWaypoint SET visited=:visited WHERE id=:id")
+    protected abstract void updateVisited(long id, int visited);
+
+    /**
+     * updates the visited status of the waypoint specified by the id
+     *
+     * @param id      id of the waypoint
+     * @param visited whether the given waypoint was visited
+     */
+    public void updateVisited(long id, boolean visited) {
+        updateVisited(id, visited ? 1 : 0);
+    }
 }

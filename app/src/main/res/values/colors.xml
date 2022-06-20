@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white">#FFF</color>
     <color name="colorPrimary">#7ba3c0</color>
     <color name="colorPrimaryDark">#6a91b9</color>
     <color name="colorPrimaryLight">#8DAEC6</color>
     <color name="colorSecondary">#232e48</color>
-    <color name="colorSurface">#FFF</color>
+    <color name="colorSecondaryLight">#4c5c74</color>
+    <color name="colorSurface">@color/white</color>
 
-    <color name="onPrimary">#ffffff</color>
+    <color name="onPrimary">@color/white</color>
     <color name="onPrimaryDark">#DDD</color>
-    <color name="onSecondary">#fff</color>
+    <color name="onSecondary">@color/white</color>
     <color name="onSurface">#232e48</color>
+
+
 
 
     <color name="neutralFAB">#DFFF</color>

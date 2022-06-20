@@ -12,13 +12,12 @@ import org.oscim.core.GeoPoint;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
-import de.jadehs.vcg.data.db.models.RouteProperties;
+import de.jadehs.vcg.data.db.models.RouteProperty;
 import de.jadehs.vcg.utils.CollectionUtils;
 import kotlin.jvm.functions.Function1;
 
@@ -35,8 +34,8 @@ public class RouteWithWaypoints implements Serializable {
     @Relation(entity = POIWaypoint.class, entityColumn = "route_id", parentColumn = "id")
     private List<POIWaypointWithMedia> waypoints;
     @NonNull
-    @Relation(entity = RouteProperties.class, entityColumn = "route_id", parentColumn = "id")
-    private List<RouteProperties> properties;
+    @Relation(entity = RouteProperty.class, entityColumn = "route_id", parentColumn = "id")
+    private List<RouteProperty> properties;
 
     @Ignore
     public RouteWithWaypoints(@NonNull POIRoute poiRoute) {
@@ -45,7 +44,7 @@ public class RouteWithWaypoints implements Serializable {
         properties = Collections.emptyList();
     }
 
-    public RouteWithWaypoints(@NonNull POIRoute poiRoute, @NonNull List<POIWaypointWithMedia> waypoints, @NonNull List<RouteProperties> properties) {
+    public RouteWithWaypoints(@NonNull POIRoute poiRoute, @NonNull List<POIWaypointWithMedia> waypoints, @NonNull List<RouteProperty> properties) {
 
         this.poiRoute = poiRoute;
         this.properties = properties;
@@ -53,11 +52,11 @@ public class RouteWithWaypoints implements Serializable {
     }
 
     @NonNull
-    public List<RouteProperties> getProperties() {
+    public List<RouteProperty> getProperties() {
         return properties;
     }
 
-    public void setProperties(@NonNull List<RouteProperties> properties) {
+    public void setProperties(@NonNull List<RouteProperty> properties) {
         this.properties = properties;
     }
 

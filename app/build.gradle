@@ -133,17 +133,18 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Map
-    def vtm_version = "0.16.0"
+    def vtm_version = "0.18.0"
     implementation "org.mapsforge:vtm:$vtm_version"
     implementation "org.mapsforge:vtm-themes:$vtm_version"
     implementation 'net.sf.kxml:kxml2:2.3.0'
     implementation 'org.slf4j:slf4j-api:1.7.28'
 
-    implementation "org.mapsforge:vtm-android:$vtm_version"
+
     implementation "org.mapsforge:vtm-android:$vtm_version:natives-armeabi-v7a"
     implementation "org.mapsforge:vtm-android:$vtm_version:natives-arm64-v8a"
     implementation "org.mapsforge:vtm-android:$vtm_version:natives-x86"
     implementation "org.mapsforge:vtm-android:$vtm_version:natives-x86_64"
+    implementation "org.mapsforge:vtm-android:$vtm_version"
     implementation "com.caverock:androidsvg:1.4"
 
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'

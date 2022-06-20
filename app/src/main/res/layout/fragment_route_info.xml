@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingStart="@dimen/default_page_padding"
+    android:paddingEnd="@dimen/default_page_padding"
     tools:context=".layout.fragments.route_info.RouteInfoFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,14 +57,49 @@
             app:layout_constraintTop_toBottomOf="@id/route_info_trophy_progress" />
 
         <TextView
+            android:id="@+id/route_info_desc_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/route_info_title"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
             android:id="@+id/route_info_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="@string/lorem100"
             android:textAppearance="?attr/textAppearanceBody1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/route_info_title" />
+            app:layout_constraintTop_toBottomOf="@id/route_info_desc_title" />
+
+        <TextView
+            android:id="@+id/route_info_contributor_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/contributors"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="?attr/colorSecondaryVariant"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/route_info_desc"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/route_info_contributor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/lorem100"
+            android:textAppearance="?attr/textAppearanceBody1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/route_info_contributor_title" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
