@@ -2,6 +2,10 @@
   description: "Ein Route über Hafenarbeiter"
   expected_time: 60
   path_to_map: "whv.map"
+  contributors: |
+    Mediengestaltung:
+    - Max Mustermann
+    - Maxime Mustermann
   path_to_map_image: "Testlauf/map.png"
   path_to_route_image: "Testlauf/im.png"
   path_to_character_image: "Testlauf/im.png"

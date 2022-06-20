@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 17,
-    "identityHash": "8d289a5f689fa6303cadf69232ff4603",
+    "identityHash": "c35e831b12e01964c19ee6f4122c5dc4",
     "entities": [
       {
         "tableName": "POIWaypoint",
@@ -109,7 +109,7 @@
       },
       {
         "tableName": "POIRoute",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `themes_file` TEXT, `path_to_route_image` TEXT NOT NULL, `path_to_map_image` TEXT, `path_to_character_image` TEXT, `expected_time` INTEGER NOT NULL, `navigation_path_color` INTEGER DEFAULT 2570282751, `path_to_map` TEXT NOT NULL, `contributors` TEXT NOT NULL DEFAULT 'Informationen zu den Mitwirkenden fehlt noch')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `themes_file` TEXT, `path_to_route_image` TEXT NOT NULL, `path_to_map_image` TEXT, `path_to_character_image` TEXT, `expected_time` INTEGER NOT NULL, `navigation_path_color` INTEGER DEFAULT 2570282751, `path_to_map` TEXT NOT NULL, `contributors` TEXT NOT NULL DEFAULT 'Informationen zu den Mitwirkenden fehlen noch')",
         "fields": [
           {
             "fieldPath": "id",
@@ -177,7 +177,7 @@
             "columnName": "contributors",
             "affinity": "TEXT",
             "notNull": true,
-            "defaultValue": "'Informationen zu den Mitwirkenden fehlt noch'"
+            "defaultValue": "'Informationen zu den Mitwirkenden fehlen noch'"
           }
         ],
         "primaryKey": {
@@ -440,7 +440,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8d289a5f689fa6303cadf69232ff4603')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c35e831b12e01964c19ee6f4122c5dc4')"
     ]
   }
 }
