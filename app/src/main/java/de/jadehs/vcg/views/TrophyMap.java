@@ -270,20 +270,11 @@ public class TrophyMap extends View implements GestureDetector.OnGestureListener
      */
     private float calculateMinZoom(int w, int h) {
         //calculate the current min zoom level
-        float vHeight = baseBackgroundBounds.height();
+        float vHeight = baseBackgroundBounds.height(); // 1200
         float vWidth = baseBackgroundBounds.width();
-        float hDiff = h - vHeight;
-        float wDiff = w - vWidth;
-        float diff;
-        float view;
-        if (Math.abs(hDiff) > Math.abs(wDiff)) {
-            diff = hDiff;
-            view = vHeight;
-        } else {
-            diff = wDiff;
-            view = vWidth;
-        }
-        return diff / view + 1;
+        float hDiff = h / vHeight;
+        float wDiff = w / vWidth;
+        return Math.max(hDiff, wDiff);
     }
 
     /**
