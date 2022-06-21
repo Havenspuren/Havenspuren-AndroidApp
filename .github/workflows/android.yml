@@ -24,6 +24,8 @@ jobs:
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
           arguments: assembleRelease
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
       - uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 23
