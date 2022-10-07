@@ -39,9 +39,9 @@ class MyApplication : Application() {
                     .detectResourceMismatches()
                     .penaltyDeath()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                threadPolicy.penaltyListener(mainExecutor, StrictMode.OnThreadViolationListener { violation: Violation? ->
+                threadPolicy.penaltyListener(mainExecutor) { violation: Violation? ->
                     violation?.printStackTrace()
-                })
+                }
             }
             StrictMode.setThreadPolicy(threadPolicy.build())
             val vmPolicy = StrictMode.VmPolicy.Builder()
@@ -52,16 +52,16 @@ class MyApplication : Application() {
                     .detectLeakedSqlLiteObjects()
                     .penaltyLog()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                vmPolicy.penaltyListener(mainExecutor, StrictMode.OnVmViolationListener { violation: Violation? ->
+                vmPolicy.penaltyListener(mainExecutor) { violation: Violation? ->
                     violation?.printStackTrace()
-                })
+                }
             }
             StrictMode.setVmPolicy(vmPolicy.build())
         }
         super.onCreate()
 
 
-        Parameters.MARKER_SORT = false;
+        Parameters.MARKER_SORT = false
 
         //load assets
         copyAssetsIfNeeded()
@@ -75,12 +75,13 @@ class MyApplication : Application() {
                 .getSharedPreferences("GENERAL", MODE_PRIVATE)
                 .getInt("DATABASE_VERSION", -1)
         if (currentDatabaseVersion < BuildConfig.DATABASE_DATA_VERSION) {
-            FileProvider(this.applicationContext).mediaRoot.deleteRecursively()
+            filesDir.deleteRecursively()
+            filesDir.mkdir()
         }
     }
 
     private fun registerPlaybackLocationUpdates() {
-        val manager = LocalBroadcastManager.getInstance(this.applicationContext);
+        val manager = LocalBroadcastManager.getInstance(this.applicationContext)
         manager.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 Log.d(TAG, "onReceive: " + intent?.extras.toString())

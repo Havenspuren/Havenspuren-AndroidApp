@@ -11,7 +11,7 @@
         android:id="@+id/logoView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@mipmap/logo_weiss"
+        android:src="@mipmap/havenspuren_audio"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
