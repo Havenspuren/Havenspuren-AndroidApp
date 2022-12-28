@@ -1,2 +1,3 @@
 rootProject.name='Havenspuren-Android'
 include ':app'
+include ':app_assets'

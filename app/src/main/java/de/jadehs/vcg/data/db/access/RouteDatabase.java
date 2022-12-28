@@ -11,8 +11,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,7 +23,6 @@ import de.jadehs.vcg.data.db.models.POIRoute;
 import de.jadehs.vcg.data.db.models.POIWaypoint;
 import de.jadehs.vcg.data.db.models.RouteProperty;
 import de.jadehs.vcg.data.db.models.Trophy;
-import kotlin.io.FilesKt;
 
 
 @Database(
