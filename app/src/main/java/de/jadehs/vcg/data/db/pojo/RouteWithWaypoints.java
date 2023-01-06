@@ -150,7 +150,7 @@ public class RouteWithWaypoints implements Serializable {
                 ignoreCount++;
             }
         }
-        return count / (float) getWaypoints().size() - ignoreCount;
+        return count / (float) (getWaypoints().size() - ignoreCount);
     }
 
 
