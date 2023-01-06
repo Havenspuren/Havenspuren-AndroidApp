@@ -1,5 +1,6 @@
 package de.jadehs.vcg.layout.fragments.poi_list;
 
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -59,7 +60,7 @@ public class POIViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         this.waypoint = waypoint;
         boolean visited = waypoint.isVisited();
         this.titleView.setText(waypoint.getTitle());
-        this.descView.setText(waypoint.getShortDescription());
+        this.descView.setText(Html.fromHtml(waypoint.getShortDescription()));
         this.trophyStatusView.setVisibility((visited && waypoint.hasTrophy()) ? View.VISIBLE : View.INVISIBLE);
         this.imageView.setImageDrawable(
                 ContextCompat.getDrawable(itemView.getContext(),
