@@ -142,11 +142,15 @@ public class RouteWithWaypoints implements Serializable {
      */
     public float getProgress() {
         int count = 0;
+        int ignoreCount = 0;
         for (POIWaypoint w : getWaypoints()) {
             if (w.isVisited() && w.isAddToProgress())
                 count++;
+            if (!w.isAddToProgress()) {
+                ignoreCount++;
+            }
         }
-        return count / (float) getWaypoints().size();
+        return count / (float) getWaypoints().size() - ignoreCount;
     }
 
 
