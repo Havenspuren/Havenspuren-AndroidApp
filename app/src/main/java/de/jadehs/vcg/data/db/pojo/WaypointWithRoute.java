@@ -10,8 +10,28 @@ import de.jadehs.vcg.data.model.Coordinate;
 
 public class WaypointWithRoute extends POIWaypoint {
 
-    public WaypointWithRoute(long id, long routeId, String title, String longDescription, String shortDescription, @Nullable String password, int indexOfRoute, boolean visited, UnlockAction unlockAction, Coordinate position) {
-        super(id, routeId, title, longDescription, shortDescription, password, indexOfRoute, visited, unlockAction, position);
+    public WaypointWithRoute(long id,
+                             long routeId,
+                             String title,
+                             String longDescription,
+                             String shortDescription,
+                             @Nullable String password,
+                             int indexOfRoute,
+                             boolean visited,
+                             UnlockAction unlockAction,
+                             Coordinate position,
+                             boolean addToProgress) {
+        super(id,
+                routeId,
+                title,
+                longDescription,
+                shortDescription,
+                password,
+                indexOfRoute,
+                visited,
+                unlockAction,
+                position,
+                addToProgress);
     }
 
     @Relation(entity = POIRoute.class, entityColumn = "id", parentColumn = "route_id")

@@ -19,8 +19,8 @@ import de.jadehs.vcg.data.model.Coordinate;
 
 public class POIWaypointWithMedia extends POIWaypoint implements Serializable {
 
-    public POIWaypointWithMedia(long id, long routeId, String title, String longDescription, String shortDescription, @Nullable String password, int indexOfRoute, boolean visited, UnlockAction unlockAction, Coordinate position) {
-        super(id, routeId, title, longDescription, shortDescription, password, indexOfRoute, visited, unlockAction, position);
+    public POIWaypointWithMedia(long id, long routeId, String title, String longDescription, String shortDescription, @Nullable String password, int indexOfRoute, boolean visited, UnlockAction unlockAction, Coordinate position, boolean addToProgress) {
+        super(id, routeId, title, longDescription, shortDescription, password, indexOfRoute, visited, unlockAction, position, addToProgress);
     }
 
     @Relation(

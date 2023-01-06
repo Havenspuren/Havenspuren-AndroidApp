@@ -141,7 +141,12 @@ public class RouteWithWaypoints implements Serializable {
      * @return the percentage of the visited waypoints
      */
     public float getProgress() {
-        return getVisitedCount() / (float) getWaypoints().size();
+        int count = 0;
+        for (POIWaypoint w : getWaypoints()) {
+            if (w.isVisited() && w.isAddToProgress())
+                count++;
+        }
+        return count / (float) getWaypoints().size();
     }
 
 

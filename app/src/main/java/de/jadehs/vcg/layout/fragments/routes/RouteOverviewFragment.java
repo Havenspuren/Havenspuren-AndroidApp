@@ -86,7 +86,7 @@ public class RouteOverviewFragment extends Fragment {
                     Button continueButton = routeView.findViewById(R.id.continue_route_button);
 
 
-                    continueButton.setText(route.getVisitedCount() > 0 ? R.string.continue_text : R.string.start_text);
+                    continueButton.setText(progress > 0 ? R.string.continue_text : R.string.start_text);
                     continueButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

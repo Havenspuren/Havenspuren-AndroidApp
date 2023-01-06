@@ -80,6 +80,7 @@
       visited: 1
       unlock_action: PASSWORD
       password: pass
+      add_to_progress: false
       audio:
         path_to_file: "Testlauf/gamedev.m4a"
         extra: "Transkription"

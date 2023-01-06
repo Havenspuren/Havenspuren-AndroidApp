@@ -5,8 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
-import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
 
 import org.oscim.core.GeoPoint;
@@ -32,7 +32,17 @@ public class POIWaypoint implements Serializable {
         GPS, PASSWORD;
     }
 
-    public POIWaypoint(long id, long routeId, String title, String longDescription, String shortDescription, @Nullable String password, int indexOfRoute, boolean visited, UnlockAction unlockAction, Coordinate position) {
+    public POIWaypoint(long id,
+                       long routeId,
+                       String title,
+                       String longDescription,
+                       String shortDescription,
+                       @Nullable String password,
+                       int indexOfRoute,
+                       boolean visited,
+                       UnlockAction unlockAction,
+                       Coordinate position,
+                       boolean addToProgress) {
         this.id = id;
         this.routeId = routeId;
         this.title = title;
@@ -43,6 +53,7 @@ public class POIWaypoint implements Serializable {
         this.visited = visited;
         this.unlockAction = unlockAction;
         this.position = position;
+        this.addToProgress = addToProgress;
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -67,6 +78,8 @@ public class POIWaypoint implements Serializable {
 
     @Embedded
     private Coordinate position;
+    @ColumnInfo(name = "add_to_progress", defaultValue = "true")
+    private boolean addToProgress;
 
 
     public long getId() {
@@ -156,5 +169,13 @@ public class POIWaypoint implements Serializable {
 
     public void setUnlockAction(UnlockAction unlockAction) {
         this.unlockAction = unlockAction;
+    }
+
+    public boolean isAddToProgress() {
+        return addToProgress;
+    }
+
+    public void setAddToProgress(boolean addToProgress) {
+        this.addToProgress = addToProgress;
     }
 }

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 17,
-    "identityHash": "c35e831b12e01964c19ee6f4122c5dc4",
+    "identityHash": "29a773fc57bc5abf1b26ddd0719feba6",
     "entities": [
       {
         "tableName": "POIWaypoint",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `route_id` INTEGER NOT NULL, `title` TEXT, `long_description` TEXT, `short_description` TEXT, `password` TEXT, `index_of_route` INTEGER NOT NULL, `visited` INTEGER NOT NULL, `unlock_action` TEXT DEFAULT 'GPS', `latitude` REAL, `longitude` REAL, FOREIGN KEY(`route_id`) REFERENCES `POIRoute`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `route_id` INTEGER NOT NULL, `title` TEXT, `long_description` TEXT, `short_description` TEXT, `password` TEXT, `index_of_route` INTEGER NOT NULL, `visited` INTEGER NOT NULL, `unlock_action` TEXT DEFAULT 'GPS', `add_to_progress` INTEGER NOT NULL DEFAULT true, `latitude` REAL, `longitude` REAL, FOREIGN KEY(`route_id`) REFERENCES `POIRoute`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -62,6 +62,13 @@
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "'GPS'"
+          },
+          {
+            "fieldPath": "addToProgress",
+            "columnName": "add_to_progress",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "true"
           },
           {
             "fieldPath": "position.latitude",
@@ -440,7 +447,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c35e831b12e01964c19ee6f4122c5dc4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '29a773fc57bc5abf1b26ddd0719feba6')"
     ]
   }
 }
