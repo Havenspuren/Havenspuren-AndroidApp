@@ -50,6 +50,8 @@ android {
         viewBinding true
     }
 
+    assetPacks = [":app_assets"]
+
 }
 
 
@@ -173,14 +175,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         jvmTarget = "1.8"
     }
 }
-
-task createDB (type:Exec){
-
-    workingDir rootDir
-    inputs.files(rootDir.toString()+'/Database/Build/buildDatabase.py',project.android.defaultConfig.javaCompileOptions.annotationProcessorOptions.arguments["room.schemaLocation"],rootDir.toString()+'/Database/Build/insert.yml')
-    outputs.file('src/main/assets/TestData.db')
-    commandLine 'python','Database/Build/buildDatabase.py',project.android.defaultConfig.javaCompileOptions.annotationProcessorOptions.arguments["room.schemaLocation"],'Database/Build/insert.yml','app/src/main/assets/TestData.db'
-}
 task deleteUserData(){
     inputs.files(rootDir.toString()+'\\Database\\Build\\buildDatabase.py',project.android.defaultConfig.javaCompileOptions.annotationProcessorOptions.arguments["room.schemaLocation"],rootDir.toString()+'\\Database\\Build\\insert.yml')
     doLast{
@@ -190,8 +184,18 @@ task deleteUserData(){
     }
 }
 
+task createDB (type:Exec){
+
+    workingDir rootDir
+    inputs.files(rootDir.toString()+'/Database/Build/buildDatabase.py',project.android.defaultConfig.javaCompileOptions.annotationProcessorOptions.arguments["room.schemaLocation"],rootDir.toString()+'/Database/Build/insert.yml')
+    outputs.file('src/main/assets/TestData.db')
+    commandLine 'python','Database/Build/buildDatabase.py',project.android.defaultConfig.javaCompileOptions.annotationProcessorOptions.arguments["room.schemaLocation"],'Database/Build/insert.yml','app/src/main/assets/TestData.db'
+}
+
 afterEvaluate {
-    compileDebugJavaWithJavac.finalizedBy(createDB)
+    preBuild.finalizedBy(createDB)
+    mergeDebugAssets.dependsOn(createDB)
+    mergeReleaseAssets.dependsOn(createDB)
 }
 
 repositories {

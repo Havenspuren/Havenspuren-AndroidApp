@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -195,7 +196,7 @@ public class LongPoiInfo extends Fragment {
     private void fillWaypointInfo(POIWaypointWithMedia waypoint){
         title.setText(waypoint.getTitle());
         // toolBar.setTitle(waypoint.getTitle());
-        desc.setText(waypoint.getLongDescription()+ "\n  ");
+        desc.setText(Html.fromHtml(waypoint.getLongDescription()+ "\n  "));
 
         FileProvider fileProvider = new FileProvider(requireActivity().getApplicationContext());
 

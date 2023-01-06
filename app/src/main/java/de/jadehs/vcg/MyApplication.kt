@@ -12,10 +12,8 @@ import android.os.StrictMode
 import android.os.strictmode.Violation
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.exoplayer2.database.StandaloneDatabaseProvider.DATABASE_NAME
 import de.jadehs.vcg.R.string.nearby_channel_description
 import de.jadehs.vcg.broadcast_receiver.TrophyBroadcastReceiver
-import de.jadehs.vcg.data.db.access.RouteDatabase
 import de.jadehs.vcg.services.NearbyWaypointService
 import de.jadehs.vcg.services.audio.AudioPlayerService
 import de.jadehs.vcg.utils.data.FileProvider

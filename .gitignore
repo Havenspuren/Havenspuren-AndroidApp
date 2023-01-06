@@ -9,3 +9,5 @@
 .cxx
 *.~vsdx
 /maps
+/app_assets/src/main/assets/maps/
+/app_assets/build/

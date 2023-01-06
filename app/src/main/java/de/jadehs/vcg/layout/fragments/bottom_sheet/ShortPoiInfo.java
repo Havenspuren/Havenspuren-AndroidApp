@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -185,7 +186,7 @@ public class ShortPoiInfo extends Fragment {
 
     private void fillInformation(POIWaypoint waypoint) {
         this.setTitle(waypoint.getTitle());
-        this.setDescription(waypoint.getShortDescription());
+        this.setDescription(Html.fromHtml(waypoint.getShortDescription()));
     }
 
     @NotNull
@@ -202,7 +203,7 @@ public class ShortPoiInfo extends Fragment {
         return (String) description.getText();
     }
 
-    public void setDescription(@NotNull String description) {
+    public void setDescription(@NotNull CharSequence description) {
         this.description.setText(description);
     }
 
@@ -243,7 +244,7 @@ public class ShortPoiInfo extends Fragment {
                     bottomSheetController.getController().open();
                 }
             });
-        }else{
+        } else {
             // TODO add a feedback if password was wrong
         }
     }
