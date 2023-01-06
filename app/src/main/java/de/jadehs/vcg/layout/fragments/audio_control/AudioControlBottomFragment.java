@@ -234,7 +234,7 @@ public class AudioControlBottomFragment extends Fragment {
                 if (AudioControlBottomFragment.this.waypointId != -1) {
                     toDisplay = routeWithWaypoints.getWaypointById(AudioControlBottomFragment.this.waypointId);
 
-                    if(toDisplay == null){
+                    if (toDisplay == null) {
 
                     }
                 }
@@ -340,7 +340,7 @@ public class AudioControlBottomFragment extends Fragment {
             POIWaypointWithMedia waypoint = route.getWaypointById(this.waypointId);
             int waypointCount = route.getVisitedCount();
             if (waypoint == null) {
-                if(this.waypointId != -1){
+                if (this.waypointId != -1) {
                     audioPlayerManager.stopPlayback();
                 }
 
@@ -364,7 +364,7 @@ public class AudioControlBottomFragment extends Fragment {
             this.updateTrackNumberProgress(waypoint.getIndexOfRoute(), waypointCount);
         } else {
             this.titleNameView.setText(requireContext().getText(R.string.no_waypoint_unlocked));
-            this.updateProgressBar(0,1);
+            this.updateProgressBar(0, 1);
             this.updateTrackNumberProgress(0, waypointCount);
             setEnabled(false);
         }
@@ -389,8 +389,9 @@ public class AudioControlBottomFragment extends Fragment {
     }
 
     private void updateProgressBar(long current, long max) {
-        final float safeProgress = current * maxProgress / max;
-        this.progressBar.setValue(safeProgress);
+        final float safeProgress = current * progressBar.getValueTo() / max;
+        final float clampedProgress = Math.max(Math.min(safeProgress, progressBar.getValueTo()), progressBar.getValueFrom());
+        this.progressBar.setValue(clampedProgress);
     }
 
     /**
