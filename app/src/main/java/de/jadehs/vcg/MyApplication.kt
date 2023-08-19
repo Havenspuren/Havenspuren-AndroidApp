@@ -49,6 +49,10 @@ class MyApplication : Application() {
                     .detectLeakedRegistrationObjects()
                     .detectLeakedSqlLiteObjects()
                     .penaltyLog()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                vmPolicy.detectUnsafeIntentLaunch()
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 vmPolicy.penaltyListener(mainExecutor) { violation: Violation? ->
                     violation?.printStackTrace()
@@ -68,7 +72,7 @@ class MyApplication : Application() {
 
     }
 
-    private fun deleteIfOldDatabaseVersion(){
+    private fun deleteIfOldDatabaseVersion() {
         val currentDatabaseVersion: Int = this
                 .getSharedPreferences("GENERAL", MODE_PRIVATE)
                 .getInt("DATABASE_VERSION", -1)

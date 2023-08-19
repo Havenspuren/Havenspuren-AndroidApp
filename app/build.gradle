@@ -8,13 +8,13 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
 
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "de.jadehs.vcg"
 		
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 28
         versionName "0.4.8"
 
@@ -51,6 +51,7 @@ android {
     }
 
     assetPacks = [":app_assets"]
+    namespace 'de.jadehs.vcg'
 
 }
 
@@ -95,10 +96,7 @@ dependencies {
 
     // nav graph
 
-    def nav_version = "2.3.5"
-
-    implementation "androidx.navigation:navigation-fragment:$nav_version"
-    implementation "androidx.navigation:navigation-ui:$nav_version"
+    def nav_version = "2.7.0"
 
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

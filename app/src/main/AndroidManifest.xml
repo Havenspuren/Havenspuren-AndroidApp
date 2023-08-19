@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.jadehs.vcg">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name="de.jadehs.vcg.MyApplication"
@@ -15,13 +16,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Light">
+        android:theme="@style/AppTheme.Light"
+        >
         <!-- Activities -->
 
 
         <activity android:name="de.jadehs.vcg.layout.activities.MainActivity"
             android:theme="@style/AppTheme.Light"
             android:screenOrientation="portrait"
+            android:resizeableActivity="false"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +37,8 @@
 
 
         <service android:name="de.jadehs.vcg.services.audio.AudioPlayerService"
-            android:exported="false"/>
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"/>
         <service android:name="de.jadehs.vcg.services.NearbyWaypointService"
             android:exported="false"/>
 
