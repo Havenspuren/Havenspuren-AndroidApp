@@ -1,46 +1,41 @@
 package de.jadehs.vcg.services.audio;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.support.v4.media.session.MediaControllerCompat;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.MediaMetadata;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
+
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
 
 import de.jadehs.vcg.R;
 import de.jadehs.vcg.data.db.pojo.POIWaypointWithMedia;
 import de.jadehs.vcg.utils.data.FileProvider;
-import kotlin.NotImplementedError;
 
 public class AudioPlayerManager {
     private static final String TAG = "AudioPlayerManager";
     private final AudioPlayerActivityLifecycleObserver lifecycleCallback = new AudioPlayerActivityLifecycleObserver();
     private FragmentActivity activtiy;
-    private AudioPlayerService.AudioServiceBinder binder;
-    private ServiceConnection connection;
-    private MediaControllerCompat controller;
+    private MediaController controller;
     private LinkedList<PlayerConnectionCallback> playerConnectionCallbacks = new LinkedList<>();
     private LocalBroadcastManager broadcastManager;
-    private BroadcastReceiver playerStartedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (isBound()) {
-                controller = binder.getSessionController();
-                callSessionAvailableCallback();
-            }
-        }
-    };
+    private ListenableFuture<MediaController> controllerFuture;
 
 
     public void attachActivity(FragmentActivity activity) {
@@ -54,24 +49,39 @@ public class AudioPlayerManager {
         this.activtiy = activity;
         this.activtiy.getLifecycle().addObserver(lifecycleCallback);
         broadcastManager = LocalBroadcastManager.getInstance(activtiy.getApplicationContext());
-        broadcastManager.registerReceiver(playerStartedReceiver, getPlayerStartedIntentFilter());
+        // broadcastManager.registerReceiver(playerStartedReceiver, getPlayerStartedIntentFilter());
     }
 
     public void unattachActivity() {
+        unBindFromService();
+        if (broadcastManager != null) {
+            // this.broadcastManager.unregisterReceiver(playerStartedReceiver);
+            this.broadcastManager = null;
+        }
         if (this.activtiy != null) {
             this.activtiy.getLifecycle().removeObserver(lifecycleCallback);
-            unBindFromService();
-            this.broadcastManager.unregisterReceiver(playerStartedReceiver);
-            this.broadcastManager = null;
             this.activtiy = null;
         }
     }
 
 
     public void startPlayback(POIWaypointWithMedia waypoint) {
+        Log.d(TAG, "startPlayback: with " + waypoint.getTitle());
         if (isAttached()) {
             bindToService();
-            startService(waypoint);
+            this.listenForConnection(new PlayerConnectionCallback() {
+
+                @Override
+                public void onSessionAvailable(MediaController controller) {
+                    startService(waypoint);
+                    removeConnectionListener(this);
+                }
+
+                @Override
+                public void connectionLost() {
+
+                }
+            });
         } else {
             throw new IllegalStateException("No activity is attached to this Manager");
         }
@@ -79,14 +89,9 @@ public class AudioPlayerManager {
 
     public void stopPlayback() {
         if (isAttached()) {
-            if (isBound()) {
-                controller = this.binder.getSessionController();
-                if (controller != null) {
-                    controller.getTransportControls().stop();
-                }
+            if (isConnected()) {
+                controller.stop();
             }
-            this.activtiy.stopService(getServiceIntent());
-
         }
     }
 
@@ -96,24 +101,33 @@ public class AudioPlayerManager {
      * @param waypoint waypoint, which is used retrieve the audio file
      */
     private void startService(POIWaypointWithMedia waypoint) {
+        if (!isConnected()) {
+            Log.w(TAG, "Tried starting a playback when manager wasn't connected");
+            return;
+        }
         if (waypoint != null) {
             FileProvider provider = new FileProvider(this.activtiy.getApplicationContext());
 
 
-            Intent intent = getServiceIntent();
-            intent.putExtra(AudioPlayerService.EXTRA_CONTENT_TITLE, waypoint.getTitle());
-            intent.putExtra(AudioPlayerService.EXTRA_DESCRIPTION, this.activtiy.getString(R.string.audio_player_waypoint_description));
+            MediaItem.Builder mediaItem = new MediaItem.Builder();
+            MediaMetadata.Builder mediaMetadata = new MediaMetadata.Builder();
+            mediaMetadata.setTitle(waypoint.getTitle());
+            mediaMetadata.setDescription(this.activtiy.getString(R.string.audio_player_waypoint_description));
             if (waypoint.getPictures().size() > 0) {
-                intent.putExtra(AudioPlayerService.EXTRA_AUDIO_PICTURE, provider.getMediaFile(waypoint.getPictures().get(0).getPathToFile()).getAbsolutePath());
+                mediaMetadata.setArtworkUri(provider.getMediaUri(waypoint.getPictures().get(0).getPathToFile()));
             }
             if (waypoint.hasAudio()) {
-                intent.putExtra(AudioPlayerService.EXTRA_AUDIO_FILE, provider.getMediaFile(waypoint.getAudio().getPathToFile()).getAbsolutePath());
+                mediaItem.setUri(provider.getMediaUri(waypoint.getAudio().getPathToFile()));
             }
 
-            intent.putExtra(AudioPlayerService.EXTRA_WAYPOINT_ID, waypoint.getId());
+            mediaItem.setMediaId(Long.toString(waypoint.getId()));
 
             // start service to start playback
-            this.activtiy.startService(intent);
+            mediaItem.setMediaMetadata(mediaMetadata.build());
+            Log.d(TAG, "startService: started play media");
+            controller.addMediaItem(mediaItem.build());
+            controller.prepare();
+            controller.play();
         }
     }
 
@@ -125,8 +139,8 @@ public class AudioPlayerManager {
     public void listenForConnection(PlayerConnectionCallback callback) {
         if (callback != null && !playerConnectionCallbacks.contains(callback)) {
             playerConnectionCallbacks.add(callback);
-            if (isBound()) {
-                callback.connectionEstablished(binder);
+            if (isConnected()) {
+                callback.connectionEstablished(controller);
                 if (controller != null) {
                     callback.onSessionAvailable(controller);
                 }
@@ -152,7 +166,7 @@ public class AudioPlayerManager {
      */
     private void callConnectedCallback() {
         for (PlayerConnectionCallback callback : playerConnectionCallbacks) {
-            callback.connectionEstablished(binder);
+            callback.connectionEstablished(controller);
         }
     }
 
@@ -173,9 +187,23 @@ public class AudioPlayerManager {
 
     private void bindToService() {
         if (this.activtiy.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-            if (isAttached() && !isBound()) {
-                connection = new AudioPlayerConnection();
-                this.activtiy.bindService(getServiceIntent(), connection, Activity.BIND_AUTO_CREATE);
+            if (isAttached() && !isConnected()) {
+
+                this.controllerFuture = new MediaController.Builder(activtiy,
+                        new SessionToken(activtiy,
+                                new ComponentName(activtiy.getBaseContext(),
+                                        AudioPlayerService.class)))
+                        .buildAsync();
+                this.controllerFuture.addListener(() -> {
+                    try {
+                        this.controller = this.controllerFuture.get();
+                        callConnectedCallback();
+                        callSessionAvailableCallback();
+                    } catch (ExecutionException | InterruptedException e) {
+                        callDisconnectedCallback();
+
+                    }
+                }, ContextCompat.getMainExecutor(activtiy));
 
             }/* Don't know if this is even needed
             else {
@@ -189,24 +217,23 @@ public class AudioPlayerManager {
      * binds to service if at least one ConnectionCallback is registered
      */
     private void bindToServiceIfNeeded() {
-        if (!isBound() && playerConnectionCallbacks.size() > 0) {
+        if (!isConnected() && playerConnectionCallbacks.size() > 0) {
             bindToService();
         }
     }
 
     private void unBindFromService() {
         callDisconnectedCallback();
-        if (connection != null) {
-            if (isAttached()) {
-                this.activtiy.unbindService(connection);
-            }
-            connection = null;
-            binder = null;
+        if (controllerFuture != null) {
+            MediaController.releaseFuture(controllerFuture);
+        }
+        if (controller != null) {
+            controller.release();
         }
     }
 
-    private boolean isBound() {
-        return binder != null && binder.isBinderAlive();
+    private boolean isConnected() {
+        return controller != null && controller.isConnected();
     }
 
     private boolean isAttached() {
@@ -226,50 +253,21 @@ public class AudioPlayerManager {
     }
 
 
-    private class AudioPlayerActivityLifecycleObserver implements LifecycleObserver {
+    private class AudioPlayerActivityLifecycleObserver implements DefaultLifecycleObserver {
 
-        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-        public void onActivityDestroyed() {
+        @Override
+        public void onDestroy(@NonNull LifecycleOwner owner) {
             AudioPlayerManager.this.unattachActivity();
         }
 
-        @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-        public void onActivityStopped() {
-            unBindFromService();
-        }
-
-        @OnLifecycleEvent(Lifecycle.Event.ON_START)
-        public void OnActivityResumed() {
+        @Override
+        public void onStart(@NonNull LifecycleOwner owner) {
             bindToServiceIfNeeded();
         }
-    }
-
-    private class AudioPlayerConnection implements ServiceConnection {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            if (componentName.compareTo(new ComponentName(activtiy.getBaseContext(), AudioPlayerService.class)) == 0) {
-                binder = (AudioPlayerService.AudioServiceBinder) iBinder;
-            }
-            callConnectedCallback();
-            controller = binder.getSessionController();
-            if (controller != null) {
-                callSessionAvailableCallback();
-            }
-        }
 
         @Override
-        public void onServiceDisconnected(ComponentName componentName) {
+        public void onStop(@NonNull LifecycleOwner owner) {
             unBindFromService();
-        }
-
-        @Override
-        public void onNullBinding(ComponentName name) {
-            throw new NotImplementedError("Service needs to return a binder");
-        }
-
-        @Override
-        public void onBindingDied(ComponentName name) {
-            connection = null;
         }
     }
 }

@@ -2,11 +2,15 @@ package de.jadehs.vcg.services.audio;
 
 import android.support.v4.media.session.MediaControllerCompat;
 
+import androidx.media3.session.MediaController;
+
 public interface PlayerConnectionCallback {
 
-    void connectionEstablished(AudioPlayerService.AudioServiceBinder binder);
+    @Deprecated
+    default void connectionEstablished(MediaController controller) {
+    }
 
-    void onSessionAvailable(MediaControllerCompat controller);
+    void onSessionAvailable(MediaController controller);
 
     void connectionLost();
 }
