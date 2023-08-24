@@ -1,46 +1,12 @@
 package de.jadehs.vcg.services.audio;
 
-import android.content.Intent;
-import android.util.Log;
-
 import androidx.annotation.Nullable;
-import androidx.media3.common.C;
-import androidx.media3.common.MediaItem;
+import androidx.media3.common.Player;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaSession;
 import androidx.media3.session.MediaSessionService;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.List;
-
 public class AudioPlayerService extends MediaSessionService implements MediaSession.Callback {
-
-    /**
-     * Used as an string extra field in AudioPlayerService intents to tell the application being invoked which title the current track has.
-     */
-    public static final String EXTRA_CONTENT_TITLE = "de.jadehs.vcg.extra_title";
-    /**
-     * Used as an string extra field in AudioPlayerService intents to tell the application being invoked which description the current track has.
-     */
-    public static final String EXTRA_DESCRIPTION = "de.jadehs.vcg.extra_description";
-
-
-    // INTENT EXTRAS
-    /**
-     * Used as an string extra field in AudioPlayerService intents to tell the application being invoked where the audio file is located. This extra is needed to start the service
-     */
-    public static final String EXTRA_AUDIO_FILE = "de.jadehs.vcg.extra_uri_to_file";
-    /**
-     * Used as an string extra field in AudioPlayerService intents to tell the application being invoked which picture to display in the notification.
-     */
-    public static final String EXTRA_AUDIO_PICTURE = "de.jadehs.vcg.extra_uri_to_picture";
-    /**
-     * Used as an string extra field in AudioPlayerService intents to tell the application being invoked which picture to display in the notification.
-     */
-    public static final String EXTRA_WAYPOINT_ID = "de.jadehs.vcg.extra_waypoint_id";
     /**
      * Broadcast which is send, when playback started.
      */
@@ -59,8 +25,9 @@ public class AudioPlayerService extends MediaSessionService implements MediaSess
      */
     public static final long PLAYBACK_LOCATION_UPDATE_INTERVAL = 300;
     private static final String TAG = "AudioPlayerService";
-    // NOTIFICATION ID
-    private static final String PLAYER_CHANNEL = "de.jadehs.vcg.audio_player";
+
+    private static int[] DISABLED_COMMANDS = {Player.COMMAND_SET_SHUFFLE_MODE, Player.COMMAND_SET_REPEAT_MODE};
+    private static int[] EXTERNAL_DISABLED_COMMANDS = {Player.COMMAND_SET_MEDIA_ITEM, Player.COMMAND_CHANGE_MEDIA_ITEMS};
     private MediaSession mediaSession;
 
     @Override
@@ -70,33 +37,25 @@ public class AudioPlayerService extends MediaSessionService implements MediaSess
         mediaSession = new MediaSession.Builder(this, player)
                 .setCallback(this)
                 .build();
-        Log.d(TAG, "onCreate: ");
-    }
-
-    @Override
-    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        int r = super.onStartCommand(intent, flags, startId);
-        Log.d(TAG, "onStartCommand: ");
-        return r;
     }
 
     @Nullable
     @Override
     public MediaSession onGetSession(MediaSession.ControllerInfo controllerInfo) {
-        Log.d(TAG, "onGetSession: " + controllerInfo.getPackageName());
-
         return mediaSession;
     }
 
     @Override
-    public ListenableFuture<MediaSession.MediaItemsWithStartPosition> onPlaybackResumption(MediaSession mediaSession, MediaSession.ControllerInfo controller) {
-        return Futures.immediateFuture(new MediaSession.MediaItemsWithStartPosition(ImmutableList.of(), C.INDEX_UNSET, C.TIME_UNSET));
-    }
-
-    @Override
     public MediaSession.ConnectionResult onConnect(MediaSession session, MediaSession.ControllerInfo controller) {
-        Log.d(TAG, "onConnect: ");
-        return MediaSession.Callback.super.onConnect(session, controller);
+
+        MediaSession.ConnectionResult result = MediaSession.Callback.super.onConnect(session, controller);
+        Player.Commands.Builder commandBuilder = result.availablePlayerCommands.buildUpon()
+                .removeAll(DISABLED_COMMANDS);
+        if (!controller.getPackageName().startsWith(getBaseContext().getPackageName())) {
+            commandBuilder.removeAll(EXTERNAL_DISABLED_COMMANDS);
+        }
+
+        return MediaSession.ConnectionResult.accept(result.availableSessionCommands, commandBuilder.build());
     }
 
     @Override

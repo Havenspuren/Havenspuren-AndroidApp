@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.MediaControllerCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -39,7 +36,6 @@ import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.services.audio.AudioPlayerManager;
 import de.jadehs.vcg.services.audio.AudioPlayerService;
 import de.jadehs.vcg.services.audio.PlayerConnectionCallback;
-import de.jadehs.vcg.utils.AudioUtils;
 import de.jadehs.vcg.view_models.RouteViewModel;
 import de.jadehs.vcg.view_models.factories.RouteViewModelFactory;
 
@@ -60,7 +56,7 @@ public class AudioControlBottomFragment extends Fragment {
     private ImageButton nextButton;
     private ImageButton previousButton;
     private ImageButton playButton;
-    private androidx.media3.session.MediaController controller;
+    private MediaController controller;
     private Slider progressBar;
     private RouteViewModel viewModel;
     private long routeId;
@@ -96,6 +92,11 @@ public class AudioControlBottomFragment extends Fragment {
             @Override
             public void onSessionAvailable(androidx.media3.session.MediaController controller) {
                 AudioControlBottomFragment.this.setController(controller);
+                MediaItem mediaItem = controller.getCurrentMediaItem();
+                if (mediaItem != null) {
+                    long waypointId = Long.parseLong(mediaItem.mediaId);
+                    updateTrackInfos(waypointId, controller.getMediaMetadata());
+                }
                 setPlayButtonState(controller.isPlaying());
             }
 
@@ -285,10 +286,8 @@ public class AudioControlBottomFragment extends Fragment {
     }
 
     private void unsubscribeFromService() {
-        if (audioPlayerManager != null) {
-            audioPlayerManager.removeConnectionListener(this.playerCallback);
-            audioPlayerManager.unattachActivity();
-        }
+        audioPlayerManager.removeConnectionListener(this.playerCallback);
+        audioPlayerManager.unattachActivity();
     }
 
 

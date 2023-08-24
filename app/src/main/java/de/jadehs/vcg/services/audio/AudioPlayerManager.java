@@ -1,9 +1,6 @@
 package de.jadehs.vcg.services.audio;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
@@ -73,7 +70,7 @@ public class AudioPlayerManager {
 
                 @Override
                 public void onSessionAvailable(MediaController controller) {
-                    startService(waypoint);
+                    startPlaybackWhenConnected(waypoint);
                     removeConnectionListener(this);
                 }
 
@@ -90,6 +87,7 @@ public class AudioPlayerManager {
     public void stopPlayback() {
         if (isAttached()) {
             if (isConnected()) {
+                controller.clearMediaItems();
                 controller.stop();
             }
         }
@@ -100,7 +98,7 @@ public class AudioPlayerManager {
      *
      * @param waypoint waypoint, which is used retrieve the audio file
      */
-    private void startService(POIWaypointWithMedia waypoint) {
+    private void startPlaybackWhenConnected(POIWaypointWithMedia waypoint) {
         if (!isConnected()) {
             Log.w(TAG, "Tried starting a playback when manager wasn't connected");
             return;
@@ -125,7 +123,7 @@ public class AudioPlayerManager {
             // start service to start playback
             mediaItem.setMediaMetadata(mediaMetadata.build());
             Log.d(TAG, "startService: started play media");
-            controller.addMediaItem(mediaItem.build());
+            controller.setMediaItem(mediaItem.build());
             controller.prepare();
             controller.play();
         }
@@ -165,9 +163,6 @@ public class AudioPlayerManager {
      * calls the connectionEstablished function of every registered listener
      */
     private void callConnectedCallback() {
-        for (PlayerConnectionCallback callback : playerConnectionCallbacks) {
-            callback.connectionEstablished(controller);
-        }
     }
 
     /**
@@ -181,6 +176,7 @@ public class AudioPlayerManager {
 
     private void callSessionAvailableCallback() {
         for (PlayerConnectionCallback callback : playerConnectionCallbacks) {
+            callback.connectionEstablished(controller);
             callback.onSessionAvailable(controller);
         }
     }
@@ -190,10 +186,9 @@ public class AudioPlayerManager {
             if (isAttached() && !isConnected()) {
 
                 this.controllerFuture = new MediaController.Builder(activtiy,
-                        new SessionToken(activtiy,
-                                new ComponentName(activtiy.getBaseContext(),
-                                        AudioPlayerService.class)))
+                        new SessionToken(activtiy, getServiceName()))
                         .buildAsync();
+
                 this.controllerFuture.addListener(() -> {
                     try {
                         this.controller = this.controllerFuture.get();
@@ -201,14 +196,9 @@ public class AudioPlayerManager {
                         callSessionAvailableCallback();
                     } catch (ExecutionException | InterruptedException e) {
                         callDisconnectedCallback();
-
                     }
                 }, ContextCompat.getMainExecutor(activtiy));
-
-            }/* Don't know if this is even needed
-            else {
-                throw new IllegalStateException("Is already bound to service or not already attached to activity");
-            }*/
+            }
         }
 
     }
@@ -240,9 +230,9 @@ public class AudioPlayerManager {
         return activtiy != null && activtiy.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED);
     }
 
-    private Intent getServiceIntent() {
+    private ComponentName getServiceName() {
         if (isAttached()) {
-            return new Intent(this.activtiy, AudioPlayerService.class);
+            return new ComponentName(this.activtiy, AudioPlayerService.class);
         } else {
             throw new IllegalStateException("Activity needs to be attached");
         }
