@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.MediaControllerCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -24,6 +21,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.MediaMetadata;
+import androidx.media3.common.Player;
+import androidx.media3.session.MediaController;
 
 import com.google.android.material.slider.Slider;
 
@@ -35,7 +36,6 @@ import de.jadehs.vcg.data.db.pojo.RouteWithWaypoints;
 import de.jadehs.vcg.services.audio.AudioPlayerManager;
 import de.jadehs.vcg.services.audio.AudioPlayerService;
 import de.jadehs.vcg.services.audio.PlayerConnectionCallback;
-import de.jadehs.vcg.utils.AudioUtils;
 import de.jadehs.vcg.view_models.RouteViewModel;
 import de.jadehs.vcg.view_models.factories.RouteViewModelFactory;
 
@@ -49,15 +49,14 @@ public class AudioControlBottomFragment extends Fragment {
     private final AudioPlayerManager audioPlayerManager = new AudioPlayerManager();
     private final PlayerConnectionCallback playerCallback;
     private final BroadcastReceiver progressReceiver;
-    private final MediaControllerCompat.Callback audioCallback;
+    private final Player.Listener audioCallback;
     private float maxProgress = 100;
     private TextView titleNameView;
     private LocalBroadcastManager broadcastManager;
     private ImageButton nextButton;
     private ImageButton previousButton;
     private ImageButton playButton;
-    private MediaControllerCompat controller;
-    private AudioPlayerService.AudioServiceBinder audioServiceBinder;
+    private MediaController controller;
     private Slider progressBar;
     private RouteViewModel viewModel;
     private long routeId;
@@ -91,14 +90,14 @@ public class AudioControlBottomFragment extends Fragment {
         };
         playerCallback = new PlayerConnectionCallback() {
             @Override
-            public void connectionEstablished(AudioPlayerService.AudioServiceBinder binder) {
-                AudioControlBottomFragment.this.audioServiceBinder = binder;
-            }
-
-            @Override
-            public void onSessionAvailable(MediaControllerCompat controller) {
+            public void onSessionAvailable(androidx.media3.session.MediaController controller) {
                 AudioControlBottomFragment.this.setController(controller);
-                setPlayButtonState(AudioUtils.isPlaying(controller));
+                MediaItem mediaItem = controller.getCurrentMediaItem();
+                if (mediaItem != null) {
+                    long waypointId = Long.parseLong(mediaItem.mediaId);
+                    updateTrackInfos(waypointId, controller.getMediaMetadata());
+                }
+                setPlayButtonState(controller.isPlaying());
             }
 
             @Override
@@ -106,41 +105,20 @@ public class AudioControlBottomFragment extends Fragment {
                 AudioControlBottomFragment.this.destroyAudioManager();
             }
         };
-        audioCallback = new MediaControllerCompat.Callback() {
+        audioCallback = new Player.Listener() {
 
             @Override
-            public void onPlaybackStateChanged(PlaybackStateCompat state) {
-                setPlayButtonState(AudioUtils.isPlaying(state.getState()));
+            public void onIsPlayingChanged(boolean isPlaying) {
+                setPlayButtonState(isPlaying);
             }
 
             @Override
-            public void onSessionDestroyed() {
-                unsubscribeFromController();
-            }
-
-            @Override
-            public void onSessionReady() {
-
-                MediaMetadataCompat metadata = controller.getMetadata();
-                if (metadata.containsKey(AudioPlayerService.EXTRA_WAYPOINT_ID)) {
-                    updateTrackInfos(metadata);
+            public void onMediaMetadataChanged(MediaMetadata mediaMetadata) {
+                MediaItem mediaItem = controller.getCurrentMediaItem();
+                if (mediaItem != null) {
+                    long waypoyntId = Long.parseLong(mediaItem.mediaId);
+                    updateTrackInfos(waypoyntId, mediaMetadata);
                 }
-            }
-
-            @Override
-            public void onMetadataChanged(MediaMetadataCompat metadata) {
-                if (metadata != null && AudioUtils.isPlaying(controller)) {
-                    if (metadata.containsKey(AudioPlayerService.EXTRA_WAYPOINT_ID)) {
-                        updateTrackInfos(metadata);
-                    }
-                }
-            }
-
-            @Override
-            public void binderDied() {
-                super.binderDied();
-                Log.d(TAG, "binderDied: ");
-                audioServiceBinder = null;
             }
         };
     }
@@ -186,7 +164,7 @@ public class AudioControlBottomFragment extends Fragment {
                 if (!fromUser || controller == null) {
                     return;
                 }
-                long duration = controller.getMetadata().getLong(MediaMetadataCompat.METADATA_KEY_DURATION);
+                long duration = controller.getDuration();
                 long newProgress = (long) (value * duration / maxProgress);
                 seekTo(newProgress);
             }
@@ -271,17 +249,17 @@ public class AudioControlBottomFragment extends Fragment {
     }
 
 
-    private MediaControllerCompat.Callback getCallback() {
+    private Player.Listener getCallback() {
         return audioCallback;
     }
 
     // set session token
-    private void setController(MediaControllerCompat controllerCompat) {
+    private void setController(androidx.media3.session.MediaController controllerCompat) {
         if (controller != null) {
             destroyAudioManager();
         }
         controller = controllerCompat;
-        controller.registerCallback(getCallback());
+        controller.addListener(getCallback());
     }
 
     private void startAudioManager() {
@@ -302,19 +280,14 @@ public class AudioControlBottomFragment extends Fragment {
 
     private void unsubscribeFromController() {
         if (controller != null) {
-            controller.unregisterCallback(getCallback());
+            controller.release();
             controller = null;
         }
     }
 
     private void unsubscribeFromService() {
-        if (audioServiceBinder != null) {
-            audioServiceBinder = null;
-        }
-        if (audioPlayerManager != null) {
-            audioPlayerManager.removeConnectionListener(this.playerCallback);
-            audioPlayerManager.unattachActivity();
-        }
+        audioPlayerManager.removeConnectionListener(this.playerCallback);
+        audioPlayerManager.unattachActivity();
     }
 
 
@@ -327,27 +300,25 @@ public class AudioControlBottomFragment extends Fragment {
     }
 
 
-    private void updateTrackInfos(MediaMetadataCompat metadata) {
+    private void updateTrackInfos(long waypointId, MediaMetadata metadata) {
 
-        if (metadata.containsKey(AudioPlayerService.EXTRA_WAYPOINT_ID)) {
-            this.waypointId = metadata.getLong(AudioPlayerService.EXTRA_WAYPOINT_ID);
+        this.waypointId = waypointId;
 
-            RouteWithWaypoints route = this.viewModel.getCurrentRoute().getValue();
-            if (route == null) {
-                return;
+        RouteWithWaypoints route = this.viewModel.getCurrentRoute().getValue();
+        if (route == null) {
+            return;
+        }
+
+        POIWaypointWithMedia waypoint = route.getWaypointById(this.waypointId);
+        int waypointCount = route.getVisitedCount();
+        if (waypoint == null) {
+            if (this.waypointId != -1) {
+                audioPlayerManager.stopPlayback();
             }
 
-            POIWaypointWithMedia waypoint = route.getWaypointById(this.waypointId);
-            int waypointCount = route.getVisitedCount();
-            if (waypoint == null) {
-                if (this.waypointId != -1) {
-                    audioPlayerManager.stopPlayback();
-                }
-
-                bindToWaypoint(route.getLastUnlocked(), waypointCount);
-            } else {
-                bindToWaypoint(waypoint, waypointCount);
-            }
+            bindToWaypoint(route.getLastUnlocked(), waypointCount);
+        } else {
+            bindToWaypoint(waypoint, waypointCount);
         }
     }
 
@@ -383,9 +354,9 @@ public class AudioControlBottomFragment extends Fragment {
 
     private void setPlayButtonState(boolean playing) {
         if (playing)
-            playButton.setImageResource(R.drawable.exo_controls_pause);
+            playButton.setImageResource(R.drawable.media3_notification_pause);
         else
-            playButton.setImageResource(R.drawable.exo_controls_play);
+            playButton.setImageResource(R.drawable.media3_notification_play);
     }
 
     private void updateProgressBar(long current, long max) {
@@ -405,7 +376,7 @@ public class AudioControlBottomFragment extends Fragment {
     }
 
     private void onPlayClick() {
-        if (this.audioServiceBinder.isMediaSessionRunning()) {
+        if (controller != null && this.controller.isConnected() && this.controller.getPlaybackState() == Player.STATE_READY) {
             this.playPause();
         } else {
             RouteWithWaypoints route = this.viewModel.getCurrentRoute().getValue();
@@ -475,11 +446,10 @@ public class AudioControlBottomFragment extends Fragment {
         if (controller == null) {
             return;
         }
-        MediaControllerCompat.TransportControls controls = controller.getTransportControls();
-        if (AudioUtils.isPlaying(controller)) {
-            controls.pause();
+        if (controller.isPlaying()) {
+            controller.pause();
         } else {
-            controls.play();
+            controller.play();
         }
     }
 
@@ -492,6 +462,6 @@ public class AudioControlBottomFragment extends Fragment {
         if (controller == null) {
             return;
         }
-        controller.getTransportControls().seekTo(milliseconds);
+        controller.seekTo(milliseconds);
     }
 }

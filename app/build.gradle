@@ -8,15 +8,15 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
 
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "de.jadehs.vcg"
 		
         minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 28
-        versionName "0.4.8"
+        targetSdkVersion 33
+        versionCode 29
+        versionName "0.5.0"
 
 
 
@@ -51,6 +51,7 @@ android {
     }
 
     assetPacks = [":app_assets"]
+    namespace 'de.jadehs.vcg'
 
 }
 
@@ -86,19 +87,13 @@ dependencies {
     implementation "androidx.core:core:1.8.0"
 
 
-    implementation "androidx.media:media:1.1.0"
-
-
 
     implementation "io.reactivex.rxjava3:rxjava:3.1.4"
     implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
 
     // nav graph
 
-    def nav_version = "2.3.5"
-
-    implementation "androidx.navigation:navigation-fragment:$nav_version"
-    implementation "androidx.navigation:navigation-ui:$nav_version"
+    def nav_version = "2.6.0"
 
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -107,11 +102,15 @@ dependencies {
 
     //exoplayer
 
-    def exo_version = "2.18.0"
+    def exo_version = "1.1.1"
 
-    implementation "com.google.android.exoplayer:exoplayer:$exo_version"
-    implementation "com.google.android.exoplayer:extension-mediasession:$exo_version"
+    implementation "androidx.media3:media3-exoplayer:$exo_version"
 
+    implementation "androidx.media3:media3-session:$exo_version"
+
+
+
+    // flow test view
     implementation 'com.github.deano2390:FlowTextView:2.0.5'
 
     // photoview
@@ -129,9 +128,9 @@ dependencies {
 
     def lifecycle_version = "2.2.0"
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
     // Kotlin
 

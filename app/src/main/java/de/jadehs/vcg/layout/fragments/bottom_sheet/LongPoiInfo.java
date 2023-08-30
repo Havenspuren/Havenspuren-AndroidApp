@@ -19,6 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.Player;
+import androidx.media3.session.MediaController;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,8 +54,7 @@ public class LongPoiInfo extends Fragment {
 
     private POIWaypointWithMedia waypoint;
 
-    private MediaControllerCompat controller;
-    private AudioPlayerService.AudioServiceBinder binder;
+    private MediaController controller;
     private AudioPlayerManager audioManager;
 
     private FlowTextView desc;
@@ -64,38 +66,25 @@ public class LongPoiInfo extends Fragment {
     private ViewPager2 pager;
 
     private PlayerConnectionCallback playerConnectionCallback = new PlayerConnectionCallback() {
-        @Override
-        public void connectionEstablished(AudioPlayerService.AudioServiceBinder binder) {
-            LongPoiInfo.this.binder = binder;
-            //requireAudioControllerFragment().setSessionToken(binder.getSessionToken());
-        }
 
         @Override
         public void connectionLost() {
             LongPoiInfo.this.controller = null;
-            LongPoiInfo.this.binder = null;
         }
 
         @Override
-        public void onSessionAvailable(MediaControllerCompat controller) {
+        public void onSessionAvailable(MediaController controller) {
             LongPoiInfo.this.controller = controller;
-            controller.registerCallback(new MediaControllerCompat.Callback() {
-                @Override
-                public void onPlaybackStateChanged(PlaybackStateCompat state) {
-                    if (getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
-                        updateButtonImages(state);
-                    }
-                    super.onPlaybackStateChanged(state);
-                }
+            controller.addListener(new Player.Listener() {
 
                 @Override
-                public void onSessionDestroyed() {
-                    updateButtonImages(false);
-                    LongPoiInfo.this.controller = null;
-                    super.onSessionDestroyed();
+                public void onIsPlayingChanged(boolean isPlaying) {
+                    if (getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                        updateButtonImages(isPlaying);
+                    }
                 }
             });
-            updateButtonImages(controller.getPlaybackState());
+            updateButtonImages(controller.isPlaying());
         }
     };
 
@@ -149,16 +138,13 @@ public class LongPoiInfo extends Fragment {
         fillWaypointInfo(waypoint);
     }
 
-    public void updateButtonImages(PlaybackStateCompat state) {
-        boolean isPlaying = AudioUtils.isPlaying(state.getState());
-        if (binder != null && waypoint != null) {
-            if (binder.getWaypointId() != waypoint.getId()) {
-                isPlaying = false;
-            }
-        } else {
-            isPlaying = false;
+
+    private long getControllerWaypointId() {
+        MediaItem mediaItem = controller.getCurrentMediaItem();
+        if (mediaItem == null) {
+            return -1;
         }
-        updateButtonImages(isPlaying);
+        return Long.parseLong(mediaItem.mediaId);
     }
 
     public void updateButtonImages(boolean isPlaying) {
@@ -179,7 +165,6 @@ public class LongPoiInfo extends Fragment {
 
     private void unbindFromAudioService() {
         audioManager.removeConnectionListener(playerConnectionCallback);
-        binder = null;
     }
 
     @Override
@@ -191,16 +176,17 @@ public class LongPoiInfo extends Fragment {
 
     /**
      * does insert all needed data into the fitting views from the given waypoint
+     *
      * @param waypoint source of the data which is displayed
      */
-    private void fillWaypointInfo(POIWaypointWithMedia waypoint){
+    private void fillWaypointInfo(POIWaypointWithMedia waypoint) {
         title.setText(waypoint.getTitle());
         // toolBar.setTitle(waypoint.getTitle());
-        desc.setText(Html.fromHtml(waypoint.getLongDescription()+ "\n  "));
+        desc.setText(Html.fromHtml(waypoint.getLongDescription() + "\n  "));
 
         FileProvider fileProvider = new FileProvider(requireActivity().getApplicationContext());
 
-        if(waypoint.getRoute().hasCharacterImage()){
+        if (waypoint.getRoute().hasCharacterImage()) {
             this.characterImage.setImageURI(fileProvider.getMediaUri(waypoint.getRoute().getPathToCharacterImage()));
         }
 
@@ -215,7 +201,7 @@ public class LongPoiInfo extends Fragment {
             FragmentTransaction transaction = LongPoiInfo.this.getChildFragmentManager().beginTransaction();
             transaction.replace(R.id.gallery_container, PictureGallery.newInstance(mediaUris));
             transaction.commit();
-        }else{
+        } else {
             pictureContainer.setVisibility(View.GONE);
         }
 
@@ -229,11 +215,11 @@ public class LongPoiInfo extends Fragment {
         arButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ARInfoDialog().show(getChildFragmentManager(),null);
+                new ARInfoDialog().show(getChildFragmentManager(), null);
             }
         });
         if (controller != null)
-            updateButtonImages(controller.getPlaybackState());
+            updateButtonImages(controller.isPlaying());
     }
 
 
@@ -250,12 +236,12 @@ public class LongPoiInfo extends Fragment {
         public void onClick(View v) {
             if (isConnected()) {
 
-                if (binder.getWaypointId() == waypoint.getId()) {
-                    Log.d(TAG, "onClick: " + controller.getPlaybackState().toString());
-                    if (AudioUtils.isPlaying(controller.getPlaybackState().getState())) {
-                        controller.getTransportControls().pause();
+                if (getControllerWaypointId() == waypoint.getId()) {
+                    Log.d(TAG, "onClick: " + controller.getPlaybackState());
+                    if (controller.isPlaying()) {
+                        controller.pause();
                     } else {
-                        controller.getTransportControls().play();
+                        controller.play();
                     }
                 } else {
                     startAudioService(waypoint);
@@ -268,6 +254,6 @@ public class LongPoiInfo extends Fragment {
     }
 
     private boolean isConnected() {
-        return binder != null && binder.isBinderAlive() && controller != null;
+        return controller != null && controller.isConnected();
     }
 }
