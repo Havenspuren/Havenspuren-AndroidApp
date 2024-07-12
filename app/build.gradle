@@ -8,15 +8,15 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
 
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "de.jadehs.vcg"
 		
         minSdkVersion 23
-        targetSdkVersion 33
-        versionCode 29
-        versionName "0.5.0"
+        targetSdkVersion 34
+        versionCode 31
+        versionName "0.5.1"
 
 
 
@@ -66,25 +66,25 @@ dependencies {
     }
 
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
-    implementation 'androidx.activity:activity:1.2.0'
-    implementation 'androidx.fragment:fragment:1.3.0'
-    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.activity:activity:1.9.0'
+    implementation 'androidx.fragment:fragment:1.8.1'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.3'
 
 
-    def androidXTestVersion = "1.4.0"
+    def androidXTestVersion = "1.6.1"
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation "androidx.test:runner:$androidXTestVersion"
     androidTestImplementation "androidx.test:rules:$androidXTestVersion"
     // Optional -- UI testing with Espresso
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.6.1"
 
-    implementation "androidx.core:core:1.8.0"
+    implementation "androidx.core:core:1.13.1"
 
 
 
@@ -93,7 +93,7 @@ dependencies {
 
     // nav graph
 
-    def nav_version = "2.6.0"
+    def nav_version = "2.7.7"
 
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -102,7 +102,7 @@ dependencies {
 
     //exoplayer
 
-    def exo_version = "1.1.1"
+    def exo_version = "1.3.1"
 
     implementation "androidx.media3:media3-exoplayer:$exo_version"
 
@@ -118,15 +118,15 @@ dependencies {
 
 
     // room
-    def room_version = "2.4.2"
+    def room_version = "2.6.1"
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     // coroutines
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3"
 
-    def lifecycle_version = "2.2.0"
+    def lifecycle_version = "2.8.3"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
@@ -134,7 +134,7 @@ dependencies {
 
     // Kotlin
 
-    implementation "androidx.core:core-ktx:1.3.1"
+    implementation "androidx.core:core-ktx:1.13.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Map
@@ -142,7 +142,7 @@ dependencies {
     implementation "org.mapsforge:vtm:$vtm_version"
     implementation "org.mapsforge:vtm-themes:$vtm_version"
     implementation 'net.sf.kxml:kxml2:2.3.0'
-    implementation 'org.slf4j:slf4j-api:1.7.28'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
 
 
     implementation "org.mapsforge:vtm-android:$vtm_version:natives-armeabi-v7a"
@@ -152,11 +152,11 @@ dependencies {
     implementation "org.mapsforge:vtm-android:$vtm_version"
     implementation "com.caverock:androidsvg:1.4"
 
-    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
 
 
     // Play Services
-    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
 
     // Markdown
     implementation "io.noties.markwon:core:4.6.2"
